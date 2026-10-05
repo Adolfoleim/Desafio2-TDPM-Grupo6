@@ -1,5 +1,5 @@
 # Archivos y carpeta de compilación de LaTeX
-*.vscode
+.vscode/
 *.aux
 *.log
 *.out
