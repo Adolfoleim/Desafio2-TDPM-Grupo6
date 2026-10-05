@@ -30,6 +30,8 @@
 \usepackage{array}
 \usepackage{makecell}
 \usepackage{adjustbox}                % Ajuste de tablas anchas
+\usepackage{multirow}                 % Necesario para combinar filas en la tabla
+\usepackage{ragged2e}
 
 % ==========================================
 % 4. FIGURAS Y GRÁFICOS
@@ -171,36 +173,42 @@
 
 \section{Necesidades, especificaciones y selección del concepto}
 \subsection{Usuario}
-Para dar inicio a la elaboración del desafío, se define como usuario a aquellas personas que requieran enfriar bebestibles individuales o calentar alimentos de pequeñas porciones en su hogar, oficina o lugar de estudio. Para esto, se realizan entrevistas a 12 personas con el objetivo de identificar las necesidades y preferencias comunes de los usuarios.
+Para dar inicio a la elaboración del desafío, se define como usuario a aquellas personas que requieran enfriar bebestibles individuales o calentar alimentos de pequeñas porciones en su hogar, oficina o lugar de estudio. Para esto, se realizan entrevistas a 12 \textit{(modificar el número final cuando se tenga)} personas con el objetivo de identificar las necesidades y preferencias comunes de los usuarios.
 
 \subsection{Necesidades}
-Finalizadas las entrevistas, se definen las siguientes necesidades:
+Finalizadas las entrevistas, se definen las necesidades del usuario:
 
 \begin{enumerate}
-    \item Tiempo de respuesta rápido.
-    \item Fácil de transportar.
-    \item Bajo consumo energético.
-    \item Facilidad de uso.
-    \item Bajo costo.
-    \item Inocuidad de los alimentos.
-    \item Seguridad ante cambios de temperatura.
+    \item \textbf{Enfriamiento efectivo:} Alcanzar la temperatura ideal de consumo para latas de bebida.
+    \item \textbf{Calentamiento efectivo:} Elevar el agua a la temperatura adecuada para la sopa.
+    \item \textbf{Tiempo de respuesta:} Completar el acondicionamiento térmico en un rango de tiempo breve.
+    \item \textbf{Facilidad de uso:} Operación simple e intuitiva para el usuario.
+    \item \textbf{Limpieza e higiene:} Limpieza rápida y accesible de las piezas en contacto con alimentos.
+    \item \textbf{Portabilidad:} Diseño compacto y transportable para entornos domésticos o de oficina.
+    \item \textbf{Inocuidad:} Agua apta y segura para consumo (sin alteración de sabor u olor).
+    \item \textbf{Protección integral:} Aislamiento seguro contra riesgos térmicos, mecánicos y eléctricos.
+    \item \textbf{Bajo costo:} Presupuesto de desarrollo y fabricación accesible.
+    \item \textbf{Eficiencia energética:} Bajo consumo eléctrico durante los ciclos de acondicionamiento.
 \end{enumerate}
 
 Una vez identificadas las necesidades, se les solicita a los entrevistados que distribuyan un total de 100 puntos entre las necesidades mencionadas en orden de importancia para ellos. La tabla \ref{tab:necesidades} muestra el promedio de los resultados obtenidos.
 
-\begin{table}[h]
+\begin{table}[H]
     \centering
-    \begin{tabular}{cc}
+    \begin{tabular}{lc}
         \hline
         \textbf{Necesidad} & \textbf{Puntos} \\
         \hline
-        Tiempo de respuesta rápido              & 20 \\
-        Fácil de transportar                    & 20 \\
-        Bajo consumo energético                 & 20 \\
-        Facilidad de uso                        & 20 \\
-        Bajo costo                              & 20 \\
-        Inocuidad de los alimentos              & 20 \\
-        Seguridad ante cambios de temperatura   & 20 \\
+        Enfriamiento efectivo & - \\
+        Calentamiento efectivo & - \\
+        Tiempo de respuesta & - \\
+        Facilidad de uso & - \\
+        Limpieza e higiene & - \\
+        Portabilidad & - \\
+        Inocuidad & - \\
+        Protección integral & - \\
+        Bajo costo & - \\
+        Eficiencia energética & - \\
         \hline
     \end{tabular}
     \caption{Promedio de puntos asignados a cada necesidad por los entrevistados.}
@@ -211,7 +219,123 @@ Una vez identificadas las necesidades, se les solicita a los entrevistados que d
 En base a las entrevistas realizadas, se identifican productos que son catalogados como competencia. Posterior a una investigación de los productos existentes en el mercado, se realiza una comparación de desempeño en la satisfacción de las necesidades de los usuarios.
 
 \subsection{Especificaciones técnicas}
-Las necesidades mencionadas se traducen en especificaciones técnicas. Estas buscan asegurar el cumplimiento de las necesidades de los usuarios mediante objetivos, criterios y métricas, los cuales permiten medir el desempeño del producto en cada una de ellas. Esto significa que para cada especificación existe un objetivo deseado, un criterio de éxito y una métrica de evaluación.
+Las necesidades mencionadas se traducen en especificaciones técnicas. Estas buscan asegurar el cumplimiento de las necesidades de los usuarios mediante objetivos, criterios y métricas, los cuales permiten medir el desempeño del producto en cada una de ellas. Esto significa que para cada especificación existe un objetivo deseado, un criterio de éxito y una métrica de evaluación. Para esto, se agrupan en diferentes categorías para luego exponer una explicación breve y concisa de cada una de ellas.
+
+\begin{itemize}
+    \item Desempeño térmico
+    \begin{enumerate}
+        \item Enfriamiento efectivo: .
+        \item Calentamiento efectivo: .
+        \item Tiempo de respuesta: .
+    \end{enumerate}
+    \item Uso e interacción
+    \begin{enumerate}
+        \item Facilidad de uso: .
+        \item Limpieza e higiene: .
+        \item Portabilidad: .
+    \end{enumerate}
+    \item Seguridad
+    \begin{enumerate}
+        \item Inocuidad: .
+        \item Protección integral al usuario: .
+    \end{enumerate}
+    \item Viabilidad y costo
+    \begin{enumerate}
+        \item Bajo costo: .
+        \item Bajo consumo energético: .
+    \end{enumerate}
+\end{itemize}
+
+En base a las justificaciones anteriores se definen las especificaciones técnicas, con sus criterios, objetivos y métricas asociados en la Tabla \ref{tab:especificaciones}.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabularx}{\textwidth}{@{}>{\RaggedRight\arraybackslash}X >{\Centering\arraybackslash}p{2.5cm} >{\Centering\arraybackslash}p{1.5cm} >{\Centering\arraybackslash}p{1.0cm}@{}}
+\toprule
+\textbf{Especificación Técnica} & \textbf{Objetivo} & \textbf{Unidad} & \textbf{Sentido} \\ 
+\midrule
+
+% --- 1. ENFRIAMIENTO EFECTIVO ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 1. Enfriamiento efectivo} \\
+\multicolumn{4}{l}{\textit{Criterio:} Desempeño Térmico (Modo Frío)} \\
+\nopagebreak
+Temperatura objetivo de la lata ($T_{f,c}$) & $\le 8$ & \si{\celsius} & $\downarrow$ \\
+Volumen nominal de la bebida ($V_c$) & $354$ & \si{\ml} & $\uparrow$ \\
+\midrule
+
+% --- 2. CALENTAMIENTO EFECTIVO ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 2. Calentamiento efectivo} \\
+\multicolumn{4}{l}{\textit{Criterio:} Desempeño Térmico (Modo Calor)} \\
+\nopagebreak
+Temperatura objetivo del agua ($T_{f,h}$) & $\ge 85$ & \si{\celsius} & $\uparrow$ \\
+Volumen de agua para sopa ($V_h$) & $300$ & \si{\ml} & $\uparrow$ \\
+\midrule
+
+% --- 3. TIEMPO DE RESPUESTA ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 3. Tiempo de respuesta} \\
+\multicolumn{4}{l}{\textit{Criterio:} Cinética de Transferencia Térmica} \\
+\nopagebreak
+Tiempo de enfriamiento ($t_c$) & $\le 15$ & \si{\minute} & $\downarrow$ \\
+Tiempo de calentamiento ($t_h$) & $\le 10$ & \si{\minute} & $\downarrow$ \\
+\midrule
+
+% --- 4. FACILIDAD DE USO ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 4. Facilidad de uso} \\
+\multicolumn{4}{l}{\textit{Criterio:} Usabilidad e Interfaz} \\
+\nopagebreak
+Pasos requeridos para iniciar el proceso & $\le 2$ & Acciones & $\downarrow$ \\
+\midrule
+
+% --- 5. LIMPIEZA E HIGIENE ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 5. Limpieza e higiene} \\
+\multicolumn{4}{l}{\textit{Criterio:} Mantenibilidad y Sanidad} \\
+\nopagebreak
+Tiempo de desmontaje y lavado de piezas & $\le 3$ & \si{\minute} & $\downarrow$ \\
+\midrule
+
+% --- 6. PORTABILIDAD ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 6. Portabilidad} \\
+\multicolumn{4}{l}{\textit{Criterio:} Ergonomía y Dimensiones} \\
+\nopagebreak
+Masa total del dispositivo ($m$) & $\le 4,0$ & \si{\kilogram} & $\downarrow$ \\
+Envolvente máxima ($A \times L \times H$) & $\le 30 \times 30 \times 35$ & \si{\cm} & $\downarrow$ \\
+\midrule
+
+% --- 7. INOCUIDAD ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 7. Inocuidad} \\
+\multicolumn{4}{l}{\textit{Criterio:} Compatibilidad de Materiales} \\
+\nopagebreak
+Compatibilidad alimentaria de superficies en contacto con agua & Grado Alimentario & Cualitativo & $\rightarrow$ \\
+\midrule
+
+% --- 8. PROTECCIÓN INTEGRAL ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 8. Protección integral} \\
+\multicolumn{4}{l}{\textit{Criterio:} Seguridad Térmica, Mecánica y Eléctrica} \\
+\nopagebreak
+Temperatura máxima externa de carcasa ($T_{\text{ext}}$) & $\le 40$ & \si{\celsius} & $\downarrow$ \\
+Protecciones eléctricas y contra humedad & IPX2 / Aislamiento & Grado IP & $\uparrow$ \\
+\midrule
+
+% --- 9. BAJO COSTO ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 9. Bajo costo} \\
+\multicolumn{4}{l}{\textit{Criterio:} Factibilidad Económica} \\
+\nopagebreak
+Costo total de desarrollo y materiales (BOM) & $\le 50.000$ & CLP & $\downarrow$ \\
+\midrule
+
+% --- 10. EFICIENCIA ENERGÉTICA ---
+\multicolumn{4}{l}{\textbf{Necesidad:} 10. Eficiencia energética} \\
+\multicolumn{4}{l}{\textit{Criterio:} Gestión Energética} \\
+\nopagebreak
+Potencia eléctrica máxima consumida ($P_{\text{máx}}$) & $\le 120$ & \si{\watt} & $\downarrow$ \\
+
+\bottomrule
+\end{tabularx}
+\caption{Matriz de especificaciones técnicas de ingeniería estructurada según las necesidades del usuario.}
+\label{tab:especificaciones}
+\end{table}
 
 
 
