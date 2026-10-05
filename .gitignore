@@ -1,0 +1,20 @@
+# Archivos y carpeta de compilación de LaTeX
+build/
+*.aux
+*.log
+*.out
+*.toc
+*.bcf
+*.bbl
+*.bbl-SAVE-ERROR
+*.blg
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.lof
+*.lot
+*.run.xml
+
+
+# Opcional: Descomenta la siguiente línea si NO quieres subir el PDF compilado
+# *.pdf

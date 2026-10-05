@@ -1,0 +1,240 @@
+\documentclass[12pt, a4paper]{article}
+
+% ==========================================
+% 1. CODIFICACIÓN Y TIPOGRAFÍA
+% ==========================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish, es-tabla]{babel} % 'es-tabla' cambia "Cuadro" por "Tabla" automáticamente
+\usepackage{amsmath, amssymb}         % Paquetes matemáticos antes de newtxmath
+\usepackage{newtxtext, newtxmath}     % Tipografía Times New Roman (12pt según bases)
+\usepackage{microtype}                % Mejora la justificación y estética tipográfica
+
+% ==========================================
+% 2. MARGENES E INTERLINEADO (SEGÚN RÚBRICA)
+% ==========================================
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing                       % Interlineado 1.5 obligatorio
+\setlength{\parindent}{0.5cm}         % Sangría de 0.5 cm
+
+% ==========================================
+% 3. MATEMÁTICAS, UNIDADES Y TABLAS
+% ==========================================
+\usepackage{siunitx}                  % Para unidades físicas (ej. \SI{25}{\degree\Celsius})
+\sisetup{output-decimal-marker = {,}}  % Coma decimal para español
+
+\usepackage[table]{xcolor}            % Colores con soporte para tablas
+\usepackage{booktabs}                 % Tablas profesionales (\toprule, \midrule, \bottomrule)
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{makecell}
+\usepackage{adjustbox}                % Ajuste de tablas anchas
+
+% ==========================================
+% 4. FIGURAS Y GRÁFICOS
+% ==========================================
+\usepackage{graphicx}
+\graphicspath{{imagenes/}}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{font=small, labelfont=bf, justification=centering}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, babel}
+
+% ==========================================
+% 5. BIBLIOGRAFÍA (APA 7) Y ENLACES
+% ==========================================
+\usepackage{csquotes}
+\usepackage[style=apa, backend=biber]{biblatex}
+\addbibresource{referencias.bib}
+
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=black, citecolor=black]{hyperref}
+\usepackage{bookmark}
+
+% ==========================================
+% 6. ENCABEZADOS Y PIE DE PÁGINA
+% ==========================================
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\setlength{\headheight}{15pt}
+\fancyhf{}
+\fancyhead[L]{\textbf{\coursename} (\coursecode)}
+\fancyhead[R]{\small Entrega: \deliverydate}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ==========================================
+% 7. COMANDOS PERSONALIZADOS
+% ==========================================
+% Encabezados rotados a 90° para tablas estrechas
+\newcommand{\rot}[1]{\rotatebox[origin=l]{90}{\parbox{2.8cm}{\raggedright #1}}}
+
+% ==========================================
+% 8. DATOS DEL DOCUMENTO
+% ==========================================
+\newcommand{\univname}{Pontificia Universidad Católica de Chile}
+\newcommand{\schoolname}{Escuela de Ingeniería}
+\newcommand{\deptname}{Departamento de Ingeniería Mecánica y Metalúrgica}
+
+\newcommand{\coursename}{Taller de Diseño de Productos Mecánicos}
+\newcommand{\coursecode}{ICM3390}
+\newcommand{\projecttitle}{Desafío 2: Acondicionador térmico de líquidos de sobremesa}
+
+\newcommand{\authorone}{Juan Francisco Ruz Aedo}
+\newcommand{\authortwo}{Francisco Joaquín Retamal Suárez}
+\newcommand{\authorthree}{Nicolás Rodrigo Meyer Sironvalle}
+\newcommand{\authorfour}{Adolfo Claudio Leiva Mendoza}
+
+\newcommand{\deliverydate}{26 de octubre de 2026}
+
+% ==========================================
+% INICIO DEL DOCUMENTO
+% ==========================================
+\begin{document}
+
+% ------------------------------------------
+% PORTADA
+% ------------------------------------------
+\begin{titlepage}
+    \centering
+    
+    % Logo de la Universidad (Asegúrate de tener 'logo-uc.jpg' en tu carpeta o carpeta imagenes/)
+    \includegraphics[width=0.2\textwidth]{logo-uc.jpg}\par
+    \vspace{0.5cm}
+    
+    {\Large \scshape \univname \par}
+    \vspace{0.2cm}
+    {\large \scshape \schoolname \par}
+    \vspace{0.1cm}
+    {\normalsize \scshape \deptname \par}
+    
+    \vspace{0.5cm}
+    \rule{\linewidth}{1pt} \par
+    \vspace{0.5cm}
+
+    {\Huge \bfseries \projecttitle \par}
+    \vspace{0.3cm}
+    {\Large Grupo 6 \par}
+    \vspace{0.3cm}
+    {\large \coursename{} -- \coursecode \par}
+    
+    \vspace{0.5cm}
+    \rule{\linewidth}{1pt} \par
+
+    \vfill 
+    
+    % Distribución de Integrantes y Docentes
+    \begin{minipage}[t]{0.5\textwidth}
+        \begin{flushleft} \large
+            \textbf{Integrantes:} \\
+            \authorone \\
+            \authortwo \\
+            \authorthree \\
+            \authorfour
+        \end{flushleft}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.4\textwidth}
+        \begin{flushright} \large
+            \textbf{Profesores:} \\
+            Juan Pablo Oyarzun Alcayaga \\
+            Ariel Orlando Espinoza Jara
+        \end{flushright}
+    \end{minipage}
+
+    \vspace{1.5cm}
+
+    {\large \deliverydate \par}
+\end{titlepage}
+
+% --- CONFIGURACIÓN DE NUMERACIÓN DESDE EL ÍNDICE ---
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% ------------------------------------------
+% ÍNDICES
+% ------------------------------------------
+\tableofcontents
+\newpage
+\listoffigures
+\listoftables
+\newpage
+
+% ==============================================================================
+% SECCIONES DEL INFORME (Estructura oficial exigida)
+% ==============================================================================
+
+\section{Introducción y contexto de uso}
+
+\section{Necesidades, especificaciones y selección del concepto}
+\subsection{Usuario}
+Para dar inicio a la elaboración del desafío, se define como usuario a aquellas personas que requieran enfriar bebestibles individuales o calentar alimentos de pequeñas porciones en su hogar, oficina o lugar de estudio. Para esto, se realizan entrevistas a 12 personas con el objetivo de identificar las necesidades y preferencias comunes de los usuarios.
+
+\subsection{Necesidades}
+Finalizadas las entrevistas, se definen las siguientes necesidades:
+
+\begin{enumerate}
+    \item Tiempo de respuesta rápido.
+    \item Fácil de transportar.
+    \item Bajo consumo energético.
+    \item Facilidad de uso.
+    \item Bajo costo.
+    \item Inocuidad de los alimentos.
+    \item Seguridad ante cambios de temperatura.
+\end{enumerate}
+
+Una vez identificadas las necesidades, se les solicita a los entrevistados que distribuyan un total de 100 puntos entre las necesidades mencionadas en orden de importancia para ellos. La tabla \ref{tab:necesidades} muestra el promedio de los resultados obtenidos.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cc}
+        \hline
+        \textbf{Necesidad} & \textbf{Puntos} \\
+        \hline
+        Tiempo de respuesta rápido              & 20 \\
+        Fácil de transportar                    & 20 \\
+        Bajo consumo energético                 & 20 \\
+        Facilidad de uso                        & 20 \\
+        Bajo costo                              & 20 \\
+        Inocuidad de los alimentos              & 20 \\
+        Seguridad ante cambios de temperatura   & 20 \\
+        \hline
+    \end{tabular}
+    \caption{Promedio de puntos asignados a cada necesidad por los entrevistados.}
+    \label{tab:necesidades}
+\end{table}
+
+\subsection{Competencia}
+En base a las entrevistas realizadas, se identifican productos que son catalogados como competencia. Posterior a una investigación de los productos existentes en el mercado, se realiza una comparación de desempeño en la satisfacción de las necesidades de los usuarios.
+
+\subsection{Especificaciones técnicas}
+Las necesidades mencionadas se traducen en especificaciones técnicas. Estas buscan asegurar el cumplimiento de las necesidades de los usuarios mediante objetivos, criterios y métricas, los cuales permiten medir el desempeño del producto en cada una de ellas. Esto significa que para cada especificación existe un objetivo deseado, un criterio de éxito y una métrica de evaluación.
+
+
+
+\subsection{Selección del concepto}
+
+
+\section{Arquitectura y modelos desarrollados}
+
+\section{Simulaciones y justificación físico-matemática}
+
+\section{Caracterización, calibración y validación inicial}
+
+\section{Desarrollo del producto final y plan de fabricación}
+
+\section{Resultados y discusión}
+
+\section{Conclusiones}
+
+% ------------------------------------------
+% BIBLIOGRAFÍA
+% ------------------------------------------
+\newpage
+\nocite{*}
+\printbibliography[heading=bibintoc, title={Referencias Bibliográficas}]
+
+\end{document}
