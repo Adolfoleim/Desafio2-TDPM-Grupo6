@@ -74,6 +74,9 @@
 % Encabezados rotados a 90° para tablas estrechas
 \newcommand{\rot}[1]{\rotatebox[origin=l]{90}{\parbox{2.8cm}{\raggedright #1}}}
 
+% Marcador de contenido pendiente (eliminar antes de la entrega)
+\newcommand{\pendiente}[1]{\textcolor{red}{[#1]}}
+
 % ==========================================
 % 8. DATOS DEL DOCUMENTO
 % ==========================================
@@ -173,10 +176,10 @@
 
 \section{Necesidades, especificaciones y selección del concepto}
 \subsection{Usuario}
-Para dar inicio a la elaboración del desafío, se define como usuario a aquellas personas que requieran enfriar bebestibles individuales o calentar alimentos de pequeñas porciones en su hogar, oficina o lugar de estudio. Para esto, se realizan entrevistas a 12 \textit{(modificar el número final cuando se tenga)} personas con el objetivo de identificar las necesidades y preferencias comunes de los usuarios.
+Para dar inicio a la elaboración del desafío, se define como usuario a aquellas personas que requieran enfriar bebestibles individuales o calentar alimentos de pequeñas porciones en su hogar, oficina o lugar de estudio. Con el objetivo de conocer las prioridades de este grupo, se aplica una encuesta mediante un formulario en línea a 9 personas representativas del usuario definido.
 
 \subsection{Necesidades}
-Finalizadas las entrevistas, se definen las necesidades del usuario:
+A partir del análisis del contexto de uso y de los requerimientos del encargo, se identifican las siguientes necesidades del usuario:
 
 \begin{enumerate}
     \item \textbf{Enfriamiento efectivo:} Alcanzar la temperatura ideal de consumo para latas de bebida.
@@ -191,32 +194,103 @@ Finalizadas las entrevistas, se definen las necesidades del usuario:
     \item \textbf{Eficiencia energética:} Bajo consumo eléctrico durante los ciclos de acondicionamiento.
 \end{enumerate}
 
-Una vez identificadas las necesidades, se les solicita a los entrevistados que distribuyan un total de 100 puntos entre las necesidades mencionadas en orden de importancia para ellos. La tabla \ref{tab:necesidades} muestra el promedio de los resultados obtenidos.
+En el formulario, cada encuestado ordena las diez necesidades según su grado de importancia, asignando un puntaje entero desde 1 (menos importante) hasta 10 (más importante), sin repetir valores. De este modo, cada encuestado distribuye un total de $\sum_{k=1}^{10} k = 55$ puntos.
+
+Para expresar la importancia relativa de cada necesidad en una escala común, el puntaje promedio de cada necesidad se normaliza respecto de un total de 100 puntos. Si $r_{ij}$ es el puntaje asignado por el encuestado $i$ a la necesidad $j$ y $N = 9$ es el número de encuestados, el puntaje promedio $\bar{r}_j$ y la importancia normalizada $P_j$ se calculan como:
+
+\begin{equation}
+    \bar{r}_j = \frac{1}{N}\sum_{i=1}^{N} r_{ij}, \qquad
+    P_j = 100 \cdot \frac{\bar{r}_j}{\sum_{k=1}^{10} \bar{r}_k} = 100 \cdot \frac{\bar{r}_j}{55}.
+    \label{eq:normalizacion}
+\end{equation}
+
+Por construcción, $\sum_j P_j = 100$. La Tabla \ref{tab:necesidades} presenta el puntaje promedio, la importancia normalizada y la prioridad resultante de cada necesidad.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{lc}
-        \hline
-        \textbf{Necesidad} & \textbf{Puntos} \\
-        \hline
-        Enfriamiento efectivo & - \\
-        Calentamiento efectivo & - \\
-        Tiempo de respuesta & - \\
-        Facilidad de uso & - \\
-        Limpieza e higiene & - \\
-        Portabilidad & - \\
-        Inocuidad & - \\
-        Protección integral & - \\
-        Bajo costo & - \\
-        Eficiencia energética & - \\
-        \hline
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Necesidad} & \textbf{Puntaje promedio} $\bar{r}_j$ & \textbf{Importancia} $P_j$ & \textbf{Prioridad} \\
+        \midrule
+        Enfriamiento efectivo  & 9,2 & 16,7 & 1 \\
+        Calentamiento efectivo & 8,4 & 15,3 & 2 \\
+        Tiempo de respuesta    & 6,7 & 12,2 & 3 \\
+        Facilidad de uso       & 4,0 & 7,3  & 7 \\
+        Limpieza e higiene     & 6,0 & 10,9 & 4 \\
+        Portabilidad           & 3,1 & 5,6  & 10 \\
+        Inocuidad              & 4,9 & 8,9  & 6 \\
+        Protección integral    & 5,8 & 10,5 & 5 \\
+        Bajo costo             & 3,7 & 6,7  & 8 \\
+        Eficiencia energética  & 3,2 & 5,8  & 9 \\
+        \midrule
+        \textbf{Total}         & 55,0 & 100,0 & -- \\
+        \bottomrule
     \end{tabular}
-    \caption{Promedio de puntos asignados a cada necesidad por los entrevistados.}
+    \caption{Puntaje promedio e importancia normalizada de cada necesidad ($N = 9$ encuestados). Los valores de $P_j$ se redondean a un decimal.}
     \label{tab:necesidades}
 \end{table}
 
+Los resultados muestran que el desempeño térmico concentra la mayor importancia: el enfriamiento efectivo, el calentamiento efectivo y el tiempo de respuesta suman en conjunto un 44,2\% del total. En segundo plano se ubican los aspectos de higiene y seguridad, mientras que la portabilidad y la eficiencia energética resultan ser las necesidades menos prioritarias para los encuestados.
+
 \subsection{Competencia}
-En base a las entrevistas realizadas, se identifican productos que son catalogados como competencia. Posterior a una investigación de los productos existentes en el mercado, se realiza una comparación de desempeño en la satisfacción de las necesidades de los usuarios.
+Con el fin de establecer referencias de desempeño, se investigan productos comerciales que resuelven total o parcialmente el problema planteado. Se consideran tanto equipos que enfrían latas de forma rápida como equipos que calientan agua para consumo, además de dispositivos que, al igual que el producto propuesto, emplean módulos termoeléctricos para operar en ambos modos. Los productos seleccionados son los siguientes:
+
+\begin{enumerate}
+    \item \textbf{Cooper Cooler Rapid Beverage Chiller:} hace girar la lata sobre su eje mientras la rocía con agua con hielo proveniente de un depósito de 1,5~L. Enfría una lata de 12~oz desde \SI{25}{\celsius} hasta \SI{6}{\celsius} en aproximadamente 1~min, pero requiere reponer hielo y no permite calentar \parencite{drinkstuff_cooper}.
+    \item \textbf{SpinChill:} dispositivo manual a baterías que hace girar la lata sumergida en un recipiente con hielo. Declara tiempos de enfriamiento cercanos a 1--2~min, a un precio aproximado de 30~USD, aunque depende de una fuente externa de frío \parencite{reviewed_spinchill, themanual_spinchill}.
+    \item \textbf{Portavasos termoeléctrico frío/calor 12~V:} vaso con módulo Peltier de \SI{36}{\watt} que enfría o calienta bebidas en latas o botellas de diámetro estándar. Alcanza cerca de \SI{4}{\celsius} en frío y \SI{54}{\celsius} en calor, con tiempos de enfriamiento del orden de 10--15~min \parencite{ottocast_cup, rvtravel_cup}.
+    \item \textbf{Mini refrigerador termoeléctrico AstroAI 4~L:} cámara aislada con capacidad para seis latas de 330~mL, que enfría hasta \SI{18}{\celsius} bajo la temperatura ambiente o mantiene alimentos a \SI{66}{\celsius}. Su masa es cercana a 2~kg, pero el enfriamiento por aire toma varias horas \parencite{astroai_fridge}.
+    \item \textbf{Hervidor eléctrico de viaje Severin WK 3462:} hervidor de 0,5~L y \SI{1100}{\watt} de potencia que calienta mediante una resistencia eléctrica. Se estima que lleva 300~mL de agua a ebullición en aproximadamente 2~min, pero no ofrece modo de enfriamiento \parencite{severin_wk3462}.
+\end{enumerate}
+
+La Tabla \ref{tab:competencia_specs} resume las principales características técnicas de los productos de referencia.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}>{\RaggedRight\arraybackslash}p{2.3cm} >{\RaggedRight\arraybackslash}X >{\Centering\arraybackslash}p{1.2cm} >{\Centering\arraybackslash}p{2.4cm} >{\Centering\arraybackslash}p{2.1cm} >{\Centering\arraybackslash}p{1.6cm}@{}}
+\toprule
+\textbf{Producto} & \textbf{Principio} & \textbf{Modos} & \textbf{Desempeño declarado} & \textbf{Alimentación} & \textbf{Precio aprox.} \\
+\midrule
+Cooper Cooler & Rotación de la lata con rocío de agua con hielo & Frío & 25 $\to$ \SI{6}{\celsius} en $\approx$ 1~min & Red eléctrica & 65--175~USD \\
+SpinChill & Rotación manual en baño de hielo & Frío & $\approx$ 1--2~min & 4 pilas AA & $\approx$ 30~USD \\
+Portavasos Peltier 12~V & Contacto conductivo con módulo Peltier & Frío y calor & $\approx$ 4 / \SI{54}{\celsius}; 10--15~min (frío) & 12~V CC, \SI{36}{\watt} & $\approx$ 69~USD \\
+AstroAI 4~L & Cámara de aire con módulo Peltier & Frío y calor & $T_\infty - 18$ / \SI{66}{\celsius}; horas & 12~V CC / 115~V CA & $\approx$ 36~USD \\
+Severin WK 3462 & Resistencia eléctrica sumergida & Calor & Ebullición en $\approx$ 2~min (300~mL) & 230~V CA, \SI{1100}{\watt} & 32--50~EUR \\
+\bottomrule
+\end{tabularx}
+\caption{Características técnicas de los productos de referencia.}
+\label{tab:competencia_specs}
+\end{table}
+
+Posteriormente, se evalúa el grado en que cada producto satisface las necesidades identificadas, utilizando una escala de 1 (no satisface) a 5 (satisface completamente). Cada evaluación se pondera por la importancia normalizada $P_j$ de la Tabla \ref{tab:necesidades}, de modo que el puntaje ponderado de cada producto resulta $\sum_j P_j\, s_j / 100$, donde $s_j$ es la evaluación asignada a la necesidad $j$. La Tabla \ref{tab:competencia_necesidades} presenta esta comparación.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Necesidad} & $P_j$ & \textbf{Cooper} & \textbf{SpinChill} & \textbf{Portavasos} & \textbf{AstroAI} & \textbf{Hervidor} \\
+\midrule
+Enfriamiento efectivo   & 16,7 & 5 & 4 & 3 & 2 & 1 \\
+Calentamiento efectivo  & 15,3 & 1 & 1 & 2 & 2 & 5 \\
+Tiempo de respuesta     & 12,2 & 5 & 5 & 3 & 1 & 5 \\
+Facilidad de uso        & 7,3  & 3 & 3 & 5 & 4 & 5 \\
+Limpieza e higiene      & 10,9 & 2 & 3 & 4 & 3 & 4 \\
+Portabilidad            & 5,6  & 3 & 5 & 5 & 3 & 5 \\
+Inocuidad               & 8,9  & 3 & 3 & 3 & 3 & 4 \\
+Protección integral     & 10,5 & 4 & 4 & 4 & 4 & 3 \\
+Bajo costo              & 6,7  & 2 & 5 & 3 & 4 & 4 \\
+Eficiencia energética   & 5,8  & 4 & 5 & 4 & 2 & 3 \\
+\midrule
+\textbf{Puntaje ponderado} & 100 & 3,26 & 3,57 & 3,38 & 2,62 & 3,74 \\
+\bottomrule
+\end{tabular}
+\caption{Evaluación de la satisfacción de necesidades por parte de los productos de referencia (escala 1 a 5), ponderada según la importancia normalizada de cada necesidad.}
+\label{tab:competencia_necesidades}
+\end{table}
+
+Del análisis se desprende que ningún producto de referencia supera un puntaje ponderado de 3,74 sobre 5, y que ninguno satisface simultáneamente las necesidades de enfriamiento y calentamiento efectivos, que son precisamente las de mayor importancia para los usuarios. Los equipos de enfriamiento rápido dependen del hielo como fuente de frío, el hervidor carece de modo de enfriamiento, y los dispositivos termoeléctricos de doble modo alcanzan temperaturas insuficientes para preparar una sopa instantánea o presentan tiempos de respuesta prolongados. Esta brecha define la oportunidad de diseño del producto propuesto: un único equipo autónomo, sin necesidad de hielo, capaz de enfriar una lata y calentar agua para consumo en tiempos competitivos.
 
 \subsection{Especificaciones técnicas}
 Las necesidades mencionadas se traducen en especificaciones técnicas. Estas buscan asegurar el cumplimiento de las necesidades de los usuarios mediante objetivos, criterios y métricas, los cuales permiten medir el desempeño del producto en cada una de ellas. Esto significa que para cada especificación existe un objetivo deseado, un criterio de éxito y una métrica de evaluación. Para esto, se agrupan en diferentes categorías para luego exponer una explicación breve y concisa de cada una de ellas.
@@ -224,25 +298,25 @@ Las necesidades mencionadas se traducen en especificaciones técnicas. Estas bus
 \begin{itemize}
     \item Desempeño térmico
     \begin{enumerate}
-        \item Enfriamiento efectivo: .
-        \item Calentamiento efectivo: .
-        \item Tiempo de respuesta: .
+        \item Enfriamiento efectivo: llevar una lata cerrada desde la temperatura ambiente hasta \SI{8}{\celsius} o menos, rango habitual de consumo de bebidas frías.
+        \item Calentamiento efectivo: elevar el volumen de agua de una porción de sopa instantánea a \SI{85}{\celsius} o más, suficiente para hidratar los fideos.
+        \item Tiempo de respuesta: completar cada ciclo en un tiempo competitivo frente a alternativas cotidianas, como el refrigerador o el hervidor eléctrico.
     \end{enumerate}
     \item Uso e interacción
     \begin{enumerate}
-        \item Facilidad de uso: .
-        \item Limpieza e higiene: .
-        \item Portabilidad: .
+        \item Facilidad de uso: iniciar un ciclo con un máximo de dos acciones, insertar la carga y seleccionar el modo, sin necesidad de consultar un manual.
+        \item Limpieza e higiene: las piezas en contacto con el agua deben poder retirarse y lavarse en pocos minutos y sin herramientas.
+        \item Portabilidad: masa y dimensiones que permitan trasladar el equipo con una mano y ubicarlo sobre un escritorio o mesón de cocina.
     \end{enumerate}
     \item Seguridad
     \begin{enumerate}
-        \item Inocuidad: .
-        \item Protección integral al usuario: .
+        \item Inocuidad: toda superficie en contacto con agua de consumo debe ser de material apto para uso alimentario y no transferir olor ni sabor.
+        \item Protección integral al usuario: superficies accesibles a temperatura segura al tacto, partes móviles cubiertas y electrónica protegida frente a goteo y condensación.
     \end{enumerate}
     \item Viabilidad y costo
     \begin{enumerate}
-        \item Bajo costo: .
-        \item Bajo consumo energético: .
+        \item Bajo costo: costo de materiales y componentes acotado al presupuesto del curso y competitivo frente a los productos de referencia.
+        \item Bajo consumo energético: potencia eléctrica máxima compatible con una fuente de alimentación estándar de 12~V, como las de uso doméstico.
     \end{enumerate}
 \end{itemize}
 
@@ -340,6 +414,82 @@ Potencia eléctrica máxima consumida ($P_{\text{máx}}$) & $\le 120$ & \si{\wat
 
 
 \subsection{Selección del concepto}
+% GUÍA: completar los campos marcados con \pendiente{} y eliminar los marcadores antes de la entrega.
+La selección del concepto se realiza en tres etapas: primero se generan alternativas de arquitectura que satisfacen las especificaciones de la Tabla \ref{tab:especificaciones}; luego se aplica un filtro de factibilidad basado en las restricciones del encargo; finalmente, las alternativas factibles se comparan mediante una matriz de decisión ponderada, cuyos pesos corresponden a la importancia normalizada $P_j$ de la Tabla \ref{tab:necesidades}.
+
+\subsubsection{Generación de alternativas}
+Considerando que el calor debe extraerse de la lata o entregarse al agua a través de los módulos Peltier, las alternativas se diferencian principalmente por el medio de transferencia entre el módulo y la carga. Se proponen los siguientes conceptos:
+
+\begin{enumerate}
+    \item[\textbf{C1.}] \textbf{Manga conductiva:} manga de aluminio ajustada al diámetro de la lata, con módulos Peltier adosados a su cara exterior y un disipador con ventilador en la cara opuesta. Para el modo calor, un recipiente de acero inoxidable se apoya sobre una placa calefactada por Peltier.
+    \item[\textbf{C2.}] \textbf{Baño líquido intermedio:} depósito con un fluido de trabajo cuya temperatura es controlada por los módulos Peltier. La lata o el recipiente de agua se sumergen en el baño, aprovechando el alto coeficiente de convección del líquido.
+    \item[\textbf{C3.}] \textbf{Cámara de aire con convección forzada:} recinto aislado en el que un ventilador hace circular aire sobre un disipador acoplado a los módulos, de manera análoga a un mini refrigerador termoeléctrico.
+    \item[\textbf{C4.}] \textbf{Lata rotatoria sobre apoyo conductivo:} la lata gira sobre su eje apoyada en rodillos o cunas enfriadas por Peltier. La rotación induce convección forzada en el líquido interior y reduce el tiempo de enfriamiento.
+    \item[\textbf{C5.}] \pendiente{Agregar alternativas adicionales propuestas por el equipo, si corresponde.}
+\end{enumerate}
+
+\pendiente{Incluir un boceto o esquema simple de cada alternativa (Figura X).}
+
+\subsubsection{Filtro de factibilidad}
+Las alternativas se someten a un filtro de tipo pasa/no pasa frente a las restricciones obligatorias del encargo: operar en ambos modos mediante módulos Peltier, funcionar con una lata cerrada, emplear materiales aptos para contacto alimentario, ser fabricable principalmente mediante impresión 3D y permitir cumplir los tiempos objetivo con la potencia disponible. La Tabla \ref{tab:filtro} resume el resultado.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Restricción} & \textbf{C1} & \textbf{C2} & \textbf{C3} & \textbf{C4} & \textbf{C5} \\
+\midrule
+Opera en frío y calor con Peltier         & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Compatible con lata cerrada               & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Contacto alimentario garantizable         & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Fabricable mayormente por impresión 3D    & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Tiempos objetivo alcanzables              & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+\midrule
+\textbf{Resultado}                        & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+\bottomrule
+\end{tabular}
+\caption{Filtro de factibilidad de las alternativas frente a las restricciones del encargo (\checkmark: cumple; $\times$: no cumple).}
+\label{tab:filtro}
+\end{table}
+
+A modo de referencia para el criterio de tiempos, el coeficiente de convección natural del aire es del orden de 5--25~\si{\watt\per\square\metre\per\kelvin} \parencite{incropera2007}, por lo que una arquitectura basada en aire, como C3, tiende a requerir tiempos del orden de horas, tal como se observa en el mini refrigerador AstroAI. Por el contrario, el contacto conductivo y la convección en líquidos permiten coeficientes efectivos uno a dos órdenes de magnitud mayores. \pendiente{Respaldar este criterio con un cálculo preliminar de constante de tiempo $\tau = m c_p / (hA)$ para cada alternativa.}
+
+\subsubsection{Matriz de decisión ponderada}
+Las alternativas que superan el filtro se evalúan en una escala de 1 a 5 frente a cada necesidad, y el puntaje total de cada alternativa se obtiene como
+\begin{equation}
+    U_a = \frac{1}{100}\sum_{j=1}^{10} P_j\, s_{aj},
+    \label{eq:matriz_decision}
+\end{equation}
+donde $s_{aj}$ es la evaluación de la alternativa $a$ en la necesidad $j$. Las evaluaciones deben justificarse con evidencia: estimaciones térmicas preliminares, comparación con los productos de referencia o pruebas exploratorias. La Tabla \ref{tab:matriz_decision} presenta la matriz.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Necesidad} & $P_j$ & \textbf{C1} & \textbf{C2} & \textbf{C4} & \textbf{C5} \\
+\midrule
+Enfriamiento efectivo   & 16,7 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Calentamiento efectivo  & 15,3 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Tiempo de respuesta     & 12,2 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Facilidad de uso        & 7,3  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Limpieza e higiene      & 10,9 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Portabilidad            & 5,6  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Inocuidad               & 8,9  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Protección integral     & 10,5 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Bajo costo              & 6,7  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Eficiencia energética   & 5,8  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+\midrule
+\textbf{Puntaje ponderado} $U_a$ & 100 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+\bottomrule
+\end{tabular}
+\caption{Matriz de decisión ponderada de las alternativas factibles (escala 1 a 5). Ajustar las columnas según el resultado del filtro de factibilidad.}
+\label{tab:matriz_decision}
+\end{table}
+
+\subsubsection{Concepto seleccionado}
+\pendiente{Describir el concepto ganador y justificar su elección a partir de la Tabla \ref{tab:matriz_decision}: señalar en qué necesidades de mayor peso supera a las demás alternativas, qué debilidades presenta y cómo se abordarán en la etapa de modelación. Indicar si se adoptan elementos de otras alternativas (concepto híbrido) y comparar su puntaje con el de los productos de referencia de la Tabla \ref{tab:competencia_necesidades}.}
 
 
 \section{Arquitectura y modelos desarrollados}
