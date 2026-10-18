@@ -173,10 +173,10 @@
 
 \section{Necesidades, especificaciones y selección del concepto}
 \subsection{Usuario}
-Para dar inicio a la elaboración del desafío, se define como usuario a aquellas personas que requieran enfriar bebestibles individuales o calentar alimentos de pequeñas porciones en su hogar, oficina o lugar de estudio. Para esto, se realizan entrevistas a 12 \textit{(modificar el número final cuando se tenga)} personas con el objetivo de identificar las necesidades y preferencias comunes de los usuarios.
+Para dar inicio a la elaboración del desafío, se define como usuario a aquellas personas que requieran enfriar bebestibles individuales o calentar alimentos de pequeñas porciones en su hogar, oficina o lugar de estudio. Para esto, se realizan entrevistas a 10 personas con el objetivo de identificar ia importancia relativas de las necesidades que se detectaron a la hora de plantear el problema. 
 
 \subsection{Necesidades}
-Finalizadas las entrevistas, se definen las necesidades del usuario:
+Las necesidades a evaluar durante las entrevistas fueron:
 
 \begin{enumerate}
     \item \textbf{Enfriamiento efectivo:} Alcanzar la temperatura ideal de consumo para latas de bebida.
@@ -191,7 +191,7 @@ Finalizadas las entrevistas, se definen las necesidades del usuario:
     \item \textbf{Eficiencia energética:} Bajo consumo eléctrico durante los ciclos de acondicionamiento.
 \end{enumerate}
 
-Una vez identificadas las necesidades, se les solicita a los entrevistados que distribuyan un total de 100 puntos entre las necesidades mencionadas en orden de importancia para ellos. La tabla \ref{tab:necesidades} muestra el promedio de los resultados obtenidos.
+Al terminar las entrevistas, se promedio el puntaje obtenido en cada necesidad, obteniendo los resultados expresados en la \ref{tab:necesidades}: 
 
 \begin{table}[H]
     \centering
@@ -199,16 +199,16 @@ Una vez identificadas las necesidades, se les solicita a los entrevistados que d
         \hline
         \textbf{Necesidad} & \textbf{Puntos} \\
         \hline
-        Enfriamiento efectivo & - \\
-        Calentamiento efectivo & - \\
-        Tiempo de respuesta & - \\
-        Facilidad de uso & - \\
-        Limpieza e higiene & - \\
-        Portabilidad & - \\
-        Inocuidad & - \\
-        Protección integral & - \\
-        Bajo costo & - \\
-        Eficiencia energética & - \\
+        Enfriamiento efectivo & 9,22 \\
+        Calentamiento efectivo & 8,44 \\
+        Tiempo de respuesta & 6,66 \\
+        Facilidad de uso & 4 \\
+        Limpieza e higiene & 6 \\
+        Portabilidad & 3,11 \\
+        Inocuidad & 4,88 \\
+        Protección integral & 5.77 \\
+        Bajo costo & 3,66 \\
+        Eficiencia energética & 3,22 \\
         \hline
     \end{tabular}
     \caption{Promedio de puntos asignados a cada necesidad por los entrevistados.}
@@ -219,7 +219,7 @@ Una vez identificadas las necesidades, se les solicita a los entrevistados que d
 
 Uno de los productos que tienen una funcionalidad similar o igual a la solicitada, ya existente en el mercado, corresponde a los frigobares con dispensador integrado (Mercado Libre, s. f.). Estos, en su versión estándar, funcionan en base a ciclos con gases de refrigeración mediante un compresor en combinación con una resistencia eléctrica similar a la de un hervidor (Culligan Water Spain, 2024). Cabe mencionar que algunos modelos más específicos o compactos en el mercado funcionan directamente mediante láminas termoeléctricas Peltier (Falabella, s. f.).
 
-
+\vspace{0.4cm}
 En base a las entrevistas realizadas, se identifican productos que son catalogados como competencia. Posterior a una investigación de los productos existentes en el mercado, se realiza una comparación de desempeño en la satisfacción de las necesidades de los usuarios.
 
 \subsection{Especificaciones técnicas}
@@ -228,9 +228,9 @@ Las necesidades mencionadas se traducen en especificaciones técnicas. Estas bus
 \begin{itemize}
     \item Desempeño térmico
     \begin{enumerate}
-        \item Enfriamiento efectivo: .
-        \item Calentamiento efectivo: .
-        \item Tiempo de respuesta: .
+        \item Enfriamiento efectivo: Se analizó el mercado actual (las especificaciones de la competencia), pues se asume que es un estándar a nivel industrial.
+        \item Calentamiento efectivo: Una vez más, se analizó el mercado actual (las especificaciones de la competencia) y se asume que es un estándar a nivel industrial.
+        \item Tiempo de respuesta: Se ha establecido un límite fundamentándose en la cinética de transferencia térmica mediante celdas termoeléctricas de contacto directo. Datos empíricos previos indican que es factible descender la temperatura de volúmenes similares de líquido en rangos cercanos a los 20 minutos bajo tecnologías de baja potencia, por lo que una meta de 45 minutos considerando que no se conará con contacto directo, mediante el sistema de disipación (Peltier Power, s.~f.).
     \end{enumerate}
     \item Uso e interacción
     \begin{enumerate}
@@ -281,7 +281,7 @@ Volumen de agua para sopa ($V_h$) & $300$ & \si{\ml} & $\uparrow$ \\
 \multicolumn{4}{l}{\textbf{Necesidad:} 3. Tiempo de respuesta} \\
 \multicolumn{4}{l}{\textit{Criterio:} Cinética de Transferencia Térmica} \\
 \nopagebreak
-Tiempo de enfriamiento ($t_c$) & $\le 15$ & \si{\minute} & $\downarrow$ \\
+Tiempo de enfriamiento ($t_c$) & $\le 45$ & \si{\minute} & $\downarrow$ \\
 Tiempo de calentamiento ($t_h$) & $\le 10$ & \si{\minute} & $\downarrow$ \\
 \midrule
 
