@@ -9,7 +9,10 @@
 \usepackage{amsmath, amssymb}         % Paquetes matemáticos antes de newtxmath
 \usepackage{newtxtext, newtxmath}     % Tipografía Times New Roman (12pt según bases)
 \usepackage{microtype}                % Mejora la justificación y estética tipográfica
-
+\usepackage{amssymb}  % Para usar \checkmark
+\usepackage{pifont}   % Opcional: para símbolos adicionales como cruces
+\newcommand{\cmark}{\checkmark} % Check
+\newcommand{\xmark}{\ding{55}}     % Cruz 
 % ==========================================
 % 2. MARGENES E INTERLINEADO (SEGÚN RÚBRICA)
 % ==========================================
@@ -300,9 +303,9 @@ Las necesidades mencionadas se traducen en especificaciones técnicas. Estas bus
 \begin{itemize}
     \item Desempeño térmico
     \begin{enumerate}
-        \item Enfriamiento efectivo: llevar una lata cerrada desde la temperatura ambiente hasta \SI{8}{\celsius} o menos, rango habitual de consumo de bebidas frías. Para fijar este valor se analizó el mercado actual (las especificaciones de la competencia), pues se asume que es un estándar a nivel industrial.
+        \item Enfriamiento efectivo: llevar una lata estándar de 350 ml, comunmente utilizada por diversos bebestibles, cerrada desde la temperatura ambiente (aproximadamente 20 °C) hasta \SI{8}{\celsius} o menos, rango habitual de consumo de bebidas frías. Para fijar este valor se analizó el mercado actual (las especificaciones de la competencia), pues se asume que es un estándar a nivel industrial.
         \item Calentamiento efectivo: elevar el volumen de agua de una porción de sopa instantánea a \SI{85}{\celsius} o más, suficiente para hidratar los fideos. Al igual que en el caso anterior, se analizaron las especificaciones de la competencia, asumiendo que representan un estándar a nivel industrial.
-        \item Tiempo de respuesta: completar cada ciclo en un tiempo competitivo frente a alternativas cotidianas, como el refrigerador o el hervidor eléctrico. El límite se establece fundamentándose en la cinética de transferencia térmica mediante celdas termoeléctricas de contacto directo. Datos empíricos previos indican que es factible descender la temperatura de volúmenes similares de líquido en rangos cercanos a los 20 minutos bajo tecnologías de baja potencia, por lo que se fija una meta de 45 minutos, considerando que no se contará con contacto directo, sino que la transferencia se realizará mediante el sistema de disipación \parencite{peltierpower}.
+        \item Tiempo de respuesta: completar cada ciclo en un tiempo competitivo frente a alternativas cotidianas, como el refrigerador o el hervidor eléctrico. El límite se establece fundamentándose en la cinética de transferencia térmica mediante celdas termoeléctricas de contacto directo. Datos empíricos previos indican que es factible descender la temperatura de volúmenes similares de líquido en rangos cercanos a los 20 minutos bajo tecnologías de baja potencia, por lo que se fija una meta de 30 minutos para una lata, considerando que no se contará con contacto directo, sino que la transferencia se realizará mediante el sistema de disipación \parencite{peltierpower}.
     \end{enumerate}
     \item Uso e interacción
     \begin{enumerate}
@@ -423,11 +426,11 @@ La selección del concepto se realiza en tres etapas: primero se generan alterna
 Considerando que el calor debe extraerse de la lata o entregarse al agua a través de los módulos Peltier, las alternativas se diferencian principalmente por el medio de transferencia entre el módulo y la carga. Se proponen los siguientes conceptos:
 
 \begin{enumerate}
-    \item[\textbf{C1.}] \textbf{Manga conductiva:} manga de aluminio ajustada al diámetro de la lata, con módulos Peltier adosados a su cara exterior y un disipador con ventilador en la cara opuesta. Para el modo calor, un recipiente de acero inoxidable se apoya sobre una placa calefactada por Peltier.
-    \item[\textbf{C2.}] \textbf{Baño líquido intermedio:} depósito con un fluido de trabajo cuya temperatura es controlada por los módulos Peltier. La lata o el recipiente de agua se sumergen en el baño, aprovechando el alto coeficiente de convección del líquido.
-    \item[\textbf{C3.}] \textbf{Cámara de aire con convección forzada:} recinto aislado en el que un ventilador hace circular aire sobre un disipador acoplado a los módulos, de manera análoga a un mini refrigerador termoeléctrico.
-    \item[\textbf{C4.}] \textbf{Lata rotatoria sobre apoyo conductivo:} la lata gira sobre su eje apoyada en rodillos o cunas enfriadas por Peltier. La rotación induce convección forzada en el líquido interior y reduce el tiempo de enfriamiento.
-    \item[\textbf{C5.}] \pendiente{Agregar alternativas adicionales propuestas por el equipo, si corresponde.}
+    \item[\textbf{C1.}] \textbf{Manga conductiva:} Manga de aluminio ajustada al diámetro de la lata, con módulos Peltier adosados a su cara exterior y un disipador con ventilador en la cara opuesta. Para el modo calor, un recipiente de acero inoxidable u similares, se apoya sobre una placa calefactada por Peltier.
+    \item[\textbf{C2.}] \textbf{Baño líquido intermedio:} Depósito con un fluido de trabajo cuya temperatura es controlada por los módulos Peltier. La lata o el recipiente de agua se sumergen en el baño, aprovechando el alto coeficiente de convección del líquido.
+    \item[\textbf{C3.}] \textbf{Cámara de aire con convección forzada:} Recinto aislado en el que un ventilador hace circular aire sobre un disipador acoplado a los módulos, de manera análoga a un mini refrigerador termoeléctrico.
+    \item[\textbf{C4.}] \textbf{Lata rotatoria sobre apoyo conductivo:} La lata gira sobre su eje apoyada en rodillos o cunas enfriadas por Peltier. La rotación induce convección forzada en el líquido interior y reduce el tiempo de enfriamiento. Para el calentamiento, se reutiliza el sistema, pero usando un vaso hecho de acero inoxidable 304 u otros metales salubres.
+    \item[\textbf{C5.}] \textbf{Bombeo conductivo:} Se utiliza una pequeña bomba, para hacer fluir líquido de trabajo directamente a un intercambiador de calor diseñado para placar Peltier. En el modo enfriamiento, se sumergería la lata en el líquido de trabajo. Para calentar, el agua para consumo sería directamente la que pasa por el sistema de intercambiadores de calor. 
 \end{enumerate}
 
 \pendiente{Incluir un boceto o esquema simple de cada alternativa (Figura X).}
@@ -442,20 +445,21 @@ Las alternativas se someten a un filtro de tipo pasa/no pasa frente a las restri
 \toprule
 \textbf{Restricción} & \textbf{C1} & \textbf{C2} & \textbf{C3} & \textbf{C4} & \textbf{C5} \\
 \midrule
-Opera en frío y calor con Peltier         & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Compatible con lata cerrada               & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Contacto alimentario garantizable         & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Fabricable mayormente por impresión 3D    & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Tiempos objetivo alcanzables              & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Opera en frío y calor con Peltier         & \cmark & \cmark & \cmark & \cmark & \cmark \\
+Compatible con lata cerrada               & \cmark & \cmark & \cmark & \cmark & \cmark \\
+Contacto alimentario garantizable         & \cmark & \cmark & \cmark & \cmark & \xmark \\ 
+Fabricable mayormente por impresión 3D    & \cmark & \cmark & \cmark & \xmark & \xmark \\
+Tiempos objetivo alcanzables              & \cmark & \cmark & \xmark & \cmark & \cmark \\ 
 \midrule
-\textbf{Resultado}                        & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+\textbf{Resultado}                        & Pasa & Pasa & No Pasa & No pasa & No Pasa \\
 \bottomrule
 \end{tabular}
 \caption{Filtro de factibilidad de las alternativas frente a las restricciones del encargo (\checkmark: cumple; $\times$: no cumple).}
 \label{tab:filtro}
 \end{table}
 
-A modo de referencia para el criterio de tiempos, el coeficiente de convección natural del aire es del orden de 5--25~\si{\watt\per\square\metre\per\kelvin} \parencite{incropera2007}, por lo que una arquitectura basada en aire, como C3, tiende a requerir tiempos del orden de horas, tal como se observa en el mini refrigerador AstroAI. Por el contrario, el contacto conductivo y la convección en líquidos permiten coeficientes efectivos uno a dos órdenes de magnitud mayores. \pendiente{Respaldar este criterio con un cálculo preliminar de constante de tiempo $\tau = m c_p / (hA)$ para cada alternativa.}
+A modo de referencia para el criterio de tiempos, el coeficiente de convección natural del aire es del orden de 5--25~\si{\watt\per\square\metre\per\kelvin} \parencite{incropera2007}, por lo que una arquitectura basada en aire, como C3, tiende a requerir tiempos del orden de horas, tal como se observa en el mini refrigerador AstroAI. Por el contrario, el contacto conductivo y la convección en líquidos permiten coeficientes efectivos uno a dos órdenes de magnitud mayores \parencite{incropera2007}, acelerando drásticamente la tasa de transferencia térmica hacia el volumen de la bebida.
+En el caso del sistema de bombeo, al utilizar un sistema de bombas que en el contexto de placas Peltier están diseñadas mayormente para el bombeo de refrigerantes u otros fluidos no destinados al consumo humano \parencite{bomba_dc12v_2026}, al poseer partes móviles que desplazan el líquido, no se puede garantizar (al menos en primera instancia) que se cumplan las normas sanitarias con las bombas disponibles en el mercado.
 
 \subsubsection{Matriz de decisión ponderada}
 Las alternativas que superan el filtro se evalúan en una escala de 1 a 5 frente a cada necesidad, y el puntaje total de cada alternativa se obtiene como
@@ -472,18 +476,18 @@ donde $s_{aj}$ es la evaluación de la alternativa $a$ en la necesidad $j$. Las 
 \toprule
 \textbf{Necesidad} & $P_j$ & \textbf{C1} & \textbf{C2} & \textbf{C4} & \textbf{C5} \\
 \midrule
-Enfriamiento efectivo   & 16,7 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Calentamiento efectivo  & 15,3 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Tiempo de respuesta     & 12,2 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Facilidad de uso        & 7,3  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Limpieza e higiene      & 10,9 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Portabilidad            & 5,6  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Inocuidad               & 8,9  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Protección integral     & 10,5 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Bajo costo              & 6,7  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
-Eficiencia energética   & 5,8  & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+Enfriamiento efectivo   & 16,7 & 3 & 4 & -- & -- \\
+Calentamiento efectivo  & 15,3 & 4 & 4 & -- & -- \\
+Tiempo de respuesta     & 12,2 & 3 & 4 & -- & -- \\
+Facilidad de uso        & 7,3  & 4 & 4 & -- & -- \\
+Limpieza e higiene      & 10,9 & 4 & 3 & -- & -- \\
+Portabilidad            & 5,6  & 4 & 4 & -- & -- \\
+Inocuidad               & 8,9  & 4 & 4 & -- & -- \\
+Protección integral     & 10,5 & 4 & 3 & -- & -- \\
+Bajo costo              & 6,7  & 4 & 4 & -- & -- \\
+Eficiencia energética   & 5,8  & 3 & 3 & -- & -- \\
 \midrule
-\textbf{Puntaje ponderado} $U_a$ & 100 & \pendiente{} & \pendiente{} & \pendiente{} & \pendiente{} \\
+\textbf{Puntaje ponderado} $U_a$ & 100 & \textbf{3,66} & \textbf{3,74} & -- & -- \\
 \bottomrule
 \end{tabular}
 \caption{Matriz de decisión ponderada de las alternativas factibles (escala 1 a 5). Ajustar las columnas según el resultado del filtro de factibilidad.}
