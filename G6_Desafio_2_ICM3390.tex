@@ -226,19 +226,19 @@ En el formulario, cada encuestado ordena las diez necesidades según su grado de
 Los resultados muestran que el desempeño térmico concentra la mayor importancia: el enfriamiento efectivo, el calentamiento efectivo y el tiempo de respuesta suman en conjunto un 44,2\% del total. En segundo plano se ubican los aspectos de higiene y seguridad, mientras que la portabilidad y la eficiencia energética resultan ser las necesidades menos prioritarias para los encuestados.
 
 \subsection{Competencia}
-Uno de los productos ya existentes en el mercado con una funcionalidad similar a la solicitada corresponde a los frigobares con dispensador integrado \parencite{mercadolibre_frigobar}. Estos, en su versión estándar, funcionan en base a ciclos con gases de refrigeración mediante un compresor, en combinación con una resistencia eléctrica similar a la de un hervidor \parencite{culligan2024}. Cabe mencionar que algunos modelos más específicos o compactos funcionan directamente mediante láminas termoeléctricas Peltier \parencite{falabella_dispensador}.
+Uno de los productos ya existentes en el mercado con una funcionalidad similar a la solicitada corresponde a los frigobares con dispensador integrado \parencite{mercadolibre_frigobar}. En su versión estándar, funcionan en base a ciclos con gases de refrigeración mediante un compresor, en combinación con una resistencia eléctrica similar a la de un hervidor \parencite{culligan2024}. Cabe mencionar que algunos modelos más específicos o compactos funcionan mediante láminas termoeléctricas Peltier \parencite{falabella_dispensador}.
 
-Con el fin de establecer referencias de desempeño, se investigan productos comerciales que resuelven total o parcialmente el problema planteado. Se consideran tanto equipos que enfrían latas de forma rápida como equipos que calientan agua para consumo, además de dispositivos que, al igual que el producto propuesto, emplean módulos termoeléctricos para operar en ambos modos. Los productos seleccionados son los siguientes:
+Para establecer referencias de desempeño, se investigan productos comerciales que resuelven total o parcialmente el problema planteado. Se consideran tanto equipos que enfrían latas de forma rápida como equipos que calientan agua para consumo, además de dispositivos que emplean módulos termoeléctricos para operar en ambos modos. Los productos seleccionados son los siguientes:
 
 \begin{enumerate}
     \item \textbf{Cooper Cooler Rapid Beverage Chiller:} hace girar la lata sobre su eje mientras la rocía con agua con hielo proveniente de un depósito de 1,5~L. Enfría una lata de 12~oz desde \SI{25}{\celsius} hasta \SI{6}{\celsius} en aproximadamente 1~min, pero requiere reponer hielo y no permite calentar \parencite{drinkstuff_cooper}.
-    \item \textbf{SpinChill:} dispositivo manual a baterías que hace girar la lata sumergida en un recipiente con hielo. Declara tiempos de enfriamiento cercanos a 1--2~min, a un precio aproximado de 30~USD, aunque depende de una fuente externa de frío \parencite{reviewed_spinchill, themanual_spinchill}.
-    \item \textbf{Portavasos termoeléctrico frío/calor 12~V:} vaso con módulo Peltier de \SI{36}{\watt} que enfría o calienta bebidas en latas o botellas de diámetro estándar. Alcanza cerca de \SI{4}{\celsius} en frío y \SI{54}{\celsius} en calor, con tiempos de enfriamiento del orden de 10--15~min \parencite{ottocast_cup, rvtravel_cup}.
-    \item \textbf{Mini refrigerador termoeléctrico AstroAI 4~L:} cámara aislada con capacidad para seis latas de 330~mL, que enfría hasta \SI{18}{\celsius} bajo la temperatura ambiente o mantiene alimentos a \SI{66}{\celsius}. Su masa es cercana a 2~kg, pero el enfriamiento por aire toma varias horas \parencite{astroai_fridge}.
-    \item \textbf{Hervidor eléctrico de viaje Severin WK 3462:} hervidor de 0,5~L y \SI{1100}{\watt} de potencia que calienta mediante una resistencia eléctrica. Se estima que lleva 300~mL de agua a ebullición en aproximadamente 2~min, pero no ofrece modo de enfriamiento \parencite{severin_wk3462}.
+    \item \textbf{SpinChill:} dispositivo manual a baterías que hace girar la lata sumergida en un recipiente con hielo. Declara tiempos de enfriamiento cercanos a 1--2~min, a un precio aproximado de 30~USD. Depende de una fuente externa de frío \parencite{reviewed_spinchill, themanual_spinchill}.
+    \item \textbf{Portavasos termoeléctrico frío/calor 12~V:} vaso con módulo Peltier de \SI{36}{\watt} que enfría o calienta bebidas en latas o botellas. Alcanza cerca de \SI{4}{\celsius} en frío y \SI{54}{\celsius} en calor, con tiempos de enfriamiento de 10--15~min \parencite{ottocast_cup, rvtravel_cup}.
+    \item \textbf{Mini refrigerador termoeléctrico AstroAI 4~L:} cámara aislada con capacidad para seis latas de 330~mL, que enfría hasta \SI{18}{\celsius} bajo la temperatura ambiente o mantiene alimentos a \SI{66}{\celsius}. Su masa es cercana a 2~kg y el enfriamiento por aire toma varias horas \parencite{astroai_fridge}.
+    \item \textbf{Hervidor eléctrico de viaje Severin WK 3462:} hervidor de 0,5~L y \SI{1100}{\watt} de potencia que calienta mediante una resistencia eléctrica. Se estima que lleva 300~mL de agua a ebullición en aproximadamente 2~min. No ofrece modo de enfriamiento \parencite{severin_wk3462}.
 \end{enumerate}
 
-La Tabla \ref{tab:competencia_specs} resume las principales características técnicas de los productos de referencia.
+La Tabla \ref{tab:competencia_specs} resume las principales características técnicas de los productos:
 
 \begin{table}[H]
 \centering
@@ -258,7 +258,7 @@ Severin WK 3462 & Resistencia eléctrica sumergida & Calor & Ebullición en $\ap
 \label{tab:competencia_specs}
 \end{table}
 
-Posteriormente, se evalúa el grado en que cada producto satisface las necesidades identificadas, utilizando una escala de 1 (no satisface) a 5 (satisface completamente). Cada evaluación se pondera por la importancia normalizada $P_j$ de la Tabla \ref{tab:necesidades}, de modo que el puntaje ponderado de cada producto resulta $\sum_j P_j\, s_j / 100$, donde $s_j$ es la evaluación asignada a la necesidad $j$. La Tabla \ref{tab:competencia_necesidades} presenta esta comparación.
+Luego, se evalúa el grado en que cada producto satisface las necesidades identificadas, utilizando una escala de 1 (no satisface) a 5 (satisface completamente). Cada evaluación se pondera por la importancia normalizada $P_j$ de la Tabla \ref{tab:necesidades}. La Tabla \ref{tab:competencia_necesidades} muestra lo mencionado:
 
 \begin{table}[H]
 \centering
@@ -281,11 +281,11 @@ Eficiencia energética   & 5,8  & 4 & 5 & 4 & 2 & 3 \\
 \textbf{Puntaje ponderado} & 100 & 3,26 & 3,57 & 3,38 & 2,62 & 3,74 \\
 \bottomrule
 \end{tabular}
-\caption{Evaluación de la satisfacción de necesidades por parte de los productos de referencia (escala 1 a 5), ponderada según la importancia normalizada de cada necesidad.}
+\caption{Evaluación de la satisfacción de necesidades por parte de los productos de referencia.}
 \label{tab:competencia_necesidades}
 \end{table}
 
-Del análisis se desprende que ningún producto de referencia supera un puntaje ponderado de 3,74 sobre 5, y que ninguno satisface simultáneamente las necesidades de enfriamiento y calentamiento efectivos, que son precisamente las de mayor importancia para los usuarios. Los equipos de enfriamiento rápido dependen del hielo como fuente de frío, el hervidor carece de modo de enfriamiento, y los dispositivos termoeléctricos de doble modo alcanzan temperaturas insuficientes para preparar una sopa instantánea o presentan tiempos de respuesta prolongados. Esta brecha define la oportunidad de diseño del producto propuesto: un único equipo autónomo, sin necesidad de hielo, capaz de enfriar una lata y calentar agua para consumo en tiempos competitivos.
+Con esto se consigue que ningún producto de referencia satisface simultáneamente las necesidades de enfriamiento y calentamiento efectivos, que son precisamente las de mayor importancia para los usuarios. Los equipos de enfriamiento rápido dependen del hielo como fuente de frío, el hervidor carece de modo de enfriamiento, y los dispositivos termoeléctricos de doble modo alcanzan temperaturas insuficientes para preparar una sopa instantánea o presentan tiempos de respuesta prolongados.
 
 \subsection{Especificaciones técnicas}
 Las necesidades mencionadas se traducen en especificaciones técnicas. Estas buscan asegurar el cumplimiento de las necesidades de los usuarios mediante objetivos, criterios y métricas, los cuales permiten medir el desempeño del producto en cada una de ellas. Esto significa que para cada especificación existe un objetivo deseado, un criterio de éxito y una métrica de evaluación. Para esto, se agrupan en diferentes categorías para luego exponer una explicación breve y concisa de cada una de ellas.
