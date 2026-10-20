@@ -197,39 +197,29 @@ A partir del análisis del contexto de uso y de los requerimientos del encargo, 
     \item \textbf{Eficiencia energética:} Bajo consumo eléctrico durante los ciclos de acondicionamiento.
 \end{enumerate}
 
-En el formulario, cada encuestado ordena las diez necesidades según su grado de importancia, asignando un puntaje entero desde 1 (menos importante) hasta 10 (más importante), sin repetir valores. De este modo, cada encuestado distribuye un total de $\sum_{k=1}^{10} k = 55$ puntos.
-
-Para expresar la importancia relativa de cada necesidad en una escala común, el puntaje promedio de cada necesidad se normaliza respecto de un total de 100 puntos. Si $r_{ij}$ es el puntaje asignado por el encuestado $i$ a la necesidad $j$ y $N = 9$ es el número de encuestados, el puntaje promedio $\bar{r}_j$ y la importancia normalizada $P_j$ se calculan como:
-
-\begin{equation}
-    \bar{r}_j = \frac{1}{N}\sum_{i=1}^{N} r_{ij}, \qquad
-    P_j = 100 \cdot \frac{\bar{r}_j}{\sum_{k=1}^{10} \bar{r}_k} = 100 \cdot \frac{\bar{r}_j}{55}.
-    \label{eq:normalizacion}
-\end{equation}
-
-Por construcción, $\sum_j P_j = 100$. La Tabla \ref{tab:necesidades} presenta el puntaje promedio, la importancia normalizada y la prioridad resultante de cada necesidad.
+En el formulario, cada encuestado ordena las diez necesidades según su grado de importancia, asignando un puntaje entero desde 1 (menos importante) hasta 10 (más importante), sin repetir valores. Con esto se consiguen el puntaje promedio, la importancia normalizada y la prioridad resultante de cada necesidad, presentados en la Tabla \ref{tab:necesidades}:
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{lccc}
+    \begin{tabular}{lcc}
         \toprule
-        \textbf{Necesidad} & \textbf{Puntaje promedio} $\bar{r}_j$ & \textbf{Importancia} $P_j$ & \textbf{Prioridad} \\
+        \textbf{Necesidad} & \textbf{Importancia} $P_j$ & \textbf{Prioridad} \\
         \midrule
-        Enfriamiento efectivo  & 9,2 & 16,7 & 1 \\
-        Calentamiento efectivo & 8,4 & 15,3 & 2 \\
-        Tiempo de respuesta    & 6,7 & 12,2 & 3 \\
-        Facilidad de uso       & 4,0 & 7,3  & 7 \\
-        Limpieza e higiene     & 6,0 & 10,9 & 4 \\
-        Portabilidad           & 3,1 & 5,6  & 10 \\
-        Inocuidad              & 4,9 & 8,9  & 6 \\
-        Protección integral    & 5,8 & 10,5 & 5 \\
-        Bajo costo             & 3,7 & 6,7  & 8 \\
-        Eficiencia energética  & 3,2 & 5,8  & 9 \\
+        Enfriamiento efectivo  & 16,7 & 1 \\
+        Calentamiento efectivo & 15,3 & 2 \\
+        Tiempo de respuesta    & 12,2 & 3 \\
+        Facilidad de uso       & 7,3  & 7 \\
+        Limpieza e higiene     & 10,9 & 4 \\
+        Portabilidad           & 5,6  & 10 \\
+        Inocuidad              & 8,9  & 6 \\
+        Protección integral    & 10,5 & 5 \\
+        Bajo costo             & 6,7  & 8 \\
+        Eficiencia energética  & 5,8  & 9 \\
         \midrule
-        \textbf{Total}         & 55,0 & 100,0 & -- \\
+        \textbf{Total}         & 100,0 & -- \\
         \bottomrule
     \end{tabular}
-    \caption{Puntaje promedio e importancia normalizada de cada necesidad ($N = 9$ encuestados). Los valores de $P_j$ se redondean a un decimal.}
+    \caption{Importancia de cada necesidad}
     \label{tab:necesidades}
 \end{table}
 
