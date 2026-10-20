@@ -288,34 +288,36 @@ Eficiencia energética   & 5,8  & 4 & 5 & 4 & 2 & 3 \\
 Con esto se consigue que ningún producto de referencia satisface simultáneamente las necesidades de enfriamiento y calentamiento efectivos, que son precisamente las de mayor importancia para los usuarios. Los equipos de enfriamiento rápido dependen del hielo como fuente de frío, el hervidor carece de modo de enfriamiento, y los dispositivos termoeléctricos de doble modo alcanzan temperaturas insuficientes para preparar una sopa instantánea o presentan tiempos de respuesta prolongados.
 
 \subsection{Especificaciones técnicas}
-Las necesidades mencionadas se traducen en especificaciones técnicas. Estas buscan asegurar el cumplimiento de las necesidades de los usuarios mediante objetivos, criterios y métricas, los cuales permiten medir el desempeño del producto en cada una de ellas. Esto significa que para cada especificación existe un objetivo deseado, un criterio de éxito y una métrica de evaluación. Para esto, se agrupan en diferentes categorías para luego exponer una explicación breve y concisa de cada una de ellas.
+Las necesidades mencionadas se traducen en especificaciones técnicas. Estas buscan asegurar el cumplimiento de las necesidades de los usuarios mediante objetivos, criterios y métricas, los cuales permiten medir el desempeño del producto en cada una de ellas. Las especificaciones se agrupan en categorías para luego definir cada una de ellas:
 
 \begin{itemize}
     \item Desempeño térmico
     \begin{enumerate}
-        \item Enfriamiento efectivo: llevar una lata estándar de 350 ml, comunmente utilizada por diversos bebestibles, cerrada desde la temperatura ambiente (aproximadamente 20 °C) hasta \SI{8}{\celsius} o menos, rango habitual de consumo de bebidas frías. Para fijar este valor se analizó el mercado actual (las especificaciones de la competencia), pues se asume que es un estándar a nivel industrial.
-        \item Calentamiento efectivo: elevar el volumen de agua de una porción de sopa instantánea a \SI{85}{\celsius} o más, suficiente para hidratar los fideos. Al igual que en el caso anterior, se analizaron las especificaciones de la competencia, asumiendo que representan un estándar a nivel industrial.
-        \item Tiempo de respuesta: completar cada ciclo en un tiempo competitivo frente a alternativas cotidianas, como el refrigerador o el hervidor eléctrico. El límite se establece fundamentándose en la cinética de transferencia térmica mediante celdas termoeléctricas de contacto directo. Datos empíricos previos indican que es factible descender la temperatura de volúmenes similares de líquido en rangos cercanos a los 20 minutos bajo tecnologías de baja potencia, por lo que se fija una meta de 30 minutos para una lata, considerando que no se contará con contacto directo, sino que la transferencia se realizará mediante el sistema de disipación \parencite{peltierpower}.
+        \item Enfriamiento efectivo: llevar una lata estándar de 350 ml, cerrada desde la temperatura ambiente hasta \SI{8}{\celsius} o menos. Para fijar este valor se analizó el mercado actual, ya que se asume que es un estándar a nivel industrial.
+        \item Calentamiento efectivo: elevar el volumen de agua de una porción de sopa instantánea a \SI{85}{\celsius} o más. Al igual que en el caso anterior, se analizaron las especificaciones de la competencia, asumiendo que representan un estándar a nivel industrial.
+        \item Tiempo de respuesta: completar cada ciclo en un tiempo competitivo frente a alternativas comunes, como el refrigerador o el hervidor eléctrico. El límite se establece según la cinética de transferencia térmica mediante celdas termoeléctricas de contacto directo. Estudios indican que es factible bajar la temperatura de volúmenes similares de líquido en tiempos cercanos a los 20 minutos con tecnologías de baja potencia, por lo que se fija una meta de 30 minutos para una lata, considerando que no se contará con contacto directo, sino que la transferencia se realizará mediante el sistema de disipación \parencite{peltierpower}.
     \end{enumerate}
     \item Uso e interacción
     \begin{enumerate}
-        \item Facilidad de uso: iniciar un ciclo con un máximo de tres acciones (por ejemplo, insertar la carga, seleccionar el modo e iniciar el ciclo), sin necesidad de consultar un manual. Se asocia la claridad y facilidad de la manipulación al número de pasos necesarios para empezar a utilizar el producto.
-        \item Limpieza e higiene: las piezas en contacto con el agua deben poder retirarse y lavarse en pocos minutos y sin herramientas. Se asocia la capacidad de mantener limpio el equipo con la facilidad de realizar dicha limpieza y, a su vez, esta facilidad con el tiempo necesario para desmontar y limpiar las piezas.
-        \item Portabilidad: masa y dimensiones que permitan trasladar el equipo con una mano y ubicarlo sobre un escritorio o mesón de cocina. Se asocia la facilidad de transporte con aspectos volumétricos y másicos, pues son los principales factores a la hora de cambiar de sitio el producto.
+        \item Facilidad de uso: iniciar un ciclo con un máximo de tres acciones, sin necesidad de consultar un manual.
+        \item Limpieza e higiene: las piezas en contacto con el agua deben poder retirarse y lavarse en pocos minutos y sin herramientas. Se asocia esto con el tiempo necesario para desmontar y limpiar las piezas.
+        \item Portabilidad: masa y dimensiones que permitan trasladar el equipo con una mano y ubicarlo sobre un escritorio o mesón de cocina.
     \end{enumerate}
     \item Seguridad
     \begin{enumerate}
-        \item Inocuidad: toda superficie en contacto con agua de consumo debe ser de material apto para uso alimentario y no transferir olor ni sabor. Aunque los usuarios no la clasificaron entre sus prioridades, el mínimo indispensable es que el producto cumpla con las normas de sanidad. Además, es un aspecto que pasa inadvertido cuando funciona bien, pero que se nota de inmediato cuando falla.
-        \item Protección integral al usuario: superficies accesibles a temperatura segura al tacto, partes móviles cubiertas y electrónica protegida frente a goteo y condensación. Se asocia a los elementos y condiciones que podrían ser riesgosos para el usuario; en este caso, los mayores riesgos detectados son la temperatura de las superficies exteriores, susceptibles de entrar en contacto con el usuario, y las zonas con riesgo de electrificación.
+        \item Inocuidad: toda superficie en contacto con agua de consumo debe ser de material apto para uso alimentario y no transferir olor ni sabor.
+        \item Protección integral al usuario: superficies accesibles a temperatura segura al tacto, partes móviles cubiertas y electrónica protegida frente a goteo y condensación.
     \end{enumerate}
     \item Viabilidad y costo
     \begin{enumerate}
-        \item Bajo costo: costo de materiales y componentes acotado al presupuesto del curso y competitivo frente a los productos de referencia. El criterio se basa en el presupuesto brindado para el desarrollo y en el precio de artículos con características similares en el mercado.
-        \item Bajo consumo energético: potencia eléctrica máxima compatible con una fuente de alimentación estándar de 12~V, como las de uso doméstico. Se relaciona directamente con la potencia máxima que puede requerir el artefacto.
+        \item Bajo costo: costo de materiales y componentes acotado al presupuesto del curso y competitivo frente a los productos de referencia.
+        \item Bajo consumo energético: potencia eléctrica máxima compatible con una fuente de alimentación estándar de 12~V. Se relaciona directamente con la potencia máxima que puede requerir el artefacto.
     \end{enumerate}
 \end{itemize}
 
 En base a las justificaciones anteriores se definen las especificaciones técnicas, con sus criterios, objetivos y métricas asociados en la Tabla \ref{tab:especificaciones}.
+
+
 
 \begin{table}[htbp]
 \centering
@@ -346,7 +348,7 @@ Volumen de agua para sopa ($V_h$) & $300$ & \si{\ml} & $\uparrow$ \\
 \multicolumn{4}{l}{\textbf{Necesidad:} 3. Tiempo de respuesta} \\
 \multicolumn{4}{l}{\textit{Criterio:} Cinética de Transferencia Térmica} \\
 \nopagebreak
-Tiempo de enfriamiento ($t_c$) & $\le 45$ & \si{\minute} & $\downarrow$ \\
+Tiempo de enfriamiento ($t_c$) & $\le 30$ & \si{\minute} & $\downarrow$ \\
 Tiempo de calentamiento ($t_h$) & $\le 10$ & \si{\minute} & $\downarrow$ \\
 \midrule
 
@@ -406,7 +408,7 @@ Potencia eléctrica máxima consumida ($P_{\text{máx}}$) & $\le 120$ & \si{\wat
 \label{tab:especificaciones}
 \end{table}
 
-
+\newpage
 
 \subsection{Selección del concepto}
 % GUÍA: completar los campos marcados con \pendiente{} y eliminar los marcadores antes de la entrega.
