@@ -411,7 +411,6 @@ Potencia eléctrica máxima consumida ($P_{\text{máx}}$) & $\le 120$ & \si{\wat
 \newpage
 
 \subsection{Selección del concepto}
-% GUÍA: completar los campos marcados con \pendiente{} y eliminar los marcadores antes de la entrega.
 Para la selección del concepto, se generan alternativas de arquitectura que satisfacen las especificaciones de la Tabla \ref{tab:especificaciones}, luego se aplica un filtro de factibilidad basado en las restricciones, y las alternativas factibles se comparan en una matriz de decisión ponderada, cuyos pesos corresponden a la importancia normalizada $P_j$ de la Tabla \ref{tab:necesidades}.
 
 \subsubsection{Generación de alternativas}
@@ -478,7 +477,7 @@ Considerando que el calor debe extraerse de la lata o entregarse al agua a trav�
     \label{fig:bocetos_parte2}
 \end{figure}
 \subsubsection{Filtro de factibilidad}
-Las alternativas se someten a un filtro de tipo pasa/no pasa frente a las restricciones obligatorias del encargo: operar en ambos modos mediante módulos Peltier, funcionar con una lata cerrada, emplear materiales aptos para contacto alimentario, ser fabricable principalmente mediante impresión 3D y permitir cumplir los tiempos objetivo con la potencia disponible. La Tabla \ref{tab:filtro} resume el resultado.
+Las alternativas se someten a un filtro para analizar si cumplen o no las restricciones. La Tabla \ref{tab:filtro} resume el resultado.
 
 \begin{table}[H]
 \centering
@@ -493,58 +492,66 @@ Contacto alimentario garantizable         & \cmark & \cmark & \cmark & \cmark & 
 Fabricable mayormente por impresión 3D    & \cmark & \cmark & \cmark & \xmark & \xmark \\
 Tiempos objetivo alcanzables              & \cmark & \cmark & \xmark & \cmark & \cmark \\ 
 \midrule
-\textbf{Resultado}                        & Pasa & Pasa & No Pasa & No pasa & No Pasa \\
+\textbf{Resultado}                        & Cumple & Cumple & No Cumple & No Cumple & No Cumple \\
 \bottomrule
 \end{tabular}
-\caption{Filtro de factibilidad de las alternativas frente a las restricciones del encargo (\checkmark: cumple; $\times$: no cumple).}
+\caption{Filtro de factibilidad de las alternativas frente a las restricciones.}
 \label{tab:filtro}
 \end{table}
 
-A modo de referencia para el criterio de tiempos, el coeficiente de convección natural del aire es del orden de 5--25~\si{\watt\per\square\metre\per\kelvin} \parencite{incropera2007}, por lo que una arquitectura basada en aire, como C3, tiende a requerir tiempos del orden de horas, tal como se observa en el mini refrigerador AstroAI. Por el contrario, el contacto conductivo y la convección en líquidos permiten coeficientes efectivos uno a dos órdenes de magnitud mayores \parencite{incropera2007}, acelerando drásticamente la tasa de transferencia térmica hacia el volumen de la bebida.
-En el caso del sistema de bombeo, al utilizar un sistema de bombas que en el contexto de placas Peltier están diseñadas mayormente para el bombeo de refrigerantes u otros fluidos no destinados al consumo humano \parencite{bomba_dc12v_2026}, al poseer partes móviles que desplazan el líquido, no se puede garantizar (al menos en primera instancia) que se cumplan las normas sanitarias con las bombas disponibles en el mercado.
+El coeficiente de convección natural del aire es del orden de 5--25~\si{\watt\per\square\metre\per\kelvin} \parencite{incropera2007}, por lo que un concepto como C3 tiende a requerir tiempos del orden de horas, tal como se observa en el mini refrigerador AstroAI. El contacto conductivo y la convección en líquidos permiten coeficientes efectivos uno a dos órdenes de magnitud mayores \parencite{incropera2007}, acelerando la tasa de transferencia térmica hacia el volumen de la bebida.
+En el caso del sistema de bombeo, al utilizar un sistema de bombas que en el contexto de placas Peltier están diseñadas mayormente para el bombeo de refrigerantes u otros fluidos no destinados al consumo humano \parencite{bomba_dc12v_2026}, al poseer partes móviles que desplazan el líquido, no se puede asegurar que se cumplan las normas sanitarias con las bombas disponibles en el mercado.
 
 \subsubsection{Matriz de decisión ponderada}
-Las alternativas que superan el filtro se evalúan en una escala de 1 a 5 frente a cada necesidad, y el puntaje total de cada alternativa se obtiene como
-\begin{equation}
-    U_a = \frac{1}{100}\sum_{j=1}^{10} P_j\, s_{aj},
-    \label{eq:matriz_decision}
-\end{equation}
-donde $s_{aj}$ es la evaluación de la alternativa $a$ en la necesidad $j$. Las evaluaciones deben justificarse con evidencia: estimaciones térmicas preliminares, comparación con los productos de referencia o pruebas exploratorias. La Tabla \ref{tab:matriz_decision} presenta la matriz.
+Las alternativas que superan el filtro se evalúan en una escala de 1 a 5 frente a cada necesidad. Se suman las multiplicaciones de estos valores con los respectivos $P_j$ y se divide en 100. La Tabla \ref{tab:matriz_decision} presenta esto:
 
 \begin{table}[H]
 \centering
 \small
 \begin{tabular}{lccccc}
 \toprule
-\textbf{Necesidad} & $P_j$ & \textbf{C1} & \textbf{C2} & \textbf{C4} & \textbf{C5} \\
+\textbf{Necesidad} & $P_j$ & \textbf{C1} & \textbf{C2} \\
 \midrule
-Enfriamiento efectivo   & 16,7 & 3 & 4 & -- & -- \\
-Calentamiento efectivo  & 15,3 & 4 & 4 & -- & -- \\
-Tiempo de respuesta     & 12,2 & 3 & 4 & -- & -- \\
-Facilidad de uso        & 7,3  & 4 & 4 & -- & -- \\
-Limpieza e higiene      & 10,9 & 4 & 3 & -- & -- \\
-Portabilidad            & 5,6  & 4 & 4 & -- & -- \\
-Inocuidad               & 8,9  & 4 & 4 & -- & -- \\
-Protección integral     & 10,5 & 4 & 3 & -- & -- \\
-Bajo costo              & 6,7  & 4 & 4 & -- & -- \\
-Eficiencia energética   & 5,8  & 3 & 3 & -- & -- \\
+Enfriamiento efectivo   & 16,7 & 3 & 4 \\
+Calentamiento efectivo  & 15,3 & 4 & 4 \\
+Tiempo de respuesta     & 12,2 & 3 & 4 \\
+Facilidad de uso        & 7,3  & 4 & 4 \\
+Limpieza e higiene      & 10,9 & 4 & 3 \\
+Portabilidad            & 5,6  & 4 & 4 \\
+Inocuidad               & 8,9  & 4 & 4 \\
+Protección integral     & 10,5 & 4 & 3 \\
+Bajo costo              & 6,7  & 4 & 4 \\
+Eficiencia energética   & 5,8  & 3 & 3 \\
 \midrule
-\textbf{Puntaje ponderado} $U_a$ & 100 & \textbf{3,66} & \textbf{3,74} & -- & -- \\
+\textbf{Puntaje ponderado} $U_a$ & 100 & \textbf{3,65} & \textbf{3,73} \\
 \bottomrule
 \end{tabular}
-\caption{Matriz de decisión ponderada de las alternativas factibles (escala 1 a 5). Ajustar las columnas según el resultado del filtro de factibilidad.}
+\caption{Matriz de decisión ponderada de las alternativas factibles.}
 \label{tab:matriz_decision}
 \end{table}
 
 \subsubsection{Concepto seleccionado}
-El baño líquido intermedio fue el concepto ganador. En primer lugar fue uno de los conceptos que superaron todos los filtros de factibilidad. Luego, utilizar un líquido puede ser más versátil a la hora de maximizar el área de transferencia. Si bien, la manga conductiva soliciona en parte esto, es muy difícil encontrar una forma que se caliente de forma uniforme. La principal contra de utilizar líquidos intermediarios está principalmente en que para el enfriamiento, las placas deben previamente enfriar todo el líquido para una transferencia eficaz, cosa que con la manga no pasa. En condiciones de preparación, con el líquido enfriado, el tiempo de respuesta debería ser superior en el enfriamiento a la manga conductiva, en cambio, en el modo calentamiento, al calentarse directamente el líquido de consumo, existe una capa de material menos, en comparación a la manga, por el que el calro debe fluir, disminuyendo el coeficiente de transferencia. A nivel sanitario, la manga conductiva es superiro, al nunca estar un componente del equipo en contacto directo con ningún líquido de consumo, tanto al calentar, como al enfriar. A pesar de que esto es la idea original, se explorará la mezcla y soluciones intermedias, como por ejemplo, algún sistema similar a la manga conductiva para utilizar un fluido de trabajo tanto a la hora de calentar como enfriar, en lugar de calentar el líquido de consumo directamente (esto para garantizar condiciones sanitarias).
-Al comparar con productos que ya están en el mercado, pierde, frente a productos que son especializados en cada función individual, como hervidores o sistemas de refrigeraci´pon especializados (un resultado esperable, pues, son producots que fueron desarrolados con una función determinada específica desde el inicio), sin emgargo, gana en calificación final a cualquier productos con función mixta e iguala la máxima puntuación obtenida por un aparato en la calificación (el hervidor).
-\pendiente{Describir el concepto ganador y justificar su elección a partir de la Tabla \ref{tab:matriz_decision}: señalar en qué necesidades de mayor peso supera a las demás alternativas, qué debilidades presenta y cómo se abordarán en la etapa de modelación. Indicar si se adoptan elementos de otras alternativas (concepto híbrido) y comparar su puntaje con el de los productos de referencia de la Tabla \ref{tab:competencia_necesidades}.}
+De acuerdo con la Tabla \ref{tab:matriz_decision}, el concepto seleccionado es el baño líquido intermedio (C2), con un puntaje ponderado de 3,73, frente a 3,65 de la manga conductiva (C1). Como ambas alternativas superan el filtro de factibilidad, la diferencia se explica por su desempeño en las necesidades de mayor peso. C2 obtiene una mejor evaluación en enfriamiento efectivo ($P_j = 16{,}7$) y en tiempo de respuesta ($P_j = 12{,}2$). Esto se debe a que el líquido envuelve por completo la superficie lateral de la lata y elimina la resistencia térmica de contacto entre la lata y la manga, la cual depende fuertemente de las tolerancias del diámetro de la lata y del ajuste de la pieza. También, el baño distribuye el calor de forma uniforme sobre la carga, mientras que en la manga conductiva resulta difícil lograr un calentamiento homogéneo.
+
+Sin embargo, C2 obtiene una menor evaluación en limpieza e higiene y en protección integral, ya que el depósito de fluido introduce riesgos de derrame, condensación y mantenimiento del fluido de trabajo que no existen en la manga. En modo frío, el fluido debe preenfriarse antes de lograr una transferencia eficaz, lo que no ocurre con la manga; en modo calor, el fluido debe elevarse por sobre \SI{85}{\celsius}, lo que aumenta la energía requerida y afecta al tiempo objetivo de calentamiento. Estos problemas se abordarán en las etapas siguientes considerando:
+
+\begin{itemize}
+    \item El volumen de fluido de trabajo se dimensionará mediante el modelo térmico transitorio, buscando el mínimo volumen que asegure el contacto completo con la lata y con el recipiente, de modo de reducir la masa térmica del sistema.
+    \item El modelo termoeléctrico evaluará la operación de los módulos Peltier con el fluido a temperaturas cercanas a \SI{90}{\celsius}, verificando que la diferencia de temperatura resultante se mantenga dentro de los límites del kit.
+    \item El diseño mecánico considerará un depósito sellado con tapa, aislamiento térmico y una bandeja colectora de condensado y derrames.
+\end{itemize}
+
+En cuanto a la inocuidad, la manga conductiva ofrece la ventaja de que ningún componente del equipo entra en contacto con el agua de consumo. Esta característica se incorpora al concepto seleccionado, dando lugar a una solución híbrida: el agua de consumo se calienta dentro de un recipiente removible de acero inoxidable AISI~304 sumergido en el baño, de modo que nunca entra en contacto con el fluido de trabajo, mientras que la lata se enfría cerrada dentro del mismo baño. Adicionalmente, se explorarán soluciones intermedias, como una camisa conductiva por la que circule el fluido de trabajo, siempre que se mantenga separado del agua de consumo.
+
+Cabe destacar que la diferencia entre ambas alternativas es reducida (0,08 puntos). La ventaja de C2 en enfriamiento y tiempo de respuesta deberá confirmarse mediante el modelo térmico transitorio desarrollado en la Sección \ref{sec:simulaciones}. Si no se confirma la ventaja, se evaluará considerar la manga conductiva.
+
+Finalmente, al comparar con los productos de referencia de la Tabla \ref{tab:competencia_necesidades}, el concepto seleccionado supera a todos los productos de doble modo, como el portavasos termoeléctrico (3,38) y el mini refrigerador AstroAI (2,62), y también a los enfriadores rápidos Cooper Cooler (3,26) y SpinChill (3,57). Solo el hervidor eléctrico alcanza un puntaje levemente superior (3,74), resultado esperable al tratarse de un producto especializado en una única función. Cabe mencionar que el puntaje de C2 corresponde a la evaluación de un concepto y no de un producto terminado, por lo que deberá verificarse con el prototipo que se fabricará en el Desafío 3.
 
 
 \section{Arquitectura y modelos desarrollados}
 
 \section{Simulaciones y justificación físico-matemática}
+\label{sec:simulaciones}
 
 \section{Caracterización, calibración y validación inicial}
 
