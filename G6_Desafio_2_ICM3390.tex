@@ -589,10 +589,10 @@ Para definir cuál será el voltaje de cada módulo, se debe considerar el efect
 
 donde:
 \begin{itemize}
-    \item $\alpha$: Coeficiente Seebeck efectivo del módulo ($\text{V/K}$) \cite{Kubov_2016}.
-    \item $T_h(t), T_c(t)$: Temperaturas instantáneas de la cara caliente y fría, respectivamente ($^\circ\text{C}$) \cite{Kubov_2016}.
-    \item $I(t)$: Corriente eléctrica continua que circula a través del módulo ($\text{A}$) \cite{Kubov_2016}.
-    \item $R_0$: Resistencia eléctrica interna equivalente ($\Omega$) \cite{Kubov_2016}.
+    \item $\alpha$: Coeficiente Seebeck efectivo del módulo ($\text{V/K}$) \parencite{Kubov_2016}.
+    \item $T_h(t), T_c(t)$: Temperaturas instantáneas de la cara caliente y fría, respectivamente ($^\circ\text{C}$) \parencite{Kubov_2016}.
+    \item $I(t)$: Corriente eléctrica continua que circula a través del módulo ($\text{A}$) \parencite{Kubov_2016}.
+    \item $R_0$: Resistencia eléctrica interna equivalente ($\Omega$) \parencite{Kubov_2016}.
 \end{itemize}
 
 Además, se debe considerar, el potencial térmico de cada cara de la peltier, que simboliza los saltos de energía que experimentan los electrones a una temperatura dada de acuerdo con \textcite{Kubov_2016}. La temperatura $T_{\text{abs}}$ es la temperatura instantánea de la cara correspondiente al módulo peltier en grados Kelvin.
@@ -607,19 +607,22 @@ Con base en la red simétrica propuesta por los autores, las fuentes dependiente
 Absorción térmica Peltier en el contacto frío:
 
 \begin{equation}
-    P_{\text{Peltier}, c}(t) = Pe(T_c) \cdot I(t) \quad \text{[W]}\label{eq:p_peltier_c}
+    P_{\text{Peltier}, c}(t) = Pe(T_c) \cdot I(t) \quad \text{[W]}
+    \label{eq:p_peltier_c}
 \end{equation}
     
 Generación térmica Peltier en el contacto caliente:
 
 \begin{equation}
-    P_{\text{Peltier}, h}(t) = Pe(T_h) \cdot I(t) \quad \text{[W]}\label{eq:p_peltier_h}
+    P_{\text{Peltier}, h}(t) = Pe(T_h) \cdot I(t) \quad \text{[W]}
+    \label{eq:p_peltier_h}
 \end{equation}
 
 Disipación por efecto Joule en el núcleo del semiconductor:
 
 \begin{equation}
-    P_{\text{Joule}}(t) = I(t)^2 \cdot R_0 \quad \text{[W]}\label{eq:p_joule}
+    P_{\text{Joule}}(t) = I(t)^2 \cdot R_0 \quad \text{[W]}
+    \label{eq:p_joule}
 \end{equation}
 
 Debido a la simetría geométrica del elemento, la potencia por calor Joule generada en el interior ($P_{\text{Joule}}$) se distribuye equitativamente ($\frac{1}{2} P_{\text{Joule}}$) hacia la cara fría y la cara caliente \parencite{Kubov_2016}.
@@ -644,32 +647,31 @@ Asimismo, la masa cerámica y metálica del módulo almacena energía durante lo
     \label{eq:p_cap}
 \end{equation}
 
-\subsubsection{Ecuaciones Nodales de Potencia Neta ($Q_c$ y $Q_h$)}
+\subsection{Modelo energético}
 
-Aplicando la Ley de Corrientes de Kirchhoff en los nodos térmicos $T_c$ y $T_h$ de la red equivalente de \textcite{Kubov_2016}, la potencia térmica neta disponible en cada superficie se define como:
+Realizando una conservación de la energía en los nodos superficiales del módulo, considerando las propiedades y la física del módulo peltier calculado en el modelo termoeléctrico y en el modelo térmico, se puede determinar el calor extraído de la cara fría, y el calor disipado en la cara caliente, como también la interacción de este calor con su entorno.
 
-\begin{enumerate}
-    \item Potencia térmica neta en la cara fría ($T_c$):
-    \begin{equation}
-        Q_c(t) = \alpha \cdot \big(T_c(t) + T_0\big) \cdot I(t) - \frac{1}{2} I(t)^2 R_0 - \frac{T_h(t) - T_c(t)}{R_q} - \frac{C_q}{2} \cdot \frac{dT_c(t)}{dt} \quad \text{[W]}
-        \label{eq:qc_net}
-    \end{equation}
-    \item Potencia térmica neta en la cara caliente ($T_h$)
-    \begin{equation}
-        Q_h(t) = \alpha \cdot \big(T_h(t) + T_0\big) \cdot I(t) + \frac{1}{2} I(t)^2 R_0 - \frac{T_h(t) - T_c(t)}{R_q} + \frac{C_q}{2} \cdot \frac{dT_h(t)}{dt} \quad \text{[W]}
-        \label{eq:qh_net}
-    \end{equation}
-    
-\end{enumerate}
+\subsubsection{Potencia térmica neta en la cara fría ($T_c$)}
 
+Es el calor total que se logra extraer del exterior. Debe ser igual a lo que absorbe el efecto Peltier en la cara fría según la ecuación \ref{eq:p_peltier_c}, menos la mitad del calor del efecto Joule de la ecuación \ref{eq:p_joule}, menos el calor que se fuga desde la cara caliente por conducción de la ecuación \ref{eq:p_cond}, menos el calor invertido en enfriar la cerámica de la propia celda de la ecuación \ref{eq:p_cap}.
 
+\begin{equation}
+    Q_c(t) = \alpha \cdot T_c(t) \cdot I(t) - \frac{1}{2} I(t)^2 R_0 - \frac{T_h(t) - T_c(t)}{R_q} - \frac{C_q}{2} \cdot \frac{dT_c(t)}{dt} \quad \text{[W]}
+    \label{eq:qc_net}
+\end{equation}
 
+\subsubsection{Potencia térmica neta en la cara caliente ($T_h$)}
 
+Es el calor total que se logra entregar hacia el exterior. Debe ser igual a lo que absorbe el efecto Peltier según la ecuación \ref{eq:p_peltier_h}, más la mitad del calor del efecto Joule de la ecuación \ref{eq:p_joule}, menos el calor que se fuga desde la cara caliente por conducción hacia la cara fría de la ecuación \ref{eq:p_cond}, más el calor invertido en calentar la cerámica de la propia celda de la ecuación \ref{eq:p_cap}.
 
+\begin{equation}
+    Q_h(t) = \alpha \cdot T_h(t) \cdot I(t) + \frac{1}{2} I(t)^2 R_0 - \frac{T_h(t) - T_c(t)}{R_q} + \frac{C_q}{2} \cdot \frac{dT_h(t)}{dt} \quad \text{[W]}
+    \label{eq:qh_net}
+\end{equation}
 
 \subsubsection{Acoplamiento Térmico con las Interfases Exteriores}
 
-Las temperaturas de las caras del módulo ($T_c$ y $T_h$) se acoplan a la temperatura del agua $T_w(t)$ y al ambiente $T_{\text{amb}}$ mediante la resistencia térmica de contacto del recipiente ($R_{\text{contacto}}$) y la resistencia del disipador de aire por ventilación forzada ($RqR$) \cite{Kubov_2016}.
+Las temperaturas de las caras del módulo ($T_c$ y $T_h$) se acoplan a la temperatura del agua u objeto objetivo $T_w(t)$ y al ambiente $T_{\text{amb}}$ mediante la resistencia térmica de contacto del recipiente que contiene el objetivo ($R_{\text{contacto}}$) y la resistencia entre la cara que debe rechazar o absorber calor del ambiente ($RqR$).
 
 \begin{enumerate}
     \item Modo Enfriamiento (Cara fría acoplada al recipiente de agua):
