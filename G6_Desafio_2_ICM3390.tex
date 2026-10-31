@@ -550,6 +550,147 @@ Finalmente, al comparar con los productos de referencia de la Tabla \ref{tab:com
 
 \section{Arquitectura y modelos desarrollados}
 
+\subsection{Modelo termoeléctrico}
+
+Para elaborar el modelo termoeléctrico transitorio y establecer sus balances de energía asociados, es fundamental caracterizar el comportamiento de los módulos termoeléctricos Peltier seleccionados (TEC1-12706). A partir de la ficha técnica del fabricante Thermonamic, en la Tabla \ref{tab:propiedades_peltier} se presentan las especificaciones nominales de la celda junto con los parámetros concentrados adoptados para el modelamiento.
+
+Existen parámetros físicos del módulo: Coeficiente Seebeck efectivo ($\alpha$), Resistencia eléctrica interna equivalente ($R_0$), Resistencia térmica del módulo ($R_q$) y Conductancia térmica interna ($K_p$). Los valores de estos parámetros se adoptan directamente de la caracterización experimental de cada módulo peltier. En lugar de calcular aproximaciones teóricas para caracterizar la Peltier, existe una experimentación desarrollada por \textcite{Kubov_2016} que obtiene valores de estos parámetros distintos a los obtenidos a partir de los datos del fabricante Thermonamic \parencite{Dymytrov_2017}, y esto se acredita a módulos Peltier degradados. En base a lo anterior, se mide la resistencia de las Peltier a utilizar y se obtiene una resistencia muy cercana (2 $\Omega$) a los valores teóricos obtenidos a partir del \textit{datasheet} del fabricante por \textcite{Kubov_2016}. Los valores de estos parámetros se determinan a partir del punto de operación óptimo del gráfico de desempeño de \textcite{Kubov_2016}: $V_{\text{opt}} = 16\,\text{V}$, $Q_{\text{cold}} = 61\,\text{W}$ y $\Delta T_{\max} = 70\,^\circ\text{C}$ a $T_h = 300{,}15\,\text{K}$.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Parámetro / Propiedad} & \textbf{Símbolo} & \textbf{$T_h = 27\,^{\circ}\text{C}$} & \textbf{$T_h = 50\,^{\circ}\text{C}$} & \textbf{Unidad} \\
+\midrule
+Potencia de bombeo máxima & $Q_{\max}$ & 61,4 & 66,7 & \text{W} \\
+Diferencia de temperatura máxima & $\Delta T_{\max}$ & 70,0 & 79,0 & $^{\circ}\text{C}$ \\
+Corriente máxima & $I_{\max}$ & 6,1 & 6,1 & \text{A} \\
+Voltaje máximo & $U_{\max}$ & 16,0 & 17,2 & \text{V} \\
+Resistencia del módulo (AC) & $R_{\text{mod}}$ & 2,00 & 2,20 & $\Omega$ \\
+\midrule
+\textbf{Parámetros del Modelo (\parencite{Kubov_2016})} & & \multicolumn{2}{c}{\textbf{Valor Adoptado}} & \\
+\midrule
+Coeficiente Seebeck efectivo & $\alpha$ & \multicolumn{2}{c}{0,0530} & \text{V/K} \\
+Resistencia eléctrica equivalente & $R_0$ & \multicolumn{2}{c}{2,1000} & $\Omega$ \\
+Resistencia térmica del módulo & $R_q$ & \multicolumn{2}{c}{1,9500} & \text{K/W} \\
+Conductancia térmica interna & $K_p$ & \multicolumn{2}{c}{0,5130} & \text{W/K} \\
+\bottomrule
+\end{tabular}
+\caption{Propiedades nominales de la ficha técnica Thermonamic y parámetros caracterizados por \textcite{Kubov_2016, Dymytrov_2017} para la celda TEC1-12706.}
+\label{tab:propiedades_peltier}
+\end{table}
+
+Para definir cuál será el voltaje de cada módulo, se debe considerar el efecto de la caída por la resistencia interna $R_0$ y la fuerza electromotriz de Seebeck. Esta última es el efecto que se debe vencer debido al efecto intrínseco del comportamiento de un módulo Peltier frente a un gradiente térmico entre sus caras \parencite{Kubov_2016}.
+
+\begin{equation}
+    V_{\text{TEC}}(t) = \alpha \cdot (T_h - T_c) + I \cdot R_0
+\end{equation}
+
+donde:
+\begin{itemize}
+    \item $\alpha$: Coeficiente Seebeck efectivo del módulo ($\text{V/K}$) \cite{Kubov_2016}.
+    \item $T_h(t), T_c(t)$: Temperaturas instantáneas de la cara caliente y fría, respectivamente ($^\circ\text{C}$) \cite{Kubov_2016}.
+    \item $I(t)$: Corriente eléctrica continua que circula a través del módulo ($\text{A}$) \cite{Kubov_2016}.
+    \item $R_0$: Resistencia eléctrica interna equivalente ($\Omega$) \cite{Kubov_2016}.
+\end{itemize}
+
+Además, se debe considerar, el potencial térmico de cada cara de la peltier, que simboliza los saltos de energía que experimentan los electrones a una temperatura dada de acuerdo con \textcite{Kubov_2016}. La temperatura $T_{\text{abs}}$ es la temperatura instantánea de la cara correspondiente al módulo peltier en grados Kelvin.
+
+\begin{equation}
+    Pe(T) = \alpha \cdot T_{\text{abs}} \quad \text{[V]}
+\label{eq:peltier_pot}
+\end{equation}
+
+Con base en la red simétrica propuesta por los autores, las fuentes dependientes del modelo cuantifican los tres fenómenos principales de conversión energética \cite{Kubov_2016}:
+
+Absorción térmica Peltier en el contacto frío:
+
+\begin{equation}
+    P_{\text{Peltier}, c}(t) = Pe(T_c) \cdot I(t) \quad \text{[W]}\label{eq:p_peltier_c}
+\end{equation}
+    
+Generación térmica Peltier en el contacto caliente:
+
+\begin{equation}
+    P_{\text{Peltier}, h}(t) = Pe(T_h) \cdot I(t) \quad \text{[W]}\label{eq:p_peltier_h}
+\end{equation}
+
+Disipación por efecto Joule en el núcleo del semiconductor:
+
+\begin{equation}
+    P_{\text{Joule}}(t) = I(t)^2 \cdot R_0 \quad \text{[W]}\label{eq:p_joule}
+\end{equation}
+
+Debido a la simetría geométrica del elemento, la potencia por calor Joule generada en el interior ($P_{\text{Joule}}$) se distribuye equitativamente ($\frac{1}{2} P_{\text{Joule}}$) hacia la cara fría y la cara caliente \parencite{Kubov_2016}.
+
+
+\subsection{Modelo Térmico}
+
+El modelo térmico describe el transporte de calor por conducción interna, la inercia térmica transitoria de las caras del módulo y las acoplamientos térmicos hacia el ambiente y el recipiente \parencite{Kubov_2016}.
+
+\subsubsection{Conducción Térmica Interna e Inercia Transitoria}
+
+Debido al gradiente térmico entre las caras del semiconductor, se produce un flujo de calor por conducción desde la superficie caliente hacia la fría a través de la resistencia térmica interna $R_q$ \parencite{Kubov_2016}:
+
+\begin{equation}
+    P_{\text{cond}}(t) = \frac{T_h(t) - T_c(t)}{R_q} = K_p \cdot \big(T_h(t) - T_c(t)\big) \quad \text{[W]}\label{eq:p_cond}
+\end{equation}
+
+Asimismo, la masa cerámica y metálica del módulo almacena energía durante los regímenes transitorios. Siguiendo a \textcite{Kubov_2016}, la capacidad calorífica total del módulo $C_q$ se distribuye equitativamente ($\frac{C_q}{2}$) entre el nodo frío y el nodo caliente:
+
+\begin{equation}
+    P_{\text{cap}, c}(t) = \frac{C_q}{2} \cdot \frac{dT_c(t)}{dt}, \quad P_{\text{cap}, h}(t) = \frac{C_q}{2} \cdot \frac{dT_h(t)}{dt} \quad \text{[W]}
+    \label{eq:p_cap}
+\end{equation}
+
+\subsubsection{Ecuaciones Nodales de Potencia Neta ($Q_c$ y $Q_h$)}
+
+Aplicando la Ley de Corrientes de Kirchhoff en los nodos térmicos $T_c$ y $T_h$ de la red equivalente de \textcite{Kubov_2016}, la potencia térmica neta disponible en cada superficie se define como:
+
+\begin{enumerate}
+    \item Potencia térmica neta en la cara fría ($T_c$):
+    \begin{equation}
+        Q_c(t) = \alpha \cdot \big(T_c(t) + T_0\big) \cdot I(t) - \frac{1}{2} I(t)^2 R_0 - \frac{T_h(t) - T_c(t)}{R_q} - \frac{C_q}{2} \cdot \frac{dT_c(t)}{dt} \quad \text{[W]}
+        \label{eq:qc_net}
+    \end{equation}
+    \item Potencia térmica neta en la cara caliente ($T_h$)
+    \begin{equation}
+        Q_h(t) = \alpha \cdot \big(T_h(t) + T_0\big) \cdot I(t) + \frac{1}{2} I(t)^2 R_0 - \frac{T_h(t) - T_c(t)}{R_q} + \frac{C_q}{2} \cdot \frac{dT_h(t)}{dt} \quad \text{[W]}
+        \label{eq:qh_net}
+    \end{equation}
+    
+\end{enumerate}
+
+
+
+
+
+
+\subsubsection{Acoplamiento Térmico con las Interfases Exteriores}
+
+Las temperaturas de las caras del módulo ($T_c$ y $T_h$) se acoplan a la temperatura del agua $T_w(t)$ y al ambiente $T_{\text{amb}}$ mediante la resistencia térmica de contacto del recipiente ($R_{\text{contacto}}$) y la resistencia del disipador de aire por ventilación forzada ($RqR$) \cite{Kubov_2016}.
+
+\begin{enumerate}
+    \item Modo Enfriamiento (Cara fría acoplada al recipiente de agua):
+    \begin{align}
+        T_c(t) &= T_w(t) - Q_c(t) \cdot R_{\text{contacto}} \label{eq:tc_cool} \\
+        T_h(t) &= T_{\text{amb}} + \big(N \cdot Q_h(t)\big) \cdot R_{\text{qR}} \label{eq:th_cool}
+    \end{align}
+    \item Modo Calentamiento (Cara caliente acoplada al recipiente de agua):
+    \begin{align}
+        T_h(t) &= T_w(t) + Q_h(t) \cdot R_{\text{contacto}} \label{eq:th_heat} \\
+        T_c(t) &= T_{\text{amb}} - \big(N \cdot Q_c(t)\big) \cdot R_{\text{qR}} \label{eq:tc_heat}
+    \end{align}    
+\end{enumerate}
+
+
+
+\subsection{Modelo energético}
+
+
+
+
 \section{Simulaciones y justificación físico-matemática}
 \label{sec:simulaciones}
 
