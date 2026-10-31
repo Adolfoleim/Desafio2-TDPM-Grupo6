@@ -667,7 +667,7 @@ La potencia térmica neta extraída desde el exterior por la cara fría de un m�
 
 \subsubsection{Potencia térmica neta en la cara caliente ($T_h$)}
 
-La potencia térmica neta liberada hacia el exterior por la cara caliente de un módulo $Q_h(t)$ es igual a la suma del calor generado por efecto Peltier (Ecuación \eqref{eq:p_peltier_h}) y la mitad del calor Joule disipado (Ecuación \eqref{eq:p_joule}), descontando el calor fugado por conducción hacia la cara fría (Ecuación \eqref{eq:p_cond}) y la energía absorbida durante el calentamiento de la cerámica caliente (Ecuación \eqref{eq:p_cap}) \parencite{Kubov_2016}:
+La potencia térmica neta liberada hacia el exterior por la cara caliente de un módulo $Q_h(t)$ es igual a la suma del calor generado por efecto Peltier (Ecuación \eqref{eq:p_peltier_h}) y la mitad del calor Joule disipado (Ecuación \eqref{eq:p_joule}), descontando el calor fugado por conducción hacia la cara fría (Ecuación \eqref{eq:p_cond}) y la energía absorbida durante el calentamiento de la cerámica caliente (Ecuación \eqref{eq:p_cap}):
 
 \begin{equation}
     Q_h(t) = \alpha \cdot \big(T_h(t) + T_0\big) \cdot I(t) + \frac{1}{2} I(t)^2 R_0 - \frac{T_h(t) - T_c(t)}{R_q} - \frac{C_q}{2} \cdot \frac{dT_h(t)}{dt} \quad \text{[W]}
@@ -678,7 +678,7 @@ La potencia térmica neta liberada hacia el exterior por la cara caliente de un 
 
 El módulo termoeléctrico opera como una bomba de calor entre dos interfaces térmicas: la interfaz de proceso (en contacto con el recipiente de acero inoxidable y el agua a temperatura $T_w(t)$) y la interfaz ambiental (en contacto con el aire a temperatura $T_{\text{amb}}$).
 
-La cara de proceso intercambia calor a través de la resistencia térmica global de contacto $R_{\text{contacto}}$, la cual contempla la pared del recipiente y la capa de pasta térmica \parencite{Kubov_2016}. La cara ambiental intercambia calor con el entorno mediante un disipador de aluminio y ventilador caracterizado por una resistencia térmica $R_{\text{qR}}$ \parencite{Kubov_2016}.
+La cara de proceso intercambia calor a través de la resistencia térmica global de contacto $R_{\text{contacto}}$, la cual contempla la pared del recipiente y la capa de pasta térmica. La cara ambiental intercambia calor con el entorno mediante un disipador de aluminio y ventilador caracterizado por una resistencia térmica $R_{\text{qR}}$.
 
 Para un arreglo de $N$ módulos Peltier, las temperaturas superficiales instantáneas ($T_c$ y $T_h$) se relacionan con las temperaturas del proceso y del ambiente según el modo de operación:
 
@@ -701,14 +701,14 @@ Para un arreglo de $N$ módulos Peltier, las temperaturas superficiales instant�
 El comportamiento térmico del fluido $T_w(t)$ contenido en el recipiente de acero inoxidable se rige por la conservación de la energía en estado transitorio:
 
 \begin{equation}
-    (m_w \cdot c_{p,w} + m_{\text{acero}} \cdot c_{p,\text{acero}}) \cdot \frac{dT_w(t)}{dt} = Q_{\text{útil, total}}(t) - Q_{\text{pérdidas}}(t)
+    (m_w \cdot c_{p,w} + m_{\text{acero}} \cdot c_{\text{acero}}) \cdot \frac{dT_w(t)}{dt} = Q_{\text{útil, total}}(t) - Q_{\text{pérdidas}}(t)
     \label{eq:balance_global_tw}
 \end{equation}
 
 donde:
 \begin{itemize}
     \item $m_w, m_{\text{acero}}$: Masas del agua y del recipiente de acero inoxidable ($\text{kg}$).
-    \item $c_{p,w}, c_{p,\text{acero}}$: Calores específicos del agua ($4186\,\text{J/kg}\cdot\text{K}$) y del acero ($500\,\text{J/kg}\cdot\text{K}$).
+    \item $c_{p,w}, c_{\text{acero}}$: Calores específicos del agua ($4186\,\text{J/kg}\cdot\text{K}$) y del acero ($500\,\text{J/kg}\cdot\text{K}$).
     \item $Q_{\text{útil, total}}(t)$: Potencia térmica neta transferida al recipiente por los $N$ módulos:
     \begin{equation}
         Q_{\text{útil, total}}(t) = 
@@ -717,7 +717,7 @@ donde:
             N \cdot Q_h(t) & \text{(Modo Calentamiento)}
         \end{cases}
     \end{equation}
-    \item $Q_{\text{pérdidas}}(t)$: Pérdidas de calor por convección y radiación del recipiente con el aire ambiente:
+    \item $Q_{\text{pérdidas}}(t)$: Pérdidas de calor por convección con el aire ambiente. Las pérdidas por radiación se despreciarán.
     \begin{equation}
         Q_{\text{pérdidas}}(t) = U \cdot A \cdot \big(T_w(t) - T_{\text{amb}}\big) \quad \text{[W]}
     \end{equation}
