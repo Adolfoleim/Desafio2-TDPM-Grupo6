@@ -68,7 +68,7 @@ else:  # "cooling"
     m_bebida, cp_bebida = 0.355, 3900.0  # Bebida en lata (355 ml)
     m_lata, cp_lata = 0.015, 900.0       # Lata de aluminio (15 g)
     m_bano, cp_agua = 0.300, 4186.0      # 300 g de agua de acople
-    m_acero, cp_acero = 0.150, 500.0     # Recipiente de acero (150 g)
+    m_acero, cp_acero = 0.207, 500.0     # Recipiente de acero (150 g)
     C_sistema = (m_bebida * cp_bebida + m_lata * cp_lata + 
                  m_bano * cp_agua + m_acero * cp_acero)
 
@@ -373,12 +373,21 @@ def simular_caso(
 fig1, axs1 = plt.subplots(1, 3, figsize=(18, 5))
 
 # Subgráfico 1.1: Temperatura Ambiente
-T_amb_valores = [10.0, 20.0, 30.0, 40.0]  # [°C]
+T_amb_valores = [10.0, 21.5, 30.0, 40.0]  # [°C] (21.5 °C es el caso base)
 for Tamb in T_amb_valores:
     t_min, Tw_sim = simular_caso(T_amb_custom=Tamb, Tw_0=Tamb)
-    axs1[0].plot(
-        t_min, Tw_sim, label=f"$T_{{amb}} = {Tamb:.0f}\\,^\\circ\\text{{C}}$"
-    )
+    if np.isclose(Tamb, T_amb):
+        axs1[0].plot(
+            t_min,
+            Tw_sim,
+            "k--",
+            linewidth=2,
+            label=f"$T_{{amb}} = {Tamb:.1f}\\,^\\circ\\text{{C}}$ (Caso Base)",
+        )
+    else:
+        axs1[0].plot(
+            t_min, Tw_sim, label=f"$T_{{amb}} = {Tamb:.0f}\\,^\\circ\\text{{C}}$"
+        )
 
 axs1[0].set_title("Efecto de la Temperatura Ambiente ($T_{amb}$)")
 axs1[0].set_xlabel("Tiempo [min]")
@@ -387,10 +396,21 @@ axs1[0].grid(True, alpha=0.3)
 axs1[0].legend()
 
 # Subgráfico 1.2: Masa de Agua
-m_w_valores = [0.150, 0.250, 0.330, 0.500]  # [kg]
+m_w_valores = [0.150, 0.250, 0.330, 0.500]  # [kg] (0.330 kg es el caso base)
 for mw in m_w_valores:
     t_min, Tw_sim = simular_caso(m_w_custom=mw)
-    axs1[1].plot(t_min, Tw_sim, label=f"$m_w = {int(mw*1000)}\\,\\text{{g}}$")
+    if np.isclose(mw, m_w):
+        axs1[1].plot(
+            t_min,
+            Tw_sim,
+            "k--",
+            linewidth=2,
+            label=f"$m_w = {int(mw*1000)}\\,\\text{{g}}$ (Caso Base)",
+        )
+    else:
+        axs1[1].plot(
+            t_min, Tw_sim, label=f"$m_w = {int(mw*1000)}\\,\\text{{g}}$"
+        )
 
 axs1[1].set_title("Efecto de la Masa de Agua ($m_w$)")
 axs1[1].set_xlabel("Tiempo [min]")
@@ -413,7 +433,7 @@ axs1[2].plot(
     Tw_var,
     "k--",
     linewidth=2,
-    label="Corriente Experimental Variable",
+    label="Corriente Experimental Variable (Caso Base)",
 )
 axs1[2].plot(t_min, Tw_c20, label="I constante = 2.0 A")
 axs1[2].plot(t_min, Tw_c25, label="I constante = 2.5 A")
@@ -435,15 +455,19 @@ plt.show()
 fig2, axs2 = plt.subplots(1, 3, figsize=(18, 5))
 
 # Subgráfico 2.1: Aislamiento Térmico (UA)
-UA_valores = [0.001, 1.0, 3.0, 5.0]  # [W/K]
+UA_valores = [UA_opt, 1.0, 3.0, 5.0]  # [W/K] (UA_opt es el valor óptimo)
 for ua_val in UA_valores:
     t_min, Tw_sim = simular_caso(UA_custom=ua_val)
-    label_txt = (
-        f"UA = {ua_val} W/K (Óptimo)"
-        if ua_val == 0.001
-        else f"UA = {ua_val:.1f} W/K"
-    )
-    axs2[0].plot(t_min, Tw_sim, label=label_txt)
+    if np.isclose(ua_val, UA_opt):
+        axs2[0].plot(
+            t_min,
+            Tw_sim,
+            "k--",
+            linewidth=2,
+            label=f"UA = {ua_val:.4f} W/K (Óptimo)",
+        )
+    else:
+        axs2[0].plot(t_min, Tw_sim, label=f"UA = {ua_val:.1f} W/K")
 
 axs2[0].set_title("Efecto del Aislamiento Térmico ($UA$)")
 axs2[0].set_xlabel("Tiempo [min]")
@@ -456,11 +480,20 @@ factores = [0.5, 1.0, 1.5, 2.0]
 for f in factores:
     r_cont_val = R_contacto_opt * f
     t_min, Tw_sim = simular_caso(R_contacto_custom=r_cont_val)
-    axs2[1].plot(
-        t_min,
-        Tw_sim,
-        label=f"$R_{{cont}} = {r_cont_val:.3f}\\,\\text{{K/W}}$ ({f*100:.0f}%)",
-    )
+    if f == 1.0:
+        axs2[1].plot(
+            t_min,
+            Tw_sim,
+            "k--",
+            linewidth=2,
+            label=f"$R_{{cont}} = {r_cont_val:.3f}\\,\\text{{K/W}}$ (100% Óptimo)",
+        )
+    else:
+        axs2[1].plot(
+            t_min,
+            Tw_sim,
+            label=f"$R_{{cont}} = {r_cont_val:.3f}\\,\\text{{K/W}}$ ({f*100:.0f}%)",
+        )
 
 axs2[1].set_title("Efecto de la Res. de Contacto ($R_{contacto}$)")
 axs2[1].set_xlabel("Tiempo [min]")
@@ -472,11 +505,20 @@ axs2[1].legend()
 for f in factores:
     r_qr_val = R_qR_opt * f
     t_min, Tw_sim = simular_caso(R_qR_custom=r_qr_val)
-    axs2[2].plot(
-        t_min,
-        Tw_sim,
-        label=f"$R_{{qR}} = {r_qr_val:.3f}\\,\\text{{K/W}}$ ({f*100:.0f}%)",
-    )
+    if f == 1.0:
+        axs2[2].plot(
+            t_min,
+            Tw_sim,
+            "k--",
+            linewidth=2,
+            label=f"$R_{{qR}} = {r_qr_val:.3f}\\,\\text{{K/W}}$ (100% Óptimo)",
+        )
+    else:
+        axs2[2].plot(
+            t_min,
+            Tw_sim,
+            label=f"$R_{{qR}} = {r_qr_val:.3f}\\,\\text{{K/W}}$ ({f*100:.0f}%)",
+        )
 
 axs2[2].set_title("Efecto de la Res. Interna ($R_{qR}$)")
 axs2[2].set_xlabel("Tiempo [min]")
@@ -486,3 +528,67 @@ axs2[2].legend()
 
 plt.tight_layout()
 plt.show()
+
+# ==============================================================================
+# 8. EXPORTACIÓN DE RESULTADOS Y FLUJO DE CALOR ÚTIL A EXCEL
+# ==============================================================================
+import pandas as pd
+
+
+def exportar_flujo_calor_excel(
+    nombre_archivo="Flujo_de_Calor_Util.xlsx", usar_datos_simulados=True
+):
+    """Calcula el flujo de calor útil (Q_flujo) en cada instante de tiempo
+
+    y exporta la tabla completa a un archivo Excel (.xlsx).
+    """
+    # 1. Seleccionar perfil de temperatura (simulado con parámetros óptimos o experimental)
+    if usar_datos_simulados:
+        Tw_eval = simular_curva(
+            [R_contacto_opt, R_qR_opt, UA_opt], modo=MODO_OPERACION
+        )
+    else:
+        Tw_eval = Tw_exp
+
+    Tc_list, Th_list, Q_flujo_list, Q_perdidas_list = [], [], [], []
+
+    # 2. Calcular variables térmicas en cada punto del tiempo
+    for t, I, Tw in zip(t_exp, I_exp, Tw_eval):
+        Tc, Th, Q_flujo = resolver_superficies(
+            Tw, I, R_contacto_opt, R_qR_opt, modo=MODO_OPERACION
+        )
+        Q_perdidas = UA_opt * (Tw - T_amb)
+
+        Tc_list.append(Tc)
+        Th_list.append(Th)
+        Q_flujo_list.append(Q_flujo)
+        Q_perdidas_list.append(Q_perdidas)
+
+    Q_flujo_arr = np.array(Q_flujo_list)
+    Q_perdidas_arr = np.array(Q_perdidas_list)
+
+    # 3. Estructurar el DataFrame
+    df_resultados = pd.DataFrame(
+        {
+            "Tiempo [min]": t_exp / 60.0,
+            "Tiempo [s]": t_exp,
+            "Corriente I [A]": I_exp,
+            "T_agua [°C]": Tw_eval,
+            "Tc Superficie Fría [°C]": Tc_list,
+            "Th Superficie Caliente [°C]": Th_list,
+            "Flujo de Calor Útil Q_flujo [W]": Q_flujo_arr,
+            "Pérdidas Térmicas Q_perdidas [W]": Q_perdidas_arr,
+            "Flujo Neto de Calor [W]": Q_flujo_arr - Q_perdidas_arr
+            if MODO_OPERACION == "heating"
+            else -Q_flujo_arr - Q_perdidas_arr,
+        }
+    )
+
+    # 4. Guardar archivo Excel
+    df_resultados.to_excel(nombre_archivo, index=False)
+    print(f"Archivo Excel exportado exitosamente: {nombre_archivo}")
+    return df_resultados
+
+
+# Ejecución de la función
+df_excel = exportar_flujo_calor_excel("Flujo_de_Calor_Util.xlsx")

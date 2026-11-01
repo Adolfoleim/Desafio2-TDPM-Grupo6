@@ -1293,7 +1293,7 @@ Y la temperatura del agua aumenta según:
 
 \subsubsection{Calibración y sensibilidad}
 
-Se realizó la calibración en el modo calentar, considerando una medición de temperatura en el centro del volumen de agua durante 45 minutos. El detalle de esta calibración, se realizará en la siguiente sección, sin embargo, se presentan los resultados de las variables óptimas en la regresión de la respuesta del sistema, y posteriormente la sensibilidad de la variación de ciertos parámetros.
+Se realizó la calibración en el modo calentar, considerando una medición de temperatura en el centro del volumen de agua durante 45 minutos. El detalle de esta calibración, se realizará en la siguiente sección, sin embargo, se presentan los resultados de las variables óptimas en la regresión de la respuesta del sistema, y posteriormente la sensibilidad de la variación de ciertos parámetros. La temperatura inicial del sistema es la temperatura ambiente (21,5°C), como también se considera una masa de 330 gramos de agua y 207 gramos de acero inoxidable.
 
 Las variables óptimas encontradas con un RMSE de 1,8269°C son:
 
@@ -1335,7 +1335,16 @@ El análisis de sensibilidad al variar las variables de entrada son:
 
 El objetivo de esta simulación en Nastran es poder observar el gradiente térmico que se genera al interior de recipiente. Para poder lograr esto, únicamente se emplean 3 objetos en la simulación para representar el modelo energético y reducir el costo computacional. Estos objetos corresponden al agua, al recipiente de acero inoxidable y los módulos Peltier.
 
-Para caracterizar correctamente el modelo térmico, se relacionan los objetos que están en contacto en la configuración, tipo módulos Peltier-recipiente y recipiente-agua. Debido a la despreciable pérdida de calor con el entorno, debido al aislamiento del sistema, únicamente existe h convectivo mínimo en la superficie superior del recipiente.
+Para caracterizar correctamente el modelo térmico, se relacionan los objetos que están en contacto en la configuración, tipo módulos Peltier-recipiente y recipiente-agua. Debido a la despreciable pérdida de calor con el entorno, debido al aislamiento del sistema, únicamente existe el coeficiente de convección natural mínimo en la superficie superior del recipiente con el ambiente. Además, se considera un equivalente en el coeficiente de convección que ejemplifique el escenario experimental (50 $W/m^2K$).
+
+Se mantienen las propiedades térmicas del acero y del agua. El volumen de agua aproximado del CAD es de 373 g de agua a diferencia al modelo simulado en \textit{Python}, a pesar de ser diferente al expuesto en el modelo térmico simulado en \textit{Python}, gracias al análisis de sensibilidad se puede despreciar el efecto de la variación de 40 g agua por sobre el simulado. Además, se considera un flujo variable de calor útil que es en resultado de la simulación realizada en \textit{Python}, por lo tanto, se entrega un flujo de calor variable en las piezas representativas de los módulos Peltier. El resultado en 45 minutos se observa en la Figura \ref{fig:Nastran_calentar}. Además en la misma Figura \ref{fig:Nastran_calentar} se observa un claro gradiente considerable de temperatura dentro del volumen de agua, de aproximadamente 15°C, por lo que puede existir un error considerable en el lugar donde se mide la temperatura en el experimento.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Nastran_Calentar.png}
+    \caption{Resultado simulación Nastran en el modo calentar.}
+    \label{fig:Nastran_calentar}
+\end{figure}
 
 \subsection{Simulación estructural}
 \label{sec:sim_estructural}
@@ -1578,7 +1587,12 @@ La Figura \ref{fig:resultados_ensayo_calibracion} presenta los resultados del en
     \label{fig:fideos_calibracion}
 \end{figure}
 
-% Calibración del modelo térmico: pendiente (Adolfo)
+\subsubsection*{Calibración modelo térmico - Python}
+
+Para la calibración se utilizó la corriente medida en este experimento en el cual se mide la temperatura en el centro del volumen de agua. Esto se realiza con el fin de tener un valor representativo del estado del agua en el tiempo $t$. Se considera que esta aproximación tenga errores, y se puede observar en la simulación de Nastran en la Figura \ref{fig:Nastran_calentar}, pero ayuda a observar el comportamiento del modelo termodinámico ante perturbaciones en la entrada de datos y es posible analizar la realidad de los datos considerados como se observó en el análisis de sensibilidad respectivo de este modelo térmico en \textit{Python}.
+
+De acuerdo con la respuesta a la calibración del sistema, se observa una buena respuesta a la aislación, debido a las pérdidas mínimas de calor al tener la variable $UA$ en 0,001 W/K. Además, se observa una elevada resistencia térmica de 8,0375 K/W, lo que puede representar la posición en donde se mide la temperatura del agua, además, se observa una baja resistencia térmica en el lugar del disipador (1,9562 K/W), lo que demuestra un aporte significativo en el momento de aumentar la temperatura del sistema. En el análisis de sensibilidad en la Figura \ref{fig:sensibilidad_variables} se observa los efectos de aumentar las pérdidas de calor en el sistema, que disminuye la temperatura final del agua con una curva logarítmica pronunciada; como también se observa el efecto de aumentar la resistencia térmica del agua, que al aumentarla disminuye la temperatura del agua; y también se observa una respuesta física lógica a que aumentar la resistencia del disipador, ya que la cara fría de un módulo Peltier al aumentar su temperatura puede superar la temperatura ambiente y se desea que el calor sea disipado en el ambiente.
+
 
 \subsubsection{Ensayo con medición junto a la pared del recipiente}
 

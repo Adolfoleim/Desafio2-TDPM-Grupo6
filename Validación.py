@@ -1,56 +1,83 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from scipy.integrate import solve_ivp
 from scipy.interpolate import interp1d
 
 # ==============================================================================
-# 1. PARÁMETROS FÍSICOS Y PARÁMETROS OPTIMIZADOS (AG)
+# 1. PARÁMETROS OPTIMIZADOS EN MODO CALENTAMIENTO (INGRESAR AQUÍ TUS RESULTADOS)
 # ==============================================================================
-# Propiedades del módulo Peltier (TEC1-12706 - Dymytrov 2017)
-ALPHA = 0.0530    # Coeficiente Seebeck efectivo [V/K]
-R0 = 2.1000       # Resistencia eléctrica interna [Ohm]
-Rq = 1.9500       # Resistencia térmica interna [K/W]
-N = 2             # Celdas en serie
+# Reemplaza estos valores por los obtenidos en la optimización del modo calentamiento
+R_contacto_opt = 8.0375  # [K/W] Resistencia de contacto térmico
+R_qR_opt = 1.9562  # [K/W] Resistencia térmica interna
+UA_opt = 0.0010  # [W/K] Coeficiente de pérdidas térmicas
 
-# Propiedades de materiales
-CP_AGUA = 4186.0     # [J/kg*K] Agua
-CP_BEBIDA = 3900.0   # [J/kg*K] Refresco/Jugo
-CP_ACERO = 500.0     # [J/kg*K] Recipiente de acero inoxidable
-CP_ALUMINIO = 900.0  # [J/kg*K] Lata de aluminio
 
-M_ACERO = 0.150      # Masa del recipiente de acero [kg] (150 g)
-M_LATA = 0.015       # Masa de la lata de aluminio [kg] (15 g)
+# ==============================================================================
+# 2. DATOS EXPERIMENTALES EN MODO ENFRIAMIENTO (COOLING)
+# ==============================================================================
+# Tiempo experimental (0 a 40 minutos en segundos, 41 puntos)
+t_exp_cooling = np.linspace(0, 2400, 41)
 
-# Parámetros óptimos identificados
-R_CONTACTO_OPT = 0.0116  # [K/W]
-R_QR_OPT = 0.0182        # [K/W]
-UA_OPT = 0.7413          # [W/K]
-
-# Perfil de corriente experimental base
-t_exp = np.linspace(0, 2100, 36)  # [s]
-I_exp = np.array([
-    2.91, 2.53, 2.46, 2.43, 2.38, 2.37, 2.30, 2.26, 2.24, 2.23,
-    2.19, 2.13, 2.13, 2.12, 2.11, 2.10, 2.10, 2.10, 2.14, 2.11,
-    2.11, 2.13, 2.16, 2.19, 2.23, 2.26, 2.27, 2.31, 2.29, 2.30,
-    2.30, 2.31, 2.31, 2.31, 2.31, 2.31
+# Corriente medida / corregida [A]
+I_exp_cooling = np.array([
+    1.830000, 1.871667, 1.913333, 1.955000, 1.996667, 2.038333, 2.080000, 2.121667,
+    2.163333, 2.205000, 2.246667, 2.288333, 2.330000, 2.371667, 2.413333, 2.455000,
+    2.496667, 2.538333, 2.580000, 2.621667, 2.663333, 2.705000, 2.746667, 2.788333,
+    2.830000, 2.871667, 2.913333, 2.955000, 2.996667, 3.038333, 3.080000, 3.121667,
+    3.163333, 3.205000, 3.246667, 3.288333, 3.330000, 3.371667, 3.413333, 3.455000,
+    3.496667
 ])
-I_func_base = interp1d(t_exp, I_exp, bounds_error=False, fill_value="extrapolate")
+
+# Temperatura experimental del fluido/agua [°C]
+Tw_exp_cooling = np.array([
+    22.8, 16.8, 16.7, 16.6, 16.6, 16.3, 16.1, 15.8, 15.5, 15.2,
+    15.1, 14.8, 14.4, 14.2, 13.9, 13.7, 13.4, 13.2, 13.0, 12.8,
+    12.6, 12.3, 12.1, 11.9, 11.6, 11.4, 11.2, 11.0, 10.8, 10.6,
+    10.4, 10.2, 10.0, 10.3,  9.8,  9.3,  9.2,  9.2,  9.0,  8.8,
+    8.7
+])
+
+T_amb = 21.5  # Temperatura ambiente [°C]
+
+# Propiedades térmicas del sistema en enfriamiento
+m_bebida, cp_bebida = 0.355, 3900.0
+m_lata, cp_lata = 0.015, 900.0
+m_bano, cp_agua = 0.300, 4186.0
+m_acero, cp_acero = 0.207, 500.0
+C_sistema_cooling = (
+    m_bebida * cp_bebida
+    + m_lata * cp_lata
+    + m_bano * cp_agua
+    + m_acero * cp_acero
+)
+
+alpha = 0.0530
+R0 = 2.1000
+Rq = 1.9500
+N = 2
+
+I_func_cooling = interp1d(
+    t_exp_cooling, I_exp_cooling, bounds_error=False, fill_value="extrapolate"
+)
 
 
 # ==============================================================================
-# 2. MOTOR FÍSICO DE SUPERFICIES Y BALANCE TÉRMICO
+# 3. RESOLUCIÓN DE SUPERFICIES Y ENFRIAMIENTO CORREGIDO
 # ==============================================================================
-
-# --- MODO 1: CALENTAR (Solo Agua + Recipiente) ---
-def resolver_superficies_heating(Tw, I, T_amb, R_contacto, R_qR):
+def resolver_superficies_cooling(Tw, I, R_contacto, R_qR):
+    """Calcula Tc (superficie fría en contacto con agua) y Th (caliente en contacto con disipador)."""
     T0 = 273.15
-    A11 = (1.0 / (N * R_qR)) + ALPHA * I + (1.0 / Rq)
-    A12 = -1.0 / Rq
-    B1  = (T_amb / (N * R_qR)) - ALPHA * T0 * I + 0.5 * (I**2) * R0
 
+    # Ecuación de conservación en superficie fría (Tc)
+    A11 = (1.0 / (N * R_contacto)) + alpha * I + (1.0 / Rq)
+    A12 = -1.0 / Rq
+    B1 = (Tw / (N * R_contacto)) - alpha * T0 * I + 0.5 * (I**2) * R0
+
+    # Ecuación de conservación en superficie caliente (Th)
     A21 = -1.0 / Rq
-    A22 = (1.0 / (N * R_contacto)) - ALPHA * I + (1.0 / Rq)
-    B2  = (Tw / (N * R_contacto)) + ALPHA * T0 * I + 0.5 * (I**2) * R0
+    A22 = (1.0 / (N * R_qR)) - alpha * I + (1.0 / Rq)
+    B2 = (T_amb / (N * R_qR)) + alpha * T0 * I + 0.5 * (I**2) * R0
 
     A = np.array([[A11, A12], [A21, A22]])
     B = np.array([B1, B2])
@@ -60,114 +87,59 @@ def resolver_superficies_heating(Tw, I, T_amb, R_contacto, R_qR):
     except np.linalg.LinAlgError:
         return T_amb, Tw, 0.0
 
-    Qh = (Th - Tw) / (N * R_contacto)
-    return Tc, Th, N * Qh
-
-def eduo_heating(t, y, I_func, T_amb, m_agua_calentar, R_contacto, R_qR, UA):
-    Tw = y[0]
-    I_t = float(I_func(t))
-    _, _, Q_util = resolver_superficies_heating(Tw, I_t, T_amb, R_contacto, R_qR)
-    Q_perdidas = UA * (Tw - T_amb)
-    
-    # Inercia térmica: Agua para maruchan + Recipiente
-    C_sistema = m_agua_calentar * CP_AGUA + M_ACERO * CP_ACERO
-    return [(Q_util - Q_perdidas) / C_sistema]
-
-
-# --- MODO 2: ENFRIAR (Bebida + Lata + Agua de Acople + Recipiente) ---
-def resolver_superficies_cooling(Tw, I, T_amb, R_contacto, R_qR):
-    T0 = 273.15
-    A11 = (1.0 / (N * R_contacto)) + ALPHA * I + (1.0 / Rq)
-    A12 = -1.0 / Rq
-    B1  = (Tw / (N * R_contacto)) - ALPHA * T0 * I + 0.5 * (I**2) * R0
-
-    A21 = -1.0 / Rq
-    A22 = (1.0 / (N * R_qR)) - ALPHA * I + (1.0 / Rq)
-    B2  = (T_amb / (N * R_qR)) + ALPHA * T0 * I + 0.5 * (I**2) * R0
-
-    A = np.array([[A11, A12], [A21, A22]])
-    B = np.array([B1, B2])
-
-    try:
-        Tc, Th = np.linalg.solve(A, B)
-    except np.linalg.LinAlgError:
-        return T_amb, Tw, 0.0
-
+    # Calor extraído del agua hacia la cara fría
     Qc = (Tw - Tc) / (N * R_contacto)
     return Tc, Th, N * Qc
 
-def eduo_cooling(t, y, I_func, T_amb, m_bebida, m_agua_bano, R_contacto, R_qR, UA):
+
+def eduo_cooling(t, y, R_contacto, R_qR, UA):
     Tw = y[0]
-    I_t = float(I_func(t))
-    _, _, Q_extraida = resolver_superficies_cooling(Tw, I_t, T_amb, R_contacto, R_qR)
-    Q_ganancias_amb = UA * (Tw - T_amb)
-    
-    # Inercia térmica completa: Bebida + Lata + Agua de nexo + Recipiente
-    C_sistema = (
-        m_bebida * CP_BEBIDA + 
-        M_LATA * CP_ALUMINIO + 
-        m_agua_bano * CP_AGUA + 
-        M_ACERO * CP_ACERO
+    I_t = float(I_func_cooling(t))
+    Tc, Th, Q_extraido = resolver_superficies_cooling(
+        Tw, I_t, R_contacto, R_qR
     )
-    return [(-Q_extraida - Q_ganancias_amb) / C_sistema]
+
+    # Pérdidas al ambiente (positivas si el agua está más caliente que el ambiente)
+    Q_perdidas = UA * (Tw - T_amb)
+
+    # El calor extraído SIEMPRE reduce la temperatura del fluido
+    dTw_dt = (-Q_extraido - Q_perdidas) / C_sistema_cooling
+    return [dTw_dt]
 
 
-# ==============================================================================
-# 3. FUNCIONES DE SIMULACIÓN Y PREDICCIÓN
-# ==============================================================================
-def simular_modo_calentar(t_max_min=35, T_amb=20.0, Tw_0=20.0, m_agua=0.330, I_input=I_func_base):
-    t_eval = np.linspace(0, t_max_min * 60, 200)
-    I_func = I_input if callable(I_input) else (lambda t: float(I_input))
-    
-    sol = solve_ivp(
-        eduo_heating, [0, t_max_min * 60], [Tw_0],
-        args=(I_func, T_amb, m_agua, R_CONTACTO_OPT, R_QR_OPT, UA_OPT),
-        t_eval=t_eval, method='RK45'
-    )
-    return t_eval / 60.0, sol.y[0]
+# Simulación numérica
+sol = solve_ivp(
+    eduo_cooling,
+    [t_exp_cooling[0], t_exp_cooling[-1]],
+    [Tw_exp_cooling[0]],
+    args=(R_contacto_opt, R_qR_opt, UA_opt),
+    t_eval=t_exp_cooling,
+    method="RK45",
+)
 
-def simular_modo_enfriar(t_max_min=45, T_amb=20.0, Tw_0=20.0, m_bebida=0.355, m_agua_bano=0.100, I_input=2.5):
-    t_eval = np.linspace(0, t_max_min * 60, 200)
-    I_func = I_input if callable(I_input) else (lambda t: float(I_input))
-    
-    sol = solve_ivp(
-        eduo_cooling, [0, t_max_min * 60], [Tw_0],
-        args=(I_func, T_amb, m_bebida, m_agua_bano, R_CONTACTO_OPT, R_QR_OPT, UA_OPT),
-        t_eval=t_eval, method='RK45'
-    )
-    return t_eval / 60.0, sol.y[0]
-
+Tw_sim_cooling = sol.y[0]
 
 # ==============================================================================
-# 4. GRÁFICOS DE PREDICCIÓN OPERATIVA
+# 4. GRÁFICO DE COMPARACIÓN
 # ==============================================================================
-fig, axs = plt.subplots(1, 2, figsize=(14, 5))
-
-# --- PANEL 1: PREDICCIÓN MODO CALENTAR (AGUA PARA MARUCHAN) ---
-t_h, Tw_h1 = simular_modo_calentar(m_agua=0.250, I_input=2.5)  # 250 g
-_, Tw_h2 = simular_modo_calentar(m_agua=0.330, I_input=2.5)    # 330 g
-
-axs[0].plot(t_h, Tw_h1, 'r-', linewidth=2, label='Calentar 250 g de agua')
-axs[0].plot(t_h, Tw_h2, 'r--', linewidth=2, label='Calentar 330 g de agua')
-axs[0].axhline(y=65.0, color='k', linestyle=':', label='Temp. servido maruchan (65 °C)')
-axs[0].set_title('Modo Calentar: Agua para Maruchan ($I = 2.5\\,\\text{A}$)')
-axs[0].set_xlabel('Tiempo [min]')
-axs[0].set_ylabel('Temperatura del Agua [$^\\circ$C]')
-axs[0].grid(True, alpha=0.3)
-axs[0].legend()
-
-# --- PANEL 2: PREDICCIÓN MODO ENFRIAR (LATA 355ml + BAÑO DE AGUA) ---
-t_c, Tw_c1 = simular_modo_enfriar(m_bebida=0.355, m_agua_bano=0.100, I_input=2.5)  # 100 g de baño
-_, Tw_c2 = simular_modo_enfriar(m_bebida=0.355, m_agua_bano=0.200, I_input=2.5)    # 200 g de baño
-
-axs[1].plot(t_c, Tw_c1, 'b-', linewidth=2, label='Lata 355 ml + 100 g agua de baño')
-axs[1].plot(t_c, Tw_c2, 'b--', linewidth=2, label='Lata 355 ml + 200 g agua de baño')
-axs[1].axhline(y=8.0, color='k', linestyle=':', label='Temp. bebida fría (8 °C)')
-axs[1].set_title('Modo Enfriar: Lata + Baño de Agua ($I = 2.5\\,\\text{A}$)')
-axs[1].set_xlabel('Tiempo [min]')
-axs[1].set_ylabel('Temperatura de la Bebida [$^\\circ$C]')
-axs[1].grid(True, alpha=0.3)
-axs[1].legend()
-
+plt.figure(figsize=(9, 5))
+plt.plot(
+    t_exp_cooling / 60.0,
+    Tw_exp_cooling,
+    "ro",
+    label="Datos Experimentales ($T_w$ Enfriamiento)",
+)
+plt.plot(
+    t_exp_cooling / 60.0,
+    Tw_sim_cooling,
+    "b-",
+    linewidth=2,
+    label="Simulación en Enfriamiento",
+)
+plt.title("Validación en Modo Enfriamiento")
+plt.xlabel("Tiempo [min]")
+plt.ylabel("Temperatura del Agua [°C]")
+plt.grid(True, alpha=0.3)
+plt.legend()
 plt.tight_layout()
 plt.show()
