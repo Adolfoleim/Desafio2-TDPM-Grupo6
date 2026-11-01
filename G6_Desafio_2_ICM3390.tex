@@ -49,6 +49,44 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning, arrows.meta, babel}
 
+% Gráficos y tablas de los ensayos, generados desde los CSV de la carpeta datos/
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.18}
+\pgfkeys{/pgf/number format/.cd, use comma, 1000 sep={}}
+\pgfplotsset{
+    ensayo/.style={
+        width=\linewidth, height=0.72\linewidth,
+        xlabel={Tiempo [min]}, xmin=0,
+        grid=major, grid style={gray!30},
+        tick label style={font=\footnotesize}, label style={font=\small},
+        every axis plot/.append style={thick, mark size=1pt},
+        table/col sep=comma,
+    },
+    potencia/.style={ensayo, ylabel={Potencia por celda [W]}},
+    temperatura/.style={ensayo, ylabel={Temperatura del agua [\si{\celsius}]}},
+}
+\pgfplotstableset{
+    tablaensayo/.style={
+        col sep=comma,
+        every head row/.style={before row=\toprule, after row=\midrule},
+        every last row/.style={after row=\bottomrule},
+        columns/t_min/.style={column name={$t$ [min]}, int detect},
+        columns/I/.style={column name={$I$ [A]}, fixed, fixed zerofill, precision=2},
+        columns/P/.style={column name={$P$ [W]}, fixed, fixed zerofill, precision=2},
+        columns/T_w/.style={column name={$T_w$ [\si{\celsius}]}, fixed, fixed zerofill, precision=1},
+    },
+}
+% Tabla de ensayo dividida en dos bloques lado a lado: {columnas}{archivo CSV}{fila de corte}
+\newcommand{\tablaensayodoble}[3]{%
+    \begin{minipage}[t]{0.46\textwidth}\centering
+        \pgfplotstabletypeset[tablaensayo, columns={#1}, skip rows between index={#3}{10000}]{#2}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.46\textwidth}\centering
+        \pgfplotstabletypeset[tablaensayo, columns={#1}, skip rows between index={0}{#3}]{#2}
+    \end{minipage}%
+}
+
 % ==========================================
 % 5. BIBLIOGRAFÍA (APA 7) Y ENLACES
 % ==========================================
@@ -1389,6 +1427,271 @@ Con esta segunda simulación se validan las decisiones geométricas del diseño 
 \paragraph{Análisis de sensibilidad.} Se omite el análisis de sensibilidad, ya que las cargas de impacto simuladas cubren holgadamente los peores escenarios de operación.
 
 \section{Caracterización, calibración y validación inicial}
+\label{sec:calibracion}
+
+Esta sección presenta la evidencia experimental empleada para caracterizar el conjunto Peltier, calibrar el modelo térmico y realizar una validación inicial de sus predicciones. Para mantener la independencia entre ambos procesos, los datos utilizados para ajustar los parámetros del modelo provienen de ensayos en modo calentamiento, mientras que la validación se realiza con un ensayo distinto, en modo enfriamiento. La Tabla \ref{tab:resumen_ensayos} resume los ensayos realizados y el propósito de cada uno; sus registros completos se encuentran en el Anexo \ref{sec:anexo_datos}.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}>{\RaggedRight\arraybackslash}p{2.6cm} >{\Centering\arraybackslash}p{1.6cm} >{\Centering\arraybackslash}p{1.7cm} >{\RaggedRight\arraybackslash}X >{\Centering\arraybackslash}p{1.3cm} >{\RaggedRight\arraybackslash}p{2.6cm}@{}}
+\toprule
+\textbf{Ensayo} & \textbf{Modo} & \textbf{Carga} & \textbf{Medición} & \textbf{Duración} & \textbf{Propósito} \\
+\midrule
+Exploratorios & Frío y calor & \SI{350}{\ml} & Comprobación táctil & 30 y \SI{45}{\minute} & Factibilidad del concepto \\
+Preliminar (29/10) & Calor & \SI{330}{\ml} & Corriente & \SI{40}{\minute} & Caracterización del kit Peltier \\
+Calibración (31/10) & Calor & \SI{330}{\ml} & Corriente y $T_w$ en el centro & \SI{45}{\minute} & Calibración del modelo térmico \\
+Medición en pared (31/10) & Calor & \SI{330}{\ml} & Corriente y $T_w$ junto a la pared & \SI{35}{\minute} & Comparación con la simulación térmica \\
+Validación (31/10) & Frío & \SI{300}{\ml} + lata & Corriente, $T_w$ y temperatura de la bebida & \SI{40}{\minute} & Validación inicial \\
+\bottomrule
+\end{tabularx}
+\caption{Resumen de los ensayos experimentales realizados.}
+\label{tab:resumen_ensayos}
+\end{table}
+
+\subsection{Caracterización del kit Peltier}
+
+\subsubsection{Ensayos exploratorios de factibilidad}
+
+Antes de realizar las simulaciones térmicas, no se sabía con certeza si los dos conjuntos Peltier serían capaces de acercarse a la temperatura objetivo de cada modo. Por esta razón, primero se realizaron dos ensayos para determinar si dos celdas Peltier son suficientes para calentar agua para preparar fideos instantáneos y para enfriar una bebida. Estos ensayos entregan información para iterar el diseño propuesto; en particular, permiten determinar si es necesario incorporar resistencias eléctricas para alcanzar temperaturas más altas en modo calentamiento.
+
+El objetivo de estos ensayos es validar el diseño de forma rápida. Para ello, se ensambla el corazón del producto, compuesto por el recipiente y los dos conjuntos Peltier, y se mantiene a una altura aproximada de \SI{100}{\mm} para que el aire pueda salir del disipador por la parte inferior. Los conjuntos Peltier se alimentan con una fuente de poder de \SI{24}{\volt} de corriente continua y una capacidad máxima de \SI{6,5}{\ampere}, mediante un circuito similar al presentado en la Sección \ref{sec:modelo_control}, con la diferencia de que la polaridad se invierte manualmente en lugar de mediante el interruptor DPDT.
+
+Al momento de realizar estos ensayos aún no se disponía de instrumentos de medición, por lo que el diseño se evaluó mediante comprobación térmica táctil a intervalos regulares. Los ensayos se realizaron sin aislación en el recipiente y con un volumen de agua de \SI{350}{\ml}. Los resultados fueron satisfactorios: en modo enfriamiento, tras 30 minutos de operación continua, el agua alcanza una temperatura fría y refrescante. En modo calentamiento, tras 45 minutos, si bien no se observa ebullición, sí aparecen burbujas de vapor distribuidas en el volumen de agua, y la comprobación táctil indica una temperatura elevada, estimada entre 70 y \SI{80}{\celsius}. Aunque estos ensayos no permiten validar por completo el modo calentamiento, sí demuestran que es posible aproximarse a su temperatura objetivo.
+
+\subsubsection{Ensayo preliminar con medición de potencia}
+
+Validado el modo enfriamiento, se requería confirmar el modo calentamiento para descartar por completo el uso de resistencias adicionales. Para ello, se repite el ensayo de calentamiento, esta vez con \SI{330}{\ml} de agua, con el objetivo de preparar un vaso de fideos instantáneos. En este ensayo solo se contaba con un multímetro, con el cual se mide la corriente del circuito; dado que la fuente opera a tensión constante, la potencia eléctrica se determina como:
+
+\begin{equation}
+    P_{\text{elec}} = V \cdot I
+    \label{eq:potencia_electrica}
+\end{equation}
+
+El calentamiento se mantuvo durante 40 minutos, tras lo cual el agua se vierte en el vaso de fideos instantáneos. Después de 5 minutos de cocción con el vaso tapado, los fideos quedan cocidos, como se observa en la Figura \ref{fig:fideos_preliminar}. La temperatura ambiente se estima a partir de la temperatura informada por un servicio meteorológico para la ubicación y hora del ensayo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{exp_fideos_preliminar.jpeg}
+    \caption{Fideos instantáneos preparados con el agua del ensayo preliminar.}
+    \label{fig:fideos_preliminar}
+\end{figure}
+
+La Figura \ref{fig:potencia_preliminar} presenta la potencia eléctrica por celda Peltier registrada durante el ensayo (Tabla \ref{tab:datos_preliminar}). Se incluyen barras de error de $\pm$\SI{7}{\percent}, ya que durante el ensayo se observó un comportamiento oscilatorio del multímetro, presumiblemente por batería baja, lo que constituye una fuente de incertidumbre a considerar. Al comienzo del ensayo la potencia disminuye hasta valores inferiores a \SI{60}{\watt}, y posteriormente se estabiliza en torno a \SI{60}{\watt}, valor que corresponde a la potencia nominal de una celda Peltier TEC1-12706.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[potencia, width=0.7\textwidth, height=0.45\textwidth, xmax=40]
+            \addplot+[mark=*, error bars/.cd, y dir=both, y fixed relative=0.07]
+                table[x=t_min, y=P]{datos/ensayo_preliminar.csv};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Potencia eléctrica por celda Peltier en el ensayo preliminar de calentamiento, con barras de error de $\pm$\SI{7}{\percent}.}
+    \label{fig:potencia_preliminar}
+\end{figure}
+
+\subsection{Ensayos para la calibración del modelo térmico}
+
+Tras los ensayos preliminares, se realizan dos ensayos en modo calentamiento: uno destinado a calibrar el modelo térmico y otro a compararlo con la simulación térmica. En ambos se reutiliza el corazón ensamblado en los ensayos anteriores, ahora con aislación, y se registran cada minuto la corriente del circuito y la temperatura del agua.
+
+\subsubsection{Ensayo de calibración con medición en el centro del recipiente}
+
+El procedimiento es similar al de los ensayos anteriores. Primero se conectan los ventiladores a la bornera de la fuente de poder, respetando su polaridad. Las celdas Peltier se conectan con polaridad inversa, de modo que calienten por la cara en contacto con el recipiente. Al circuito de las celdas se incorpora un interruptor, para controlar el inicio del ensayo y del registro de corriente y temperatura. Luego, se vierten \SI{330}{\ml} de agua en el recipiente y se esperan unos minutos para que el conjunto alcance el equilibrio térmico (Figura \ref{fig:montaje_calibracion}a).
+
+Para reducir las pérdidas térmicas del agua, se coloca un plato sobre el recipiente junto con algodón (Figura \ref{fig:montaje_calibracion}b). La punta del termómetro se ubica aproximadamente en el centro del volumen de agua, suspendida desde el plato (Figura \ref{fig:montaje_calibracion}c). A continuación, se coloca el plato sobre el recipiente y se inicia el registro de la corriente y la temperatura del agua durante 45 minutos, suponiendo que la temperatura ambiente medida antes del ensayo se mantiene constante.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{exp_montaje_calibracion.jpeg}
+        \caption{Montaje del ensayo.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{exp_aislacion_calibracion.jpeg}
+        \caption{Aislación con algodón.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{exp_termometro_plato.jpeg}
+        \caption{Termómetro suspendido del plato.}
+    \end{subfigure}
+    \caption{Montaje experimental del ensayo de calibración.}
+    \label{fig:montaje_calibracion}
+\end{figure}
+
+La Figura \ref{fig:resultados_ensayo_calibracion} presenta los resultados del ensayo (Tabla \ref{tab:datos_calibracion}). A diferencia del ensayo preliminar, la potencia por celda Peltier disminuye de forma aproximadamente lineal y no se estabiliza en \SI{60}{\watt}, sino que llega a valores cercanos a \SI{50}{\watt}; nuevamente, esto podría deberse a la falla del multímetro. Por su parte, la temperatura del agua en el centro del recipiente alcanza cerca de \SI{58}{\celsius}, bastante por debajo de la temperatura de ebullición. Sin embargo, dado que el objetivo del modo calentamiento es preparar fideos instantáneos y no hervir agua, el objetivo se cumple, ya que los fideos nuevamente quedan cocidos (Figura \ref{fig:fideos_calibracion}).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[potencia, xmax=45]
+                \addplot+[mark=*, error bars/.cd, y dir=both, y fixed relative=0.07]
+                    table[x=t_min, y=P]{datos/ensayo_calibracion.csv};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Potencia eléctrica por celda ($\pm$\SI{7}{\percent}).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[temperatura, xmax=45]
+                \addplot+[mark=*, color=red!70!black] table[x=t_min, y=T_w]{datos/ensayo_calibracion.csv};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Temperatura del agua en el centro del recipiente.}
+    \end{subfigure}
+    \caption{Resultados del ensayo de calibración en modo calentamiento.}
+    \label{fig:resultados_ensayo_calibracion}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{exp_fideos_calibracion.jpeg}
+    \caption{Fideos instantáneos preparados con el agua del ensayo de calibración.}
+    \label{fig:fideos_calibracion}
+\end{figure}
+
+% Calibración del modelo térmico: pendiente (Adolfo)
+
+\subsubsection{Ensayo con medición junto a la pared del recipiente}
+
+El procedimiento de este ensayo es idéntico al anterior, con la diferencia de que la temperatura del agua se mide lo más cerca posible de la pared del recipiente, junto a la zona donde se ubica la celda Peltier, como se muestra en la Figura \ref{fig:termometro_pared}. El calentamiento se mantiene durante 35 minutos, con el fin de determinar si este tiempo es suficiente para preparar los fideos instantáneos y de registrar datos para comparar con los resultados de la simulación térmica.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{exp_termometro_pared.jpeg}
+    \caption{Ubicación del termómetro junto a la pared del recipiente.}
+    \label{fig:termometro_pared}
+\end{figure}
+
+La Figura \ref{fig:resultados_ensayo_pared} presenta los resultados del ensayo (Tabla \ref{tab:datos_pared}). Nuevamente, la temperatura no se acerca al punto de ebullición del agua; sin embargo, por tercera vez, los fideos instantáneos quedan cocidos tras 6 minutos de cocción. Se determina que 35 minutos es el tiempo mínimo para preparar fideos instantáneos bajo las condiciones ambientales descritas, ya que en este ensayo los fideos alcanzan un punto \textit{al dente}, mientras que en los dos ensayos anteriores quedaron completamente cocidos.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[potencia, xmax=35]
+                \addplot+[mark=*, error bars/.cd, y dir=both, y fixed relative=0.07]
+                    table[x=t_min, y=P]{datos/ensayo_pared.csv};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Potencia eléctrica por celda ($\pm$\SI{7}{\percent}).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[temperatura, xmax=35]
+                \addplot+[mark=*, color=red!70!black] table[x=t_min, y=T_w]{datos/ensayo_pared.csv};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Temperatura del agua junto a la pared.}
+    \end{subfigure}
+    \caption{Resultados del ensayo en modo calentamiento con medición junto a la pared del recipiente.}
+    \label{fig:resultados_ensayo_pared}
+\end{figure}
+
+\subsection{Validación inicial}
+
+Para evaluar experimentalmente la capacidad predictiva del modelo térmico calibrado con los ensayos anteriores, se realiza un nuevo ensayo cuyos datos se comparan con las predicciones del modelo bajo las mismas condiciones. Para que la comparación sea válida, este ensayo debe ser distinto de los utilizados en la calibración.
+
+El corazón se mantiene con la aislación, pero esta vez se ensaya el modo enfriamiento: se vierten \SI{300}{\ml} de agua y se introduce una lata de bebida de \SI{350}{\ml} en el recipiente (Figura \ref{fig:montaje_validacion}a). Para operar en este modo, se invierte la polaridad respecto de los ensayos anteriores, y la corriente se registra con el multímetro conectado en serie. Al igual que en los ensayos anteriores, se utiliza el plato como tapa, con algodón entre el plato y el recipiente. Dado que la lata está sellada, se registra la temperatura del agua ubicando la punta del termómetro entre la lata y la pared del recipiente, es decir, cerca de la celda Peltier (Figura \ref{fig:montaje_validacion}b). Cabe señalar que la lata no queda completamente sumergida: aproximadamente la mitad se encuentra bajo el agua y la otra mitad en contacto con el aire del recipiente.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{exp_montaje_validacion.jpeg}
+        \caption{Montaje del ensayo.}
+    \end{subfigure}
+    \hspace{1cm}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{exp_termometro_validacion.jpeg}
+        \caption{Ubicación del termómetro.}
+    \end{subfigure}
+    \caption{Montaje experimental del ensayo de validación en modo enfriamiento.}
+    \label{fig:montaje_validacion}
+\end{figure}
+
+El ensayo tiene una duración de 40 minutos y sus resultados se presentan en la Figura \ref{fig:resultados_ensayo_validacion} (Tabla \ref{tab:datos_validacion}).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[potencia, xmax=40]
+                \addplot+[mark=*, error bars/.cd, y dir=both, y fixed relative=0.07]
+                    table[x=t_min, y=P]{datos/ensayo_validacion.csv};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Potencia eléctrica por celda ($\pm$\SI{7}{\percent}).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[temperatura, xmax=40]
+                \addplot+[mark=*, color=blue!70!black] table[x=t_min, y=T_w]{datos/ensayo_validacion.csv};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Temperatura del agua entre la lata y la pared.}
+    \end{subfigure}
+    \caption{Resultados del ensayo de validación en modo enfriamiento.}
+    \label{fig:resultados_ensayo_validacion}
+\end{figure}
+
+Tras los 40 minutos de ensayo, la temperatura del agua en la zona medida es de aproximadamente \SI{9}{\celsius}, lo que representaría una temperatura fría y refrescante. Sin embargo, esta no corresponde necesariamente a la temperatura de la bebida. Por ello, al finalizar el ensayo se retira la lata, se abre y se mide la temperatura de la bebida en varios puntos de su interior, con los resultados de la Tabla \ref{tab:temperatura_bebida}.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lc}
+\toprule
+\textbf{Zona de la lata} & \textbf{Temperatura [\si{\celsius}]} \\
+\midrule
+Sumergida & 12,6 \\
+Sumergida & 13,3 \\
+Expuesta al aire & 14,0 \\
+Expuesta al aire & 16,3 \\
+Expuesta al aire & 15,9 \\
+\bottomrule
+\end{tabular}
+\caption{Temperatura de la bebida medida en distintos puntos al finalizar el ensayo de validación.}
+\label{tab:temperatura_bebida}
+\end{table}
+
+Se observa una diferencia de temperatura dentro de la bebida, debida a que la lata no se sumerge por completo. Tras consumir la bebida, el evaluador la describe según la Tabla \ref{tab:opinion_catador}.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{0.8\textwidth}{@{}l >{\RaggedRight\arraybackslash}X@{}}
+\toprule
+\textbf{Aspecto} & \textbf{Opinión del evaluador} \\
+\midrule
+Sensación al beberla & Agradable y fresca. \\
+ & Refrescante. \\
+ & No se siente tan refrescante como una bebida que ha estado todo el día en el refrigerador. \\
+\bottomrule
+\end{tabularx}
+\caption{Evaluación sensorial de la bebida al finalizar el ensayo de validación.}
+\label{tab:opinion_catador}
+\end{table}
+
+Con los datos registrados durante este ensayo, se procede a comparar los resultados experimentales con las predicciones del modelo térmico.
+
+% Comparación del modelo térmico con el ensayo de validación: pendiente (Adolfo)
 
 \section{Desarrollo del producto final y plan de fabricación}
 \label{sec:plan_fabricacion}
@@ -1403,5 +1706,47 @@ Con esta segunda simulación se validan las decisiones geométricas del diseño 
 \newpage
 \nocite{*}
 \printbibliography[heading=bibintoc, title={Referencias Bibliográficas}]
+
+% ------------------------------------------
+% ANEXOS
+% ------------------------------------------
+\newpage
+\appendix
+\section{Datos experimentales}
+\label{sec:anexo_datos}
+
+En este anexo se presentan los registros completos de los ensayos descritos en la Sección \ref{sec:calibracion}. Los datos se encuentran además en formato CSV en la carpeta \texttt{datos/} de los archivos de respaldo.
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \tablaensayodoble{t_min,I,P}{datos/ensayo_preliminar.csv}{21}
+    \caption{Registro del ensayo preliminar de calentamiento (29/10, \SI{330}{\ml} de agua, sin medición de temperatura). Tensión de la fuente: \SI{24}{\volt}; temperatura ambiente estimada: \SI{19}{\celsius}.}
+    \label{tab:datos_preliminar}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \tablaensayodoble{t_min,I,P,T_w}{datos/ensayo_calibracion.csv}{23}
+    \caption{Registro del ensayo de calibración en modo calentamiento (31/10, \SI{330}{\ml} de agua, termómetro en el centro del recipiente). Tensión de la fuente: \SI{24}{\volt}; temperatura ambiente: \SI{21,5}{\celsius}.}
+    \label{tab:datos_calibracion}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \tablaensayodoble{t_min,I,P,T_w}{datos/ensayo_pared.csv}{18}
+    \caption{Registro del ensayo en modo calentamiento con medición junto a la pared (31/10, \SI{330}{\ml} de agua). Tensión de la fuente: \SI{24}{\volt}; temperatura ambiente: \SI{21,5}{\celsius}.}
+    \label{tab:datos_pared}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \tablaensayodoble{t_min,I,P,T_w}{datos/ensayo_validacion.csv}{21}
+    \caption{Registro del ensayo de validación en modo enfriamiento (31/10, \SI{300}{\ml} de agua y lata de \SI{350}{\ml}, termómetro entre la lata y la pared). Tensión de la fuente: \SI{24}{\volt}; temperatura ambiente: \SI{21,5}{\celsius}.}
+    \label{tab:datos_validacion}
+\end{table}
 
 \end{document}
