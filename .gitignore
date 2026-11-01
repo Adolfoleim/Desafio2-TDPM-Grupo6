@@ -15,5 +15,12 @@
 *.run.xml
 
 
+# Documentos de trabajo locales (no se suben)
+E2.docx
+Desafio_2_TDPM_2026_S2.pdf
+
+# Archivos de sistema de Windows
+desktop.ini
+
 # Opcional: Descomenta la siguiente línea si NO quieres subir el PDF compilado
 # *.pdf

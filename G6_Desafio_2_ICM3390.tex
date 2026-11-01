@@ -727,12 +727,442 @@ donde:
 
 
 
+\subsection{Modelo mecánico y estructural}
+\label{sec:modelo_mecanico}
+
+\subsubsection{Recipiente}
+
+Para definir el modelo mecánico y estructural, primero se define el recipiente que estará en contacto con el agua de consumo (modo calentamiento) o con la lata de bebida y el baño de agua (modo enfriamiento), ya que a partir de él se definen los soportes, apoyos, uniones y la manipulación del producto. Las características que debe cumplir el recipiente son:
+
+\begin{itemize}
+    \item Material de grado alimentario, de fácil limpieza y manipulación, y con buena conductividad térmica.
+    \item Espacio suficiente en al menos dos paredes para fijar los conjuntos Peltier.
+    \item Pestaña superior para apoyar el recipiente en la estructura.
+    \item Espacio interior suficiente para sumergir una lata de bebida de \SI{350}{\ml}.
+\end{itemize}
+
+Para definir un recipiente que cumpla estas características, se realiza una búsqueda en comercio electrónico y en tiendas presenciales, con especial énfasis en recipientes de acero inoxidable para alimentos. Tras la búsqueda, se selecciona un contenedor gastronorma (GN), el cual se muestra en la Figura \ref{fig:recipiente_fotos}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.24\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_recipiente_foto_sup.png}
+        \caption{Vista superior.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_recipiente_foto_lat.png}
+        \caption{Vista lateral.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_recipiente_lata.png}
+        \caption{Verificación con lata de \SI{350}{\ml}.}
+    \end{subfigure}
+    \caption{Contenedor gastronorma de acero inoxidable seleccionado como recipiente.}
+    \label{fig:recipiente_fotos}
+\end{figure}
+
+El recipiente seleccionado cumple con todas las características descritas. Sus pestañas de apoyo superiores miden \SI{176}{\mm} $\times$ \SI{108}{\mm} (largo $\times$ ancho), con una altura total de \SI{100}{\mm} y un espesor de pared de \SI{0,5}{\mm}. El fabricante declara que el material es acero inoxidable, y se verifica que una lata de bebida de \SI{350}{\ml} cabe en su interior. Se propone fijar los conjuntos Peltier en las paredes laterales planas de mayor dimensión del recipiente. Dado que el recipiente es cónico, la fijación se ve favorecida, ya que el disipador puede sobresalir del recipiente sin generar interferencia, considerando también el espesor de la celda Peltier. Esta disposición se muestra en la Figura \ref{fig:recipiente_peltier_foto}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{mec_recipiente_conjunto_peltier.png}
+    \caption{Disposición del conjunto Peltier sobre la pared lateral cónica del recipiente.}
+    \label{fig:recipiente_peltier_foto}
+\end{figure}
+
+A continuación, se realiza el levantamiento digital del recipiente en \textit{Autodesk Inventor}, herramienta empleada en todos los modelos digitales de este informe. Por simplicidad, se omite la pequeña pestaña que presenta el cuerpo del recipiente. Además, se modela el agua contenida en su interior: dado que la preparación de fideos instantáneos requiere cerca de \SI{330}{\ml} de agua caliente, se modelan \SI{350}{\ml} de agua para las simulaciones térmicas posteriores, como se observa en la Figura \ref{fig:recipiente_agua}. Al no conocerse la designación específica del acero inoxidable del recipiente, se le asigna el material genérico ``acero inoxidable'', mientras que al volumen de agua se le asigna el material ``agua''.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.55\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_recipiente_agua_iso.png}
+        \caption{Vista isométrica.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_recipiente_agua_sup.png}
+        \caption{Vista superior.}
+    \end{subfigure}
+    \caption{Modelo digital del ensamble recipiente--agua.}
+    \label{fig:recipiente_agua}
+\end{figure}
+
+\subsubsection{Corazón del producto}
+
+Luego, se realiza el ensamble con los conjuntos Peltier, para lo cual se utiliza un modelo digital existente del conjunto, cuyo origen se indica en la lista de materiales (BOM). Tras confirmar que corresponde exactamente al mismo modelo del conjunto Peltier adquirido, se fija un conjunto en cada pared lateral, de modo que el centro de la celda Peltier coincida con el centro de la superficie de la pared. El ensamble resultante se muestra en la Figura \ref{fig:corazon}, la cual ilustra la posición de ambos conjuntos Peltier y no el nivel de agua de operación.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{mec_corazon_iso.png}
+    \caption{Vista isométrica del ensamble recipiente--agua--conjuntos Peltier (corazón del producto).}
+    \label{fig:corazon}
+\end{figure}
+
+El ensamble recipiente--agua--conjuntos Peltier constituye el corazón del producto, tanto en modo calentamiento como en modo enfriamiento. Este ensamble corresponde al subsistema de contención, calentamiento del agua y enfriamiento de la bebida en lata.
+
+\subsubsection{Interfaz de ABS y soporte principal}
+
+Definido el corazón del producto, se diseña el soporte principal, el cual sostiene al recipiente y a los conjuntos Peltier, y contiene la electrónica del dispositivo. El soporte se diseña para ser fabricado mediante impresión 3D por deposición de material fundido (FDM). Sin embargo, en modo calentamiento el recipiente puede superar la temperatura de transición vítrea del PLA+, lo que comprometería la integridad del dispositivo. Por esta razón, el corazón se apoya en el soporte a través de su pestaña superior, intercalando una interfaz de ABS entre el recipiente y el soporte principal de PLA+.
+
+En el diseño se presta especial atención al montaje del dispositivo. El corazón del producto se maneja como un conjunto, de modo que, al desarmar el producto, este pueda retirarse completo y no por partes. El soporte principal tiene la función de apoyar al corazón, permitir la entrada de aire hacia los ventiladores y su expulsión a través de los disipadores. Además, el soporte debe restringir completamente al corazón, para que el producto se mantenga íntegro ante un volcamiento o durante su traslado. Para ello, el corazón se apoya en la pestaña superior y queda fijado mediante los tornillos de fijación de los ventiladores. La Figura \ref{fig:interfaz} muestra la interfaz de ABS ensamblada con el corazón.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_interfaz_iso.png}
+        \caption{Vista isométrica superior.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_interfaz_inf.png}
+        \caption{Vista isométrica inferior.}
+    \end{subfigure}
+    \caption{Interfaz de ABS ensamblada con el corazón del producto.}
+    \label{fig:interfaz}
+\end{figure}
+
+La interfaz cumple además la función de centrar el corazón: su zona de asentamiento es levemente mayor que el contorno exterior de la pestaña del recipiente, definiendo una holgura aproximada de \SI{1}{\mm} en todo el perímetro, como se observa en la Figura \ref{fig:interfaz_holgura}. Todo lo relacionado con la interfaz de ABS corresponde al subsistema de aislación entre el corazón y el soporte principal.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{mec_interfaz_holgura.png}
+    \caption{Detalle de la zona de asentamiento y centrado de la interfaz de ABS.}
+    \label{fig:interfaz_holgura}
+\end{figure}
+
+La Figura \ref{fig:soporte} presenta el soporte principal ensamblado con el corazón y la interfaz.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_soporte_iso.png}
+        \caption{Vista isométrica.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_soporte_post.png}
+        \caption{Vista posterior.}
+    \end{subfigure}
+
+    \vspace{0.3cm}
+
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_soporte_inf.png}
+        \caption{Vista inferior.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.64\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_soporte_transparente.png}
+        \caption{Vista con el soporte en transparencia.}
+    \end{subfigure}
+    \caption{Soporte principal ensamblado con la interfaz de ABS y el corazón del producto.}
+    \label{fig:soporte}
+\end{figure}
+
+Las funciones principales del soporte principal son:
+
+\begin{itemize}
+    \item Centrar la interfaz de ABS, del mismo modo en que la interfaz centra al corazón.
+    \item Permitir la salida de la cañería de servicio del agua de consumo.
+    \item Restringir al corazón mediante 8 tornillos (los de fijación de los ventiladores).
+    \item Incorporar mangos que faciliten el traslado del producto.
+    \item Permitir la entrada y salida del aire de los ventiladores y disipadores.
+    \item Incorporar agujeros para fijar los componentes eléctricos (Sección \ref{sec:modelo_control}).
+    \item Facilitar su fabricación mediante impresión 3D por FDM.
+\end{itemize}
+
+Cada una de estas funciones se identifica en la Figura \ref{fig:soporte_funciones}. El soporte principal constituye el subsistema de contención y restricción del corazón del producto.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_soporte_funciones_1.png}
+        \caption{Vista isométrica superior.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_soporte_funciones_2.png}
+        \caption{Vista isométrica inferior.}
+    \end{subfigure}
+    \caption{Funciones del soporte principal.}
+    \label{fig:soporte_funciones}
+\end{figure}
+
+\subsubsection{Subsistema de dispensación del agua caliente}
+
+Para dispensar el agua caliente, el recipiente cuenta con un agujero en su parte inferior (visible en la Figura \ref{fig:recipiente_agua}), de modo que el agua se sirve por gravedad. El subsistema se compone de un tramo de cañería de cobre tipo M de diámetro nominal $1/4''$ y \SI{15}{\mm} de largo, adherido al agujero de salida del recipiente mediante masilla epóxica no tóxica, certificada para uso en agua potable. A este tramo se une un codo de \ang{90} mediante soldadura de estaño, seguido de un tramo de la misma cañería de \SI{50}{\mm} de largo, al que se suelda un terminal hilo interior (HI) para ensamblar una válvula de bola de $1/4''$. A la salida de la válvula se aperna un terminal hilo exterior (HE), al cual se suelda un tramo curvo de cañería. El subsistema se muestra en la Figura \ref{fig:dispensacion}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.56\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_dispensacion_corte.png}
+        \caption{Vista sin soporte principal.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_dispensacion_valvula.png}
+        \caption{Vista con soporte principal.}
+    \end{subfigure}
+    \caption{Subsistema de dispensación del agua caliente.}
+    \label{fig:dispensacion}
+\end{figure}
+
+Se selecciona cañería de cobre tipo M por ser compatible con agua potable, y un diámetro nominal de $1/4''$ para no invadir en exceso la estructura del soporte y mantener su integridad. En la zona donde la cañería sale del soporte principal, un apoyo inferior sostiene el peso del conjunto de fittings; este presenta holguras, ya que en dicha zona se aplica aislación de algodón. Asimismo, la unión entre el recipiente y la cañería mediante masilla epóxica está diseñada para resistir el momento torsor que ejerce el usuario al abrir y cerrar la válvula de bola. Con esto, se conforma el subsistema de dispensación del agua caliente.
+
+\subsubsection{Aislación térmica y tapa}
+
+Si bien el soporte principal limita las corrientes de aire entre el recipiente y el soporte, no las impide por completo, ya que cuenta con entradas y salidas para el aire que refrigera los disipadores. Por esta razón, se aísla la superficie del recipiente que no queda cubierta por el soporte principal, utilizando algodón en tiras por su baja conductividad térmica, como se muestra en la Figura \ref{fig:aislacion}. Esta aislación también se aplica a las cañerías de servicio del agua caliente.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{mec_aislacion_algodon.png}
+    \caption{Aislación del recipiente mediante algodón en tiras.}
+    \label{fig:aislacion}
+\end{figure}
+
+En la misma línea de reducir las pérdidas energéticas, se diseña una tapa que limita la transferencia de calor entre la parte superior del recipiente y el ambiente. La tapa se fabrica en ABS, ya que en esta zona se supera la temperatura de transición vítrea del PLA+, según se demuestra en la simulación térmica y en las pruebas experimentales. Además, la tapa se reviste con cartón corrugado y papel de aluminio (apto para contacto con alimentos), de modo que el vapor de agua condense sobre el aluminio y la tapa no alcance la temperatura de transición vítrea del ABS. El diseño de la tapa se presenta en la Figura \ref{fig:tapa}. Este incorpora un mango para levantarla fácilmente y dos agujeros que permiten liberar el vapor al ambiente, evitando que aumente la presión dentro del recipiente.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.52\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_tapa_sup.png}
+        \caption{Vista superior.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.44\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{mec_tapa_inf.png}
+        \caption{Vista inferior.}
+    \end{subfigure}
+    \caption{Diseño de la tapa del recipiente.}
+    \label{fig:tapa}
+\end{figure}
+
+\subsubsection{Base de elevación}
+
+Por último, para servir el agua caliente por gravedad, el producto requiere un desnivel favorable respecto del vaso de fideos instantáneos. Para ello, se diseña una base que eleva el producto en \SI{140}{\mm}, como se muestra en la Figura \ref{fig:producto_completo}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{mec_producto_completo.png}
+    \caption{Producto completo sobre su base de elevación.}
+    \label{fig:producto_completo}
+\end{figure}
+
+\subsubsection{Seguridad, dilatación térmica y selección de materiales}
+
+El método de dispensación del agua caliente se diseña para resguardar la seguridad del usuario, ya que retirar el agua de otra manera, por ejemplo, volcando el producto sobre el vaso de fideos, implicaría un alto riesgo de quemaduras. Por otra parte, en modo enfriamiento la lata se introduce en el recipiente junto con un baño de agua que la cubre por completo. Dadas las limitaciones del sistema, la temperatura de enfriamiento en estado estacionario no representa un riesgo para el usuario, quien puede retirar la lata sin riesgo de quemaduras por frío. Ambas afirmaciones se respaldan mediante las simulaciones térmicas y las pruebas experimentales.
+
+Asimismo, se consideran las dilataciones térmicas del recipiente. La única zona de contacto crítica en este aspecto es el asentamiento del recipiente sobre la interfaz de ABS, el cual contempla una holgura de \SI{1}{\mm} en todo el perímetro, de modo que el recipiente dispone de espacio suficiente para dilatarse. Para un caso extremo en que la pestaña superior alcance \SI{100}{\celsius}, la dilatación térmica lineal respecto de una temperatura ambiente $T_{\text{amb}} = \SI{20}{\celsius}$ es:
+
+\begin{equation}
+    \Delta L = L_i \cdot \alpha \cdot \Delta T = \SI{176}{\mm} \cdot \SI{1,73e-5}{\per\celsius} \cdot (100 - 20)\,\si{\celsius} = \SI{0,2436}{\mm}
+    \label{eq:dilatacion}
+\end{equation}
+
+Dado que la holgura disponible es $2 \cdot \text{offset} = \SI{2}{\mm}$, se verifica que no existirán problemas de dilatación térmica. Lo mismo ocurre con la holgura entre la interfaz de ABS y el soporte principal.
+
+El soporte principal se fabrica en PLA+ por su facilidad de impresión y adquisición, considerando además que el producto no está sometido a cargas demandantes y solo debe resistir su propio peso. Aun así, el diseño se justifica mediante el análisis por elementos finitos presentado en la Sección \ref{sec:simulaciones}. En las piezas críticas que podrían sufrir deformación térmica se emplea ABS, cuya temperatura de transición vítrea es notablemente mayor que la del PLA+, cercana a los \SI{90}{\celsius}. El aislante en la tapa del recipiente es indispensable, ya que el vapor calienta la zona entre el agua y la tapa. Por restricciones de presupuesto, se utiliza cartón corrugado como aislante, cuya cara en contacto con el vapor se recubre con papel de aluminio para evitar que el cartón se humedezca y para cumplir con el grado alimentario.
+
+\subsubsection{Consideraciones de fabricación mediante impresión 3D}
+
+Las piezas fabricadas mediante impresión 3D se diseñan considerando la facilidad de impresión, el volumen de impresión de la impresora, la resistencia a las cargas y el filamento utilizado. A continuación, se presentan la orientación de impresión y el laminado general de cada pieza.
+
+La Figura \ref{fig:laminado_soporte} muestra el laminado del soporte principal, fabricado en PLA+. El uso de chaflanes entre las paredes y las bases horizontales reduce considerablemente el tiempo de impresión, al no requerir soportes. Las líneas azules indican zonas en voladizo; sin embargo, estas zonas se diseñan con geometrías rectas, lo que permite activar la opción de soportes solo en zonas críticas, ya que es posible imprimir voladizos rectos reduciendo la velocidad de impresión en dichas zonas. De este modo, el diseño orientado a la impresión 3D optimiza el tiempo de impresión y reduce el material utilizado.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imp_soporte_laminado_1.png}
+        \caption{Vista isométrica.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.56\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imp_soporte_laminado_2.png}
+        \caption{Zonas en voladizo (en azul).}
+    \end{subfigure}
+    \caption{Orientación de impresión y laminado del soporte principal.}
+    \label{fig:laminado_soporte}
+\end{figure}
+
+Las piezas obtenidas mediante FDM presentan un comportamiento transversalmente isótropo, cuyo punto débil es la unión entre capas. Dado que el soporte recibe el peso del corazón, del agua y de la lata, las capas trabajan en compresión, por lo que no existe riesgo de delaminación. El único riesgo de delaminación se encuentra en los mangos, ya que al levantar el producto se genera un momento que somete a tracción a las capas en la zona de unión de los mangos. Esto se consideró en el diseño, adoptando dimensiones capaces de soportar el peso del producto, y se verifica mediante el análisis por elementos finitos de la Sección \ref{sec:simulaciones}.
+
+La base del producto también se fabrica en PLA+ mediante impresión 3D. La Figura \ref{fig:laminado_base} muestra la orientación de impresión de las tres piezas que la componen. Su geometría simple en el plano de impresión permite fabricarlas sin soportes. Al laminar las piezas se agrega un \textit{brim} para reducir la probabilidad de pérdida de adherencia en las esquinas.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imp_base_laminado_1.png}
+        \caption{Patas y travesaño.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imp_base_laminado_2.png}
+        \caption{Detalle de una pata.}
+    \end{subfigure}
+    \caption{Orientación de impresión y laminado de las piezas de la base.}
+    \label{fig:laminado_base}
+\end{figure}
+
+Las piezas fabricadas en ABS son la interfaz y la tapa. La orientación de impresión de la interfaz es simple, como se observa en la Figura \ref{fig:laminado_interfaz}. El único desafío es imprimirla con un \textit{brim} de aproximadamente \SIrange{5}{7}{\mm}, para reducir la probabilidad de deformación por contracción (\textit{warping}) propia del ABS, y en un entorno cerrado, ya sea una impresora cerrada o una impresora abierta con cerramiento.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{imp_interfaz_laminado.png}
+    \caption{Orientación de impresión y laminado de la interfaz de ABS.}
+    \label{fig:laminado_interfaz}
+\end{figure}
+
+Finalmente, la geometría de la tapa de ABS dificulta en cierta medida su impresión. Dado que la tapa no está sometida a esfuerzos relevantes, se orienta de forma que se minimice el tiempo de impresión y el uso de soportes, lo que corresponde a una inclinación aproximada de \ang{45}, como se muestra en la Figura \ref{fig:laminado_tapa}. La reducida área de contacto con la cama disminuye la probabilidad de \textit{warping}; sin embargo, al apoyarse sobre una esquina pequeña, se debe utilizar \textit{brim} para asegurar su adherencia. Asimismo, se debe imprimir en un entorno cerrado para evitar el agrietamiento de las capas superiores.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imp_tapa_laminado_1.png}
+        \caption{Vista lateral.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imp_tapa_laminado_2.png}
+        \caption{Vista isométrica.}
+    \end{subfigure}
+    \caption{Orientación de impresión y laminado de la tapa de ABS.}
+    \label{fig:laminado_tapa}
+\end{figure}
+
+\subsection{Modelo de instrumentación y control}
+\label{sec:modelo_control}
+
+\subsubsection{Estrategia de control}
+
+Dadas las características de transferencia de calor del diseño y el presupuesto acotado del proyecto, el sistema prescinde de sensores de temperatura, microcontroladores y bombas de agua. Para mantener la simplicidad, el control es manual, ya que la propia termodinámica del producto es suficiente para limitar de forma natural las temperaturas máxima y mínima del agua.
+
+Dado que el dispositivo se probará con una fuente de poder de laboratorio provista por el DIMM, la tensión y la corriente consumidas por el producto pueden leerse directamente en la pantalla de la fuente. El modo de funcionamiento, calentamiento o enfriamiento, lo selecciona el usuario mediante un interruptor DPDT de 6 pines.
+
+La estrategia de control de temperatura la proporciona la termodinámica del propio sistema, por lo que no se requiere un termostato que corte la energía al alcanzar una temperatura objetivo ni un microcontrolador que gobierne sensores o actuadores. En modo calentamiento, la potencia entregada por los dos conjuntos Peltier se equilibra con las pérdidas de calor, lo que impide que el agua supere los \SI{100}{\celsius}, pero permite alcanzar una temperatura adecuada para preparar los fideos instantáneos. En este modo se debe prestar especial atención a la temperatura de la cara caliente de la celda Peltier, ya que, si supera la temperatura de fusión de la soldadura interna, aproximadamente \SI{138}{\celsius}, la celda se daña; las simulaciones y las pruebas experimentales demuestran que este escenario no ocurre. De forma análoga, en modo enfriamiento la temperatura del agua no desciende de \SI{0}{\celsius}, por lo que no se forma hielo. Las temperaturas y tiempos de operación se detallan en la Sección \ref{sec:simulaciones}.
+
+\subsubsection{Circuito eléctrico}
+
+El interruptor DPDT permite invertir la polaridad del circuito de las celdas, lo que produce el cambio de modo del producto. Las dos celdas Peltier TEC1-12706 se conectan en serie, de modo que, al alimentar el sistema con \SI{24}{\volt} de corriente continua y al tratarse de celdas idénticas, cada una opera a \SI{12}{\volt}, mientras que la corriente es la misma que circularía por una sola celda. De igual forma, los ventiladores de ambos disipadores se conectan en serie para respetar su tensión de trabajo de \SI{12}{\volt}.
+
+La fuente de poder se conecta al producto mediante conectores tipo banana hembra de \SI{4}{\mm}. El circuito de los ventiladores se conecta directamente a estos conectores, de modo que los ventiladores funcionen siempre que el producto esté energizado, refrigerando las celdas Peltier en todo momento sin posibilidad de apagarlos mediante el interruptor, y respetando su polaridad. El interruptor DPDT también se conecta a los conectores banana y, a continuación, al circuito de los conjuntos Peltier.
+
+Dado que la corriente por las celdas Peltier es la misma que circularía por una sola celda (entre 2 y \SI{3}{\ampere}), se conservan los cables que traen las celdas de fábrica, los cuales soportan dicha corriente. Si, por ejemplo, las celdas se conectaran en paralelo a una fuente de \SI{12}{\volt}, la corriente se duplicaría y sería necesario dimensionar adecuadamente el cableado. Esta es una de las ventajas de operar a \SI{24}{\volt} con un circuito en serie.
+
+Lo anterior se implementa en el modelo digital del producto, donde los conectores banana y el interruptor se ubican en la parte posterior, en la zona inferior del soporte principal por razones de espacio, como se observa en las Figuras \ref{fig:panel_control} y \ref{fig:corte_control}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ctrl_panel_posterior.png}
+        \caption{Conectores banana e interruptor de modo.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ctrl_interruptor_interior.png}
+        \caption{Vista interior del interruptor y los conectores.}
+    \end{subfigure}
+    \caption{Ubicación de los componentes eléctricos en la parte posterior del producto.}
+    \label{fig:panel_control}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{ctrl_corte_lateral.png}
+    \caption{Vista en corte de la ubicación de los componentes eléctricos en la zona inferior del soporte principal.}
+    \label{fig:corte_control}
+\end{figure}
+
+La conexión eléctrica del dispositivo se presenta en el diagrama de la Figura \ref{fig:diagrama_electrico}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{ctrl_diagrama_electrico.png}
+    \caption{Diagrama de conexión eléctrica del producto.}
+    \label{fig:diagrama_electrico}
+\end{figure}
+
+\subsubsection{Medidas de seguridad}
+
+El dispositivo debe utilizarse obligatoriamente con el volumen mínimo de agua establecido en las especificaciones del producto. Encenderlo sin agua en el recipiente podría provocar un sobrecalentamiento y fundir las celdas, por lo que el agua actúa como medida de seguridad al absorber el calor y evitar un aumento brusco de temperatura. Además, al operar con una fuente de poder de laboratorio, el sistema hereda sus protecciones, las cuales limitan la corriente ante un mal funcionamiento y protegen al sistema frente a un cortocircuito.
+
+Para los empalmes de cables se utilizan conectores termorretráctiles con soldadura integrada, cuya temperatura de operación alcanza los \SI{125}{\celsius} \parencite{conectores_termo}, y soldadura de estaño para las conexiones del interruptor. Asimismo, se debe dejar cable suficiente para realizar las conexiones con el corazón del producto fuera del soporte, de modo que este pueda montarse y desmontarse con facilidad, aspecto que se aborda en el modelo de integración.
+
+\subsection{Modelo de integración}
+\label{sec:modelo_integracion}
+
+\subsubsection{Articulación de los subsistemas}
+
+Los modelos anteriores, presentados por separado, se articulan dentro del producto de la siguiente manera. El sistema se basa en dos conjuntos Peltier, conectados según lo descrito en el modelo de instrumentación y control (Figura \ref{fig:diagrama_electrico}). Las celdas Peltier definen el modo de funcionamiento del producto a través del interruptor DPDT, el cual invierte la polaridad según el modo seleccionado por el usuario. Las celdas calientan o enfrían el agua contenida en el recipiente de acero inoxidable mediante su contacto directo con las paredes del recipiente. Este ensamble recipiente--agua--conjuntos Peltier constituye el corazón del producto.
+
+El corazón se integra en el modelo mecánico y estructural, cuyo elemento principal es el soporte, encargado de apoyar y restringir correctamente al corazón. La articulación de todos los subsistemas descritos constituye la arquitectura completa del producto.
+
+\subsubsection{Secuencia de uso}
+
+La secuencia de uso del producto es la siguiente:
+
+\begin{enumerate}
+    \item Situar el producto sobre una mesa estable.
+    \item Con la fuente de poder apagada, conectarla a los conectores banana, verificando que coincidan los colores.
+    \item Verificar que el interruptor del producto se encuentre en la posición \textit{OFF}.
+    \item Cerrar la válvula de bola de servicio.
+    \item Verter entre \SIrange{325}{350}{\ml} de agua en el recipiente de acero inoxidable.
+    \item En modo enfriamiento, introducir la lata de bebida en posición horizontal dentro del recipiente. En modo calentamiento, omitir este paso.
+    \item Colocar la tapa sobre el recipiente.
+    \item Seleccionar el modo deseado mediante el interruptor.
+    \item Encender la fuente de poder y ajustarla a \SI{24}{\volt} de corriente continua.
+    \item Esperar el tiempo declarado en las especificaciones del producto para el modo seleccionado.
+    \item Transcurrido el tiempo, situar el interruptor en \textit{OFF} y apagar la fuente.
+    \item Retirar la bebida o servir el agua caliente abriendo la válvula de bola.
+\end{enumerate}
+
+\subsubsection{Mantenibilidad y limpieza}
+
+El diseño modular facilita la mantenibilidad del producto, ya que la estructura impresa en 3D únicamente apoya al corazón. Al retirar los 8 tornillos de sujeción y desmontar la válvula de bola (terminal HE), el corazón completo puede extraerse hacia arriba, tras lo cual es posible desconectar el circuito eléctrico. Con el corazón fuera del soporte, se pueden realizar las operaciones de mantenimiento correspondientes y revisar el estado de las celdas Peltier y del interruptor DPDT.
+
+Dado que el producto solo calienta o enfría agua, y que la bebida se enfría dentro de su lata sellada, su limpieza es sencilla: basta con un paño húmedo para retirar polvo o residuos. El producto no debe lavarse en el lavaplatos ni en el lavavajillas.
+
+\subsubsection{Manufactura}
+
+La manufactura se ha abordado a lo largo de los modelos anteriores. Se emplea manufactura aditiva mediante impresión 3D por FDM para las piezas descritas en el modelo mecánico y estructural. El agujero de desagüe del agua caliente se realiza con una broca de \SI{10}{\mm} en el punto indicado en el plano, dado que el diámetro exterior de una cañería de cobre tipo M de $1/4''$ es de \SI{9,525}{\mm}. Las uniones de los fittings de cobre se realizan con soldadura de estaño, mientras que la unión entre la cañería de cobre y el recipiente se realiza con masilla epóxica de grado alimentario. El procedimiento detallado de armado del producto se presenta en la Sección \ref{sec:plan_fabricacion}.
+
+\subsubsection{Gestión de la condensación}
+
+La condensación se controla mediante la aislación de algodón aplicada sobre el recipiente. Este material actúa como barrera física que mantiene la temperatura de la cavidad interna, comprendida entre el soporte principal y el recipiente, por sobre el punto de rocío del ambiente. De este modo, el aire de la cavidad no alcanza la saturación (humedad relativa de 100\%), lo que evita la condensación sobre el metal y protege el circuito eléctrico ubicado en el interior.
+
 \section{Simulaciones y justificación físico-matemática}
 \label{sec:simulaciones}
 
 \section{Caracterización, calibración y validación inicial}
 
 \section{Desarrollo del producto final y plan de fabricación}
+\label{sec:plan_fabricacion}
 
 \section{Resultados y discusión}
 
