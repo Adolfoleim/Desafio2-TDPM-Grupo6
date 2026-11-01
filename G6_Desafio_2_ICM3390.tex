@@ -42,6 +42,9 @@
 \usepackage{graphicx}
 \graphicspath{{imagenes/}}
 \usepackage{float}
+\usepackage{longtable}                % Tablas de varias páginas (BOM)
+\usepackage{rotating}                 % Figuras apaisadas (planos)
+\usepackage{enumitem}                 % Etiquetas de listas (minuta de armado)
 \usepackage{caption}
 \usepackage{subcaption}
 \captionsetup{font=small, labelfont=bf, justification=centering}
@@ -1728,6 +1731,452 @@ Con los datos registrados durante este ensayo, se procede a comparar los resulta
 
 \section{Desarrollo del producto final y plan de fabricación}
 \label{sec:plan_fabricacion}
+
+\subsection{Arquitectura general y modos de operación}
+
+A lo largo del informe se desglosaron todos los subsistemas y modelos del producto. Con base en los ensayos, los modelos y las simulaciones térmicas, el diseño cuenta con una validación inicial, cuya validación final se realizará con el prototipo fabricado en el Desafío 3. Las Figuras \ref{fig:renders_producto} y \ref{fig:renders_operacion} presentan distintos renders que describen visualmente el producto.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{render_superior.jpeg}
+        \caption{Vista superior sin tapa.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{render_con_tapa.jpeg}
+        \caption{Vista isométrica con tapa.}
+    \end{subfigure}
+
+    \vspace{0.3cm}
+
+    \begin{subfigure}[b]{0.7\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{render_lateral.jpeg}
+        \caption{Vista lateral con el vaso de fideos instantáneos.}
+    \end{subfigure}
+    \caption{Renders del producto final.}
+    \label{fig:renders_producto}
+\end{figure}
+
+En los renders se aprecia la arquitectura general del sistema, con los dos conjuntos Peltier ubicados en los costados del producto. El soporte principal incluye dos mangos que facilitan el traslado del producto, y en él se observa la válvula de bola para servir el agua caliente destinada a preparar fideos instantáneos. El soporte principal se eleva mediante la base, que actúa como patas del soporte y cumple dos funciones: generar espacio para evacuar el aire que sale de los disipadores por la parte inferior y generar una diferencia de altura entre el recipiente y el vaso de fideos instantáneos, para dispensar el agua por gravedad. Se incluyen renders del producto con y sin tapa para apreciar el nivel de agua en su interior, que corresponde a \SI{350}{\ml}.
+
+Los modos de operación y la alimentación eléctrica del producto se muestran en la Figura \ref{fig:renders_operacion}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{render_posterior_iso.jpeg}
+        \caption{Vista isométrica posterior.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{render_posterior.jpeg}
+        \caption{Vista posterior.}
+    \end{subfigure}
+
+    \vspace{0.3cm}
+
+    \begin{subfigure}[b]{0.6\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{render_panel_detalle.jpeg}
+        \caption{Detalle de los conectores y del selector de modo.}
+    \end{subfigure}
+    \caption{Alimentación eléctrica y selección del modo de operación.}
+    \label{fig:renders_operacion}
+\end{figure}
+
+Como se indicó anteriormente, el producto no incorpora sistemas de control electrónico ni microcontroladores. El modo de funcionamiento se selecciona mediante la posición del interruptor DPDT, que tiene tres posiciones (\textit{HOT}, \textit{OFF} y \textit{COLD}), como se observa en los renders. Cabe destacar que no se debe pasar directamente del modo calentamiento al modo enfriamiento, ya que esto podría dañar las celdas Peltier.
+
+En modo enfriamiento, el producto interactúa con la lata de bebida, cuyo volumen máximo para este producto es de \SI{350}{\ml}. La lata se introduce en el recipiente junto con el agua, como se muestra en la Figura \ref{fig:interaccion_lata}. Antes de iniciar el modo, se debe colocar la tapa.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{exp_montaje_validacion.jpeg}
+    \caption{Interacción de la lata de bebida con el recipiente en modo enfriamiento.}
+    \label{fig:interaccion_lata}
+\end{figure}
+
+\subsection{Minuta de armado}
+\label{sec:minuta}
+
+El armado del producto se realiza mediante los procesos que se describen a continuación.
+
+\begin{enumerate}
+    \item \textbf{Inspección visual de los componentes y preparación}
+    \begin{enumerate}[label=\alph*.]
+        \item Inspeccionar cada elemento del BOM (Sección \ref{sec:bom}) en búsqueda de posibles defectos.
+        \item Limpiar el recipiente, las celdas Peltier y los disipadores con un paño empapado en alcohol isopropílico.
+        \item Antes de comenzar el armado, verificar el cumplimiento de todos los requisitos de seguridad.
+    \end{enumerate}
+
+    \item \textbf{Armado del corazón}
+    \begin{enumerate}[label=\alph*.]
+        \item Verificar la integridad de cada celda Peltier midiendo su resistencia interna estática con un multímetro y comparando el valor obtenido con el declarado en la ficha técnica del modelo de la celda. Registrar el valor en la minuta de armado para que el Departamento de Control de Calidad autorice la continuación del armado.
+        \item Colocar el recipiente sobre una mesa de trabajo limpia junto con los componentes de los conjuntos Peltier. Identificar el centro de cada pared lateral del recipiente donde irá un conjunto Peltier, y el centro de cada conjunto.
+        \item Colocar la interfaz de ABS en el recipiente (Figura \ref{fig:minuta_corazon}a).
+        \item Aplicar pasta térmica suficiente en la cara de la celda Peltier que lleva la inscripción ``TEC1-12706'' y adherirla centrada al disipador. Luego, colocar el aislante de la celda, el cual se fija con cinta doble contacto, verificando que los cables de la celda pasen por sobre el aislante (Figura \ref{fig:minuta_corazon}b).
+        \item Realizar una muesca en el aislante para cubrir los cables de la celda y pegar con pegamento instantáneo el trozo retirado por sobre los cables (Figura \ref{fig:minuta_corazon}c).
+        \item Aplicar pasta térmica suficiente en la cara restante de la celda y cuatro puntos de pegamento instantáneo en las esquinas del aislante, para fijar momentáneamente el conjunto. Luego, adherir la celda a la pared del recipiente; esto se realiza para ambas celdas. Se debe dejar una distancia de \SI{10}{\mm} entre la pestaña superior del recipiente y el disipador, la cual puede verificarse con una regla (Figura \ref{fig:minuta_celdas}).
+        \item Dejar curar el pegamento durante unos minutos. Con el recipiente boca abajo, marcar con un punzón el agujero de desagüe en la coordenada indicada en la Figura \ref{fig:minuta_agujero}. Perforar con una broca para metal de \SI{10}{\mm} de diámetro, retirar las rebabas y limpiar la superficie.
+        \item Preparar, lijar y limpiar los extremos de las cañerías, del codo y del terminal HI de bronce, y soldarlos con estaño (Figura \ref{fig:minuta_fitting}a).
+        \item Preparar la superficie para aplicar masilla epóxica y unir el fitting al recipiente. Insertar la cañería hasta que su cara axial haga tope con el fondo del recipiente y aplicar la masilla por el exterior del recipiente (Figura \ref{fig:minuta_fitting}b).
+        \item Dejar curar la masilla durante el tiempo indicado por el fabricante.
+        \item Pegar con silicona caliente tiras de algodón en el exterior del recipiente, incluyendo el fitting y la parte inferior del recipiente (Figura \ref{fig:minuta_aislacion}).
+    \end{enumerate}
+
+    \item \textbf{Ensamble del soporte principal con el corazón}
+    \begin{enumerate}[label=\alph*.]
+        \item Insertar y fijar los conectores banana hembra de \SI{4}{\mm} y el interruptor DPDT en sus agujeros del soporte principal (Figura \ref{fig:minuta_soporte}a).
+        \item Con el corazón ubicado junto al soporte principal, realizar el circuito eléctrico de la Figura \ref{fig:diagrama_electrico}.
+        \item Retirar los ventiladores de los disipadores e insertar el corazón en el soporte principal, verificando que el corazón quede centrado, al igual que el recipiente respecto de la interfaz. Luego, montar los ventiladores pasando los tornillos desde el soporte principal, de modo que restrinjan todo el corazón (Figuras \ref{fig:minuta_soporte}b y \ref{fig:minuta_soporte}c).
+    \end{enumerate}
+
+    \item \textbf{Integración de la base}
+    \begin{enumerate}[label=\alph*.]
+        \item Pegar las dos patas en la parte inferior del soporte con pegamento instantáneo, haciendo coincidir esquina con esquina (Figura \ref{fig:minuta_base}a).
+        \item Pegar el espaciador entre ambas patas con pegamento instantáneo, verificando que quede centrado (Figura \ref{fig:minuta_base}b).
+    \end{enumerate}
+
+    \item \textbf{Tapa y fittings}
+    \begin{enumerate}[label=\alph*.]
+        \item Soldar la cañería curva restante al terminal HE y aplicar cinta de teflón en el terminal HE y en el extremo macho de la válvula de bola, verificando que la curva de la cañería apunte hacia abajo. Ensamblar la válvula de bola junto con el fitting restante y pegar con pegamento instantáneo el soporte inferior del fitting (Figura \ref{fig:minuta_final}a).
+        \item Pegar cartón corrugado en la cara de la tapa que irá en contacto con el recipiente, y sobre él una capa de papel de aluminio, fijada con pegamento instantáneo (Figura \ref{fig:minuta_final}b).
+    \end{enumerate}
+\end{enumerate}
+
+Finalmente, se elabora el reporte final de ensamblaje, indicando la fecha y hora del armado, la autorización de cada paso por parte del Departamento de Control de Calidad, y las indicaciones y observaciones correspondientes. La Figura \ref{fig:plano_ensamble} presenta el plano de ensamble, que indica la ubicación de cada pieza del producto.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.36\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_interfaz.png}
+        \caption{Interfaz de ABS en el recipiente.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_celda_disipador.png}
+        \caption{Celda y aislante sobre el disipador.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.2\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_muesca_cables.png}
+        \caption{Muesca sobre los cables.}
+    \end{subfigure}
+    \caption{Pasos 2c a 2e del armado del corazón.}
+    \label{fig:minuta_corazon}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.38\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_corazon.png}
+        \caption{Celdas adheridas al recipiente.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.58\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_medida_10mm.png}
+        \caption{Distancia de \SI{10}{\mm} entre la pestaña y el disipador.}
+    \end{subfigure}
+    \caption{Paso 2f del armado del corazón: fijación de las celdas Peltier al recipiente.}
+    \label{fig:minuta_celdas}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{arm_coordenada_agujero.png}
+    \caption{Paso 2g del armado del corazón: coordenada del agujero de desagüe (cotas en mm).}
+    \label{fig:minuta_agujero}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.52\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_fitting_soldadura.png}
+        \caption{Soldadura del fitting.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.44\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_fitting_masilla.png}
+        \caption{Unión del fitting al recipiente.}
+    \end{subfigure}
+    \caption{Pasos 2h e 2i del armado del corazón: fitting de dispensación.}
+    \label{fig:minuta_fitting}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{arm_aislacion_algodon.jpeg}
+    \caption{Paso 2k del armado del corazón: aislación del recipiente con algodón.}
+    \label{fig:minuta_aislacion}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.34\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_panel_conectores.png}
+        \caption{Conectores e interruptor.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_corazon_soporte.png}
+        \caption{Corazón en el soporte.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_corazon_soporte_inf.png}
+        \caption{Vista inferior.}
+    \end{subfigure}
+    \caption{Paso 3 del armado: ensamble del soporte principal con el corazón.}
+    \label{fig:minuta_soporte}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.56\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_patas.png}
+        \caption{Unión de las patas al soporte.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.34\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_base.png}
+        \caption{Base completa.}
+    \end{subfigure}
+    \caption{Paso 4 del armado: integración de la base.}
+    \label{fig:minuta_base}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.56\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_valvula.png}
+        \caption{Válvula de bola y fitting de salida.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.34\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{arm_tapa.png}
+        \caption{Producto con la tapa.}
+    \end{subfigure}
+    \caption{Paso 5 del armado: tapa y fittings.}
+    \label{fig:minuta_final}
+\end{figure}
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=\textheight]{plano_ensamble.jpeg}
+    \caption{Plano de ensamble del producto (Plano N.\textsuperscript{o}~1).}
+    \label{fig:plano_ensamble}
+\end{sidewaysfigure}
+
+\subsection{Acceso y mantenimiento}
+
+Como se detalló en el modelo de integración (Sección \ref{sec:modelo_integracion}), el corazón constituye un conjunto independiente: al retirar los 8 tornillos de sujeción y desmontar la válvula de bola desde el terminal HE, el corazón completo puede extraerse hacia arriba. Con el corazón fuera del soporte, es posible desacoplar las celdas Peltier de la pared del recipiente para realizar mantenimiento, ya sea para cambiar la pasta térmica, reemplazar un ventilador o una celda Peltier, o realizar una limpieza preventiva. De este modo, el acceso para mantenimiento resulta sencillo, ya que el diseño se concibió con este fin. Asimismo, a través de las distintas aberturas del soporte principal es posible soplar cuidadosamente para retirar el polvo y los restos de comida acumulados en su interior.
+
+\subsection{Fabricación mediante impresión 3D y costos}
+
+\subsubsection{Parámetros de laminado y tarifas de impresión}
+
+El corazón del producto no requiere impresión 3D ni otros procesos de manufactura, ya que se compone de piezas adquiridas. El resto de las piezas se fabrica mediante impresión 3D, con la orientación descrita en la Sección \ref{sec:modelo_mecanico}. A continuación, se presenta la información de laminado de cada pieza, a partir de la cual se estima el costo de impresión. Los parámetros generales de laminado son:
+
+\begin{itemize}
+    \item Impresora: Creality Hi.
+    \item Boquilla: \SI{0,6}{\mm}.
+    \item Altura de capa: \SI{0,30}{\mm}.
+    \item Laminador: Creality Print 7.2.
+\end{itemize}
+
+Para estimar los costos, se elabora una calculadora de costos de impresión 3D en Excel, la cual permite determinar el costo de una pieza conociendo únicamente su tiempo de impresión y la masa de filamento. Esta considera las siguientes tarifas:
+
+\begin{itemize}
+    \item \textbf{Electricidad:} en la comuna de San Miguel, Santiago, el precio de la electricidad es de aproximadamente \SI{215}{CLP/kWh}, y se adopta un consumo constante y conservador de la impresora de \SI{280}{\watt}.
+    \item \textbf{Repuestos:} se considera un gasto de \num{20000}~CLP en consumibles de la máquina, como la boquilla y la cama de impresión, distribuido en una vida útil de \num{1200}~horas. Estos parámetros se han ajustado a partir del uso continuo de impresión 3D.
+    \item \textbf{Amortización:} se adopta un valor de la impresora de \num{250000}~CLP y una vida útil de \num{10000}~horas.
+    \item \textbf{Filamento:} se considera el mismo precio para el PLA+ y el ABS, de \num{13000}~CLP/kg.
+\end{itemize}
+
+Con estos valores, las tarifas resultan:
+
+\begin{align}
+    c_{\text{elec}} &= \frac{\SI{280}{\watt}}{1000} \cdot \SI{215}{CLP/kWh} = \SI{60,2}{CLP/h} \\
+    c_{\text{rep}} &= \frac{\num{20000}~\text{CLP}}{\SI{1200}{\hour}} = \SI{16,7}{CLP/h} \\
+    c_{\text{amort}} &= \frac{\num{250000}~\text{CLP}}{\SI{10000}{\hour}} = \SI{25}{CLP/h} \\
+    c_{\text{fil}} &= \frac{\num{13000}~\text{CLP}}{\SI{1000}{\gram}} = \SI{13}{CLP/g}
+\end{align}
+
+de modo que el costo de cada pieza se obtiene como $C = (c_{\text{elec}} + c_{\text{rep}} + c_{\text{amort}})\, t_{\text{imp}} + c_{\text{fil}}\, m_{\text{fil}}$, donde $t_{\text{imp}}$ es el tiempo de impresión y $m_{\text{fil}}$ la masa de filamento.
+
+\subsubsection{Laminado y costo de cada pieza}
+
+\paragraph{Soporte principal.} La boquilla de \SI{0,6}{\mm} y la altura de capa de \SI{0,30}{\mm} permiten reducir el tiempo de impresión respecto de una configuración estándar, ya que se requieren menos paredes. El soporte se lamina con 3 paredes, una densidad de relleno de \SI{15}{\percent} y 5 capas sólidas inferiores y superiores (Figura \ref{fig:laminado_costos}a), con un tiempo de impresión de 5~h 18~min (\SI{5,3}{\hour}) y \SI{368,11}{\gram} de filamento.
+
+\paragraph{Base.} La base se compone de tres piezas: dos se laminan en una misma cama y la restante en otra (Figuras \ref{fig:laminado_costos}b y \ref{fig:laminado_costos}c). Se laminan también con 3 paredes y \SI{15}{\percent} de relleno, con un tiempo total de impresión de 1~h 3~min + 1~h 17~min (\SI{2,33}{\hour}) y \SI{81,51}{\gram} + \SI{97,36}{\gram} = \SI{178,87}{\gram} de filamento.
+
+\paragraph{Tapa e interfaz de ABS.} Se selecciona el material correspondiente en el laminador y se mantienen 3 paredes y \SI{15}{\percent} de relleno. Dado que ambas piezas son del mismo material y de dimensiones reducidas, conviene laminarlas e imprimirlas en una única cama (Figura \ref{fig:laminado_costos}d), con un tiempo de impresión de 2~h 6~min (\SI{2,1}{\hour}) y \SI{137,54}{\gram} de filamento.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{lam_soporte.png}
+        \caption{Soporte principal (PLA+).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{lam_pata.png}
+        \caption{Pata de la base (PLA+).}
+    \end{subfigure}
+
+    \vspace{0.3cm}
+
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{lam_pata_espaciador.png}
+        \caption{Pata y espaciador de la base (PLA+).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{lam_abs.png}
+        \caption{Tapa e interfaz (ABS).}
+    \end{subfigure}
+    \caption{Laminado de las piezas impresas en 3D en Creality Print 7.2.}
+    \label{fig:laminado_costos}
+\end{figure}
+
+La Tabla \ref{tab:costos_impresion} resume el costo de impresión de cada grupo de piezas.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Concepto} & \textbf{Tarifa} & \textbf{Soporte principal} & \textbf{Base} & \textbf{Tapa e interfaz} \\
+\midrule
+Tiempo de impresión [h]     & --              & 5,30     & 2,33     & 2,10 \\
+Masa de filamento [g]       & --              & 368,11   & 178,87   & 137,54 \\
+\midrule
+Electricidad [CLP]          & 60,2 CLP/h      & 319,06   & 140,27   & 126,42 \\
+Repuestos [CLP]             & 16,7 CLP/h      & 88,51    & 38,91    & 35,07 \\
+Amortización [CLP]          & 25 CLP/h        & 132,50   & 58,25    & 52,50 \\
+Filamento [CLP]             & 13 CLP/g        & 4785,43  & 2325,31  & 1788,02 \\
+\midrule
+\textbf{Costo total [CLP]}  &                 & \textbf{5325,50} & \textbf{2562,74} & \textbf{2002,01} \\
+\bottomrule
+\end{tabular}
+\caption{Costo de impresión 3D de las piezas del producto.}
+\label{tab:costos_impresion}
+\end{table}
+
+Por lo tanto, el costo de las piezas impresas en 3D suma aproximadamente \num{9890}~CLP.
+
+\subsection{Costo total del producto}
+
+Los demás componentes se adquieren en distintas tiendas. La Tabla \ref{tab:costo_total} resume su costo junto con el de las piezas impresas en 3D. En los consumibles se indica el porcentaje aproximado del producto que se utiliza.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}>{\RaggedRight\arraybackslash}X >{\Centering\arraybackslash}p{3.6cm} >{\RaggedLeft\arraybackslash}p{1.9cm} >{\RaggedRight\arraybackslash}p{2.8cm}@{}}
+\toprule
+\textbf{Ítem} & \textbf{Cantidad o uso} & \textbf{Costo [CLP]} & \textbf{Fuente} \\
+\midrule
+Conjunto Peltier (kit \SI{60}{\watt})         & 2                                & 15.490 & \textcite{ml_kit_peltier} \\
+Interruptor DPDT de 3 posiciones               & 1                                & 1.460  & \textcite{hubot_dpdt} \\
+Conectores banana hembra \SI{4}{\mm}           & $2 \times 1.134$                 & 2.268  & \textcite{diartek_banana} \\
+Recipiente GN de acero inoxidable              & 1                                & 3.690  & Compra presencial \\
+Cañería de cobre tipo M de $1/4''$             & \SI{0,07}{\metre} a 2.800 CLP/m  & 196    & \textcite{tuercamartillo_caneria} \\
+Soldadura de estaño                            & \SI{5}{\percent} de 3.840        & 192    & \textcite{sodimac_estano} \\
+Masilla epóxica para agua potable              & \SI{10}{\percent} de 8.990       & 899    & \textcite{falabella_masilla} \\
+Válvula de bola de $1/4''$                     & 1                                & 4.290  & \textcite{aguaplanet_valvula} \\
+Fittings (terminales HI/HE y codo) y soldadura & Estimación                       & 5.000  & Estimación \\
+Algodón, pegamento instantáneo y otros         & Estimación                       & 5.000  & Estimación \\
+\midrule
+\textbf{Subtotal de componentes adquiridos}    &                                  & \textbf{38.485} & \\
+\textbf{Piezas impresas en 3D}                 &                                  & \textbf{9.890}  & Tabla \ref{tab:costos_impresion} \\
+\midrule
+\textbf{Costo total del producto}              &                                  & \textbf{48.375} & \\
+\bottomrule
+\end{tabularx}
+\caption{Costo total estimado del producto.}
+\label{tab:costo_total}
+\end{table}
+
+El costo de los fittings se estima, ya que no se encontraron en el mercado chileno terminales HI/HE de $1/4''$ con precio publicado. El costo total estimado del producto, de \num{48375}~CLP, cumple la especificación de costo máximo de \num{50000}~CLP de la Tabla \ref{tab:especificaciones}.
+
+\subsection{Tiempo de fabricación}
+
+El tiempo de fabricación asociado a la impresión 3D corresponde a la suma de los tiempos de impresión de las piezas, de aproximadamente 10 horas. Para fabricar el producto, primero se imprime el soporte principal; mientras tanto, se ensambla el corazón y se instala el fitting mediante la masilla epóxica de grado alimentario. Al terminar esta impresión, se imprime la interfaz de ABS, tras lo cual es posible armar gran parte del producto ensamblando el corazón en el soporte principal mediante la interfaz, mientras se imprimen las piezas restantes. Esta es una ventaja de la impresión 3D: permite realizar ensambles en paralelo mientras la máquina imprime.
+
+Por lo tanto, el tiempo total corresponde a las 10 horas de impresión más el tiempo de ensamblaje de la base y del subensamble de la válvula de bola (válvula, terminal HI y tubo de salida). Suponiendo que esto último toma 1 hora, el tiempo total de fabricación, incluida la impresión 3D, es de 11 horas laborales.
+
+\subsection{Lista de materiales (BOM)}
+\label{sec:bom}
+
+Los materiales del producto se han mencionado a lo largo del informe. La Tabla \ref{tab:bom} resume cada pieza, su material, cantidad y forma de obtención.
+
+\begin{longtable}{@{}c >{\RaggedRight\arraybackslash}p{4.2cm} c >{\RaggedRight\arraybackslash}p{2.4cm} c >{\RaggedRight\arraybackslash}p{3.4cm}@{}}
+\caption{Lista de materiales (BOM) del producto.}
+\label{tab:bom} \\
+\toprule
+\textbf{N.\textsuperscript{o}} & \textbf{Pieza} & \textbf{Miniatura} & \textbf{Material} & \textbf{Cant.} & \textbf{Obtención} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{N.\textsuperscript{o}} & \textbf{Pieza} & \textbf{Miniatura} & \textbf{Material} & \textbf{Cant.} & \textbf{Obtención} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+1  & Conjunto Peltier                        & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_01_peltier.jpg}}         & Varía            & 2 & Se compra el conjunto \\
+2  & Recipiente                              & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_02_recipiente.jpg}}      & Acero inoxidable & 1 & Se compra \\
+3  & Soporte                                 & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_03_soporte.jpg}}         & PLA+             & 1 & Impresión 3D (FDM) \\
+4  & Interfaz                                & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_04_interfaz.jpg}}        & ABS              & 1 & Impresión 3D (FDM) \\
+5  & Tapa                                    & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_05_tapa.jpg}}            & ABS              & 1 & Impresión 3D (FDM) \\
+6  & Patas principales (base)                & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_06_patas.jpg}}           & PLA+             & 2 & Impresión 3D (FDM) \\
+7  & Espaciador de patas (base)              & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_07_espaciador.jpg}}      & PLA+             & 1 & Impresión 3D (FDM) \\
+8  & Conector banana \SI{4}{\mm} hembra      & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_08_banana.jpg}}          & Varía            & 2 & Se compra \\
+9  & Interruptor DPDT                        & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_09_dpdt.jpg}}            & Varía            & 1 & Se compra \\
+10 & Cartel \textit{HOT}                     & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_10_cartel_hot.jpg}}      & PLA+             & 1 & Impresión 3D (FDM) \\
+11 & Cartel \textit{COLD}                    & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_11_cartel_cold.jpg}}     & PLA+             & 1 & Impresión 3D (FDM) \\
+12 & Cartel \textit{OFF}                     & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_12_cartel_off.jpg}}      & PLA+             & 1 & Impresión 3D (FDM) \\
+13 & Cañería de cobre tipo M $1/4''$ $\times$ \SI{15}{\mm} & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_13_caneria_15.jpg}} & Cobre & 1 & Se compra y se dimensiona \\
+14 & Codo \ang{90} $1/4''$                   & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_14_codo.jpg}}            & Bronce           & 1 & Se compra \\
+15 & Cañería de cobre tipo M $1/4''$ $\times$ \SI{25}{\mm} & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_15_caneria_25.jpg}} & Cobre & 1 & Se compra y se dimensiona \\
+16 & Válvula de bola \textit{on--off}        & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_16_valvula.jpg}}         & Varía            & 1 & Se compra \\
+17 & Terminal HI / HE $1/4''$                & --                                                                                   & Bronce           & 2 & Se compra \\
+19 & Cañería de cobre $1/4''$ $\times$ \SI{20}{\mm}, curva & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_19_caneria_curva.jpg}} & Cobre & 1 & Se compra, se dimensiona y se dobla \\
+20 & Soporte de cañería                      & \raisebox{-0.45\height}{\includegraphics[height=1.1cm]{bom_20_soporte_caneria.jpg}} & PLA+             & 1 & Impresión 3D (FDM) \\
+\end{longtable}
+
+\subsection{Coherencia dimensional y funcional con el prototipo}
+
+Finalmente, la Figura \ref{fig:plano_general} presenta el plano general del producto con sus medidas principales, el cual justifica la coherencia espacial del prototipo que se fabricará en el Desafío 3. La coherencia funcional se justificó en las secciones anteriores.
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=\textheight]{plano_general.jpeg}
+    \caption{Plano general del producto con sus dimensiones principales (Plano N.\textsuperscript{o}~2, cotas en mm).}
+    \label{fig:plano_general}
+\end{sidewaysfigure}
 
 \section{Resultados y discusión}
 
