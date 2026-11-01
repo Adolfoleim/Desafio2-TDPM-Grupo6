@@ -36,8 +36,8 @@ if MODO_OPERACION == "heating":
     T_amb = 21.5  # [°C]
     
     # Inercia térmica modo calentamiento (Agua + Recipiente acero)
-    m_w, cp_w = 0.250, 4186.0        # 250 g de agua
-    m_acero, cp_acero = 0.150, 500.0 # 150 g de acero
+    m_w, cp_w = 0.330, 4186.0        # 250 g de agua
+    m_acero, cp_acero = 0.207, 500.0 # 150 g de acero
     C_sistema = m_w * cp_w + m_acero * cp_acero
 
 else:  # "cooling"

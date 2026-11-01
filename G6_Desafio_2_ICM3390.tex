@@ -96,7 +96,7 @@
 \newcommand{\authorthree}{Nicolás Rodrigo Meyer Sironvalle}
 \newcommand{\authorfour}{Adolfo Claudio Leiva Mendoza}
 
-\newcommand{\deliverydate}{26 de octubre de 2026}
+\newcommand{\deliverydate}{01 de noviembre de 2026}
 
 % ==========================================
 % INICIO DEL DOCUMENTO
@@ -1198,9 +1198,16 @@ Las celdas Peltier operan de forma que la cara caliente ($T_h$) queda acoplada t
 
 El sistema de ecuaciones a resolver corresponde al siguiente:
 
-\textbf{Balance en el nodo Frío ($T_c$):} $\frac{T_{\text{amb}} - T_c}{N \cdot R_{\text{qR}}} = \alpha (T_c + T_0) I - \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}$
+\textbf{Balance en el nodo Frío ($T_c$):} 
+\begin{equation}
+    \frac{T_{\text{amb}} - T_c}{N \cdot R_{\text{qR}}} = \alpha (T_c + T_0) I - \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}    
+\end{equation}
 
-\textbf{Balance en el nodo caliente ($T_h$):} $\frac{T_h - T_w}{N \cdot R_{\text{contacto}}} = \alpha (T_h + T_0) I + \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}$
+
+\textbf{Balance en el nodo caliente ($T_h$):} 
+\begin{equation}
+    \frac{T_h - T_w}{N \cdot R_{\text{contacto}}} = \alpha (T_h + T_0) I + \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}
+\end{equation}
 
 La potencia útil de calor entregado $Q_{\text{flujo}}$ es:
 
@@ -1221,9 +1228,17 @@ Al invertir la polaridad de corriente (o la posición del módulo), la cara frí
 
 El sistema de ecuaciones a resolver corresponde al siguiente:
 
-\textbf{Balance en el nodo Frío ($T_c$):} $\frac{T_w - T_c}{N \cdot R_{\text{contacto}}} = \alpha (T_c + T_0) I - \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}$
+\textbf{Balance en el nodo Frío ($T_c$):}
 
-\textbf{Balance en el nodo caliente ($T_h$):} $\frac{T_h - T_{\text{amb}}}{N \cdot R_{\text{qR}}} = \alpha (T_h + T_0) I + \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}$
+\begin{equation}
+    \frac{T_w - T_c}{N \cdot R_{\text{contacto}}} = \alpha (T_c + T_0) I - \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}
+\end{equation}
+
+\textbf{Balance en el nodo caliente ($T_h$):}
+
+\begin{equation}
+    \frac{T_h - T_{\text{amb}}}{N \cdot R_{\text{qR}}} = \alpha (T_h + T_0) I + \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}
+\end{equation}
 
 La potencia útil de calor entregado $Q_{\text{flujo}}$ es:
 
@@ -1240,13 +1255,13 @@ Y la temperatura del agua aumenta según:
 
 \subsubsection{Calibración y sensibilidad}
 
-Se realizó la calibración en el modo calentar, considerando una medición de temperatura en el centro del volumen de agua. El detalle de esta calibración, se realizará en la siguiente sección, sin embargo, se presentan los resultados de las variables óptimas en la regresión de la respuesta del sistema, y posteriormente la sensibilidad de la variación de ciertos parámetros.
+Se realizó la calibración en el modo calentar, considerando una medición de temperatura en el centro del volumen de agua durante 45 minutos. El detalle de esta calibración, se realizará en la siguiente sección, sin embargo, se presentan los resultados de las variables óptimas en la regresión de la respuesta del sistema, y posteriormente la sensibilidad de la variación de ciertos parámetros.
 
-Las variables óptimas encontradas con un RMSE de 1,842°C son:
+Las variables óptimas encontradas con un RMSE de 1,8269°C son:
 
 \begin{itemize}
-    \item $R_{contacto} = 9,395$ K/W
-    \item $R_{qR} = 0.9693$ K/W
+    \item $R_{contacto} = 8,0375$ K/W
+    \item $R_{qR} = 1.9562$ K/W
     \item $UA = 0.001$ W/K
 \end{itemize}
 
@@ -1279,6 +1294,10 @@ El análisis de sensibilidad al variar las variables de entrada son:
 
 
 \subsection{Simulación térmica - Nastran}
+
+El objetivo de esta simulación en Nastran es poder observar el gradiente térmico que se genera al interior de recipiente. Para poder lograr esto, únicamente se emplean 3 objetos en la simulación para representar el modelo energético y reducir el costo computacional. Estos objetos corresponden al agua, al recipiente de acero inoxidable y los módulos Peltier.
+
+Para caracterizar correctamente el modelo térmico, se relacionan los objetos que están en contacto en la configuración, tipo módulos Peltier-recipiente y recipiente-agua. Debido a la despreciable pérdida de calor con el entorno, debido al aislamiento del sistema, únicamente existe h convectivo mínimo en la superficie superior del recipiente.
 
 \subsection{Simulación estructural}
 \label{sec:sim_estructural}
