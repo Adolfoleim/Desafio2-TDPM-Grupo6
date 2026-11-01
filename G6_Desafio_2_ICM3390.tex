@@ -1159,7 +1159,126 @@ La condensación se controla mediante la aislación de algodón aplicada sobre e
 \section{Simulaciones y justificación físico-matemática}
 \label{sec:simulaciones}
 
-% Simulaciones térmicas: pendiente (Adolfo)
+\subsection{Simulación térmica - Python - Balance de Energía}
+
+En primer lugar se realizó un modelo simplificado producto del modelo termoeléctrico de los módulos Peltier, el modelo térmico y modelo energético. Las simplificaciones se realizaron debido a los instrumentos de medición disponibles como de aquellos parámetros a controlar. La simulación realizada en Python tiene como objetivo calibrarse y validarse de manera experimental para ajustarse a la respuesta temporal de temperatura del agua a calentar y lata a enfriar.
+
+\subsubsection{Simplificaciones}
+
+Debido a que se realizaron mediciones de corriente a un voltaje fijo, y que los módulos Peltier se colocan en serie, se utiliza la corriente entregada por la fuente de voltaje directamente a los balances de energía, utilizando la función de interpolación \textit{interp1d} de \textit{numpy}.
+
+Además, se utilizan las propiedades derivadas de los módulos Peltier, expuestas en el modelo termoeléctrico, como constantes a lo largo de todo el proceso y conocidas, por lo tanto se utilizan los resultados de \textcite{Dymytrov_2017}.
+
+Se utiliza un régimen cuasi-estacionario en las caras de cada módulo Peltier. Debido a la dificultad para medir de manera constante la temperatura de ambas caras de los módulos, se desprecia la capacidad calorífica de las superficies cerámicas $\left(\frac{C_q}{2}\frac{dT_c}{dt}\right) \approx 0$ y $\left(\frac{C_q}{2}\frac{dT_h}{dt}\right) \approx 0$. Esto permite quedar con una sola EDO temporal ($T_w$) en conjunto con un sistema algebraico lineal para las temperaturas superficiales $T_c$ y $T_h$.
+
+Para simplificar la temperatura del agua en esta simulación, se asume una mezcla perfecta del fluido y una resistencia térmica despreciable, por lo que el la temperatura del fluido $T_w$ representa un único valor para todo el volumen de agua. 
+
+Con respecto al modelo energético global, se simplifican las pérdidas por conducción, convección natural y radiación superficial en un único término de pérdidas térmicas $UA$ (W/K). Además, se calcula la capcidad calorífica total del sistema como la supa ponderada entre la masa y el calor específico de cada material o fluido. Para esto último se asume lo siguiente para el modo calentar y el modo enfriar:
+
+\begin{itemize}
+    \item \textbf{Modo calentar:}
+    $$ C_{sistema} = m_w c_{w} + m_{acero} c_{acero} $$
+    \item \textbf{Modo enfriar:}
+    $$ C_{sistema} = m_{bebida} c_{bebida} + m_{aluminio} c_{aluminio} + m_w c_{w} + m_{acero} c_{acero} $$
+\end{itemize}
+
+\subsubsection{Objetivo simulación y variables}
+
+El objetivo de esta simulación realizada en \textit{Python} es predecir el comportamiento del sistema, específicamente, predecir el comportamiento temporal de la temperatura del agua o lata. Para esto, necesita ser ajustada debido a variables que no son conocidas, y son: la resistencia térmica de contacto $R_{contacto}$ [K/W] (que aborda la resistencia térmica de la pasta térmica y el espesor del acero inoxidable), la resistencia térmica del disipador $R_{qR}$ [K/W] y el término de pérdidas térmicas $UA$.
+
+La calibración se realizará mediante algoritmo genético de la librería \textit{pymoo}, con una población de 30 individuos y con 50 generaciones. Se optimizará la minimización del RMSE. Los rangos para cada variable son $R_{contacto} \in [0,001; 10]$, $R_{qR} \in [0,01;10]$ y $UA \in [0,001;5]$.
+
+\subsubsection{Modo de operación}
+
+El algoritmo responderá de acuerdo a qué tipo de simulación se realizará, si será el modo calentamiento (\textit{heating}) o el modo enfriamiento (\textit{cooling}). De acuerdo a cada modo, se resolverá el siguiente balance de ecuaciones.
+
+\subsubsection*{Modo calentar}
+
+Las celdas Peltier operan de forma que la cara caliente ($T_h$) queda acoplada térmicamente al acero del recipiente ($T_w$) a través de la resistencia de contacto $R_{\text{contacto}}$, mientras que la cara fría ($T_c$) absorbe calor del aire ambiente ($T_{\text{amb}}$) a través del disipador ($R_{\text{qR}}$).
+
+El sistema de ecuaciones a resolver corresponde al siguiente:
+
+\textbf{Balance en el nodo Frío ($T_c$):} $\frac{T_{\text{amb}} - T_c}{N \cdot R_{\text{qR}}} = \alpha (T_c + T_0) I - \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}$
+
+\textbf{Balance en el nodo caliente ($T_h$):} $\frac{T_h - T_w}{N \cdot R_{\text{contacto}}} = \alpha (T_h + T_0) I + \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}$
+
+La potencia útil de calor entregado $Q_{\text{flujo}}$ es:
+
+\begin{equation}
+    Q_{\text{flujo}} = N \cdot Q_h = \frac{T_h - T_w}{R_{\text{contacto}}}    
+\end{equation}
+
+
+Y la temperatura del agua aumenta según:
+
+\begin{equation}
+    \frac{dT_w}{dt} = \frac{Q_{\text{flujo}} - UA \cdot (T_w - T_{\text{amb}})}{m_w c_{p,w} + m_{\text{acero}} c_{\text{acero}}}
+\end{equation}
+
+\subsubsection*{Modo enfriar}
+
+Al invertir la polaridad de corriente (o la posición del módulo), la cara fría ($T_c$) queda acoplada al baño de agua de acople que rodea la lata ($T_w$) mediante $R_{\text{contacto}}$, mientras que la cara caliente ($T_h$) disipa la energía hacia el aire ambiente ($T_{\text{amb}}$) a través de $R_{\text{qR}}$.
+
+El sistema de ecuaciones a resolver corresponde al siguiente:
+
+\textbf{Balance en el nodo Frío ($T_c$):} $\frac{T_w - T_c}{N \cdot R_{\text{contacto}}} = \alpha (T_c + T_0) I - \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}$
+
+\textbf{Balance en el nodo caliente ($T_h$):} $\frac{T_h - T_{\text{amb}}}{N \cdot R_{\text{qR}}} = \alpha (T_h + T_0) I + \frac{1}{2} I^2 R_0 - \frac{T_h - T_c}{R_q}$
+
+La potencia útil de calor entregado $Q_{\text{flujo}}$ es:
+
+\begin{equation}
+    Q_{\text{flujo}} = N \cdot Q_c = \frac{T_w - T_c}{R_{\text{contacto}}}
+\end{equation}
+
+
+Y la temperatura del agua aumenta según:
+
+\begin{equation}
+    \frac{dT_w}{dt} = \frac{- Q_{\text{flujo}} - UA \cdot (T_w - T_{\text{amb}})}{C_{\text{sistema}}}
+\end{equation}
+
+\subsubsection{Calibración y sensibilidad}
+
+Se realizó la calibración en el modo calentar, considerando una medición de temperatura en el centro del volumen de agua. El detalle de esta calibración, se realizará en la siguiente sección, sin embargo, se presentan los resultados de las variables óptimas en la regresión de la respuesta del sistema, y posteriormente la sensibilidad de la variación de ciertos parámetros.
+
+Las variables óptimas encontradas con un RMSE de 1,842°C son:
+
+\begin{itemize}
+    \item $R_{contacto} = 9,395$ K/W
+    \item $R_{qR} = 0.9693$ K/W
+    \item $UA = 0.001$ W/K
+\end{itemize}
+
+Los resultados son:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{resultados_calibracion.pdf}
+    \caption{Resultados calibración experimento en modo caliente con medición central de temperatura.}
+    \label{fig:resultados_calibracion}
+\end{figure}
+
+El análisis de sensibilidad al variar la temperatura ambiente, la masa de agua y la corriente eléctrica son:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Sensibilidad_parametros.pdf}
+    \caption{Análisis de sensibilidad para $T_{amb}$, $m_w$ y $I(t)$.}
+    \label{fig:sensibilidad_parametros}
+\end{figure}
+
+El análisis de sensibilidad al variar las variables de entrada son:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Sensibilidad_variables.pdf}
+    \caption{Análisis de sensibilidad para $R_{contacto}$, $R_{qR}$ y $UA$.}
+    \label{fig:sensibilidad_variables}
+\end{figure}
+
+
+\subsection{Simulación térmica - Nastran}
 
 \subsection{Simulación estructural}
 \label{sec:sim_estructural}
