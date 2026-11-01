@@ -1159,6 +1159,116 @@ La condensación se controla mediante la aislación de algodón aplicada sobre e
 \section{Simulaciones y justificación físico-matemática}
 \label{sec:simulaciones}
 
+% Simulaciones térmicas: pendiente (Adolfo)
+
+\subsection{Simulación estructural}
+\label{sec:sim_estructural}
+
+La evaluación estructural del producto se realiza mediante dos simulaciones estáticas por el método de elementos finitos (FEA) en \textit{Autodesk Inventor}: la primera somete a la estructura principal a cargas severas de compresión y desvío, y la segunda evalúa los mangos de agarre durante el levantamiento del producto. En ambos casos, el informe completo de análisis de tensión generado por el software se adjunta junto con este informe.
+
+\subsubsection{Simulación estática de la estructura principal ante cargas severas}
+
+\paragraph{Fenómeno físico.} Se simula la deformación elástica y la concentración de esfuerzos en el soporte principal sometido a cargas severas, con el fin de determinar si el diseño estructural propuesto resiste cargas superiores a las de operación.
+
+\paragraph{Ecuaciones gobernantes.} El análisis se basa en las ecuaciones de la elastostática lineal, es decir, en la ley de Hooke generalizada, cuya forma unidimensional es:
+
+\begin{equation}
+    \sigma = E \cdot \varepsilon
+    \label{eq:hooke}
+\end{equation}
+
+Para evaluar la falla se utiliza el criterio de la energía de distorsión de von Mises, el cual compara el esfuerzo equivalente $\sigma_{VM}$ con el límite de fluencia del material $S_y$ \parencite{norton1999}:
+
+\begin{equation}
+    \sigma_{VM} = \sqrt{\frac{(\sigma_1 - \sigma_2)^2 + (\sigma_2 - \sigma_3)^2 + (\sigma_3 - \sigma_1)^2}{2}}, \qquad n = \frac{S_y}{\sigma_{VM}}
+    \label{eq:von_mises}
+\end{equation}
+
+donde $\sigma_1$, $\sigma_2$ y $\sigma_3$ son los esfuerzos principales y $n$ es el factor de seguridad.
+
+\paragraph{Supuestos y simplificaciones.} Para reducir el costo computacional, se eliminan del ensamble los conjuntos Peltier, el agua contenida en el recipiente, el interruptor DPDT, los conectores banana y los fittings de cobre. De este modo, la simulación considera únicamente el soporte principal, la interfaz de ABS, el recipiente y la base del producto. Además, los materiales se modelan como isótropos.
+
+\paragraph{Propiedades de los materiales.} Dado que la biblioteca de materiales de \textit{Autodesk Inventor} no incluye el PLA, se asignan los siguientes materiales:
+
+\begin{itemize}
+    \item Soporte principal: ``plástico, negro'' (en representación del PLA+).
+    \item Interfaz: ABS.
+    \item Recipiente: acero inoxidable.
+    \item Base (patas de apoyo): ``plástico, negro'' (en representación del PLA+).
+\end{itemize}
+
+\paragraph{Cargas y condiciones de borde.} Las cargas aplicadas son las siguientes:
+
+\begin{itemize}
+    \item El peso propio de los componentes considerados.
+    \item Dos fuerzas de compresión de \SI{300}{\newton} cada una, aplicadas en los apoyos de la interfaz sobre el soporte principal.
+    \item Dos fuerzas perpendiculares de desvío de \SI{20}{\newton} cada una.
+\end{itemize}
+
+Para restringir el ensamble, se aplica una condición de empotramiento en la cara inferior de la base del producto, que corresponde a la superficie en contacto con la mesa.
+
+\paragraph{Técnica numérica y resultados.} La simulación se resuelve mediante FEA para estática lineal en \textit{Autodesk Inventor}. La Figura \ref{fig:fem_cargas_severas} presenta la distribución del esfuerzo de von Mises y del factor de seguridad.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{fem_cargas_severas_vm.png}
+        \caption{Esfuerzo de von Mises.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{fem_cargas_severas_fs.png}
+        \caption{Factor de seguridad.}
+    \end{subfigure}
+    \caption{Resultados de la simulación estática de la estructura principal ante cargas severas.}
+    \label{fig:fem_cargas_severas}
+\end{figure}
+
+\paragraph{Interpretación de los resultados.} Los resultados indican que la estructura opera muy por debajo del límite de fluencia de sus materiales, lo que demuestra una alta resistencia mecánica para su contexto de uso. El esfuerzo máximo de von Mises alcanza \SI{21,22}{\mega\pascal} y se concentra en la pestaña superior del recipiente. Por su parte, el factor de seguridad mínimo es de 4,7 y se ubica en la zona del ventilador del disipador de la celda Peltier, como consecuencia de la fuerza de desvío aplicada en dicho lugar. En las patas de apoyo, el factor de seguridad alcanza un valor similar al mínimo, del orden de 5, mientras que el resto de la estructura no presenta concentraciones de esfuerzos.
+
+Estos resultados validan la geometría del soporte, confirmando que los espesores actuales de las paredes y de la base de apoyo son adecuados. El objetivo del análisis es castigar al modelo con cargas severas, ya que las piezas impresas en 3D no son completamente sólidas, sus propiedades no son isótropas y su rigidez disminuye con el aumento de temperatura de algunas piezas. Aun considerando estos factores, los resultados validan la geometría propuesta.
+
+\paragraph{Análisis de sensibilidad.} No se realiza un análisis de sensibilidad variando las cargas, ya que las fuerzas aplicadas representan una situación poco realista para el contexto del producto. El propósito de esta simulación no es estudiar el efecto de la variación de las cargas, sino castigar al ensamble por los motivos antes expuestos.
+
+\subsubsection{Simulación estática de los mangos de agarre y su unión con el soporte principal}
+
+\paragraph{Fenómeno físico.} Esta simulación busca determinar la deformación elástica y el factor de seguridad del producto durante su levantamiento para trasladarlo. La zona crítica corresponde a los mangos, por lo que interesa conocer la distribución de esfuerzos en ellos. Al igual que en la simulación anterior, se aplica una fuerza de castigo por los mismos motivos.
+
+\paragraph{Ecuaciones gobernantes.} Las ecuaciones que gobiernan la simulación son las mismas de la simulación anterior: la ley de Hooke generalizada (Ecuación \eqref{eq:hooke}) y el criterio de falla de von Mises (Ecuación \eqref{eq:von_mises}).
+
+\paragraph{Supuestos y simplificaciones.} Se asume que la carga dinámica de un tirón brusco puede modelarse como una carga estática equivalente, y que los materiales son isótropos. El ensamble de prueba y la asignación de materiales son idénticos a los de la simulación anterior.
+
+\paragraph{Cargas y condiciones de borde.} Se aplican tres fuerzas: el peso propio y dos fuerzas de levantamiento de \SI{200}{\newton} cada una, aplicadas en la zona inferior de cada mango. El ensamble se restringe mediante una condición de empotramiento en el apoyo donde se asienta la interfaz, para representar la inercia y la resistencia que opone el peso del producto al ser levantado.
+
+\paragraph{Técnica numérica y resultados.} Se utiliza FEA en régimen estático con el mismo software. La Figura \ref{fig:fem_mangos} presenta los resultados relevantes.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{fem_mangos_vm.png}
+        \caption{Esfuerzo de von Mises.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{fem_mangos_fs.png}
+        \caption{Factor de seguridad.}
+    \end{subfigure}
+    \caption{Resultados de la simulación estática de los mangos de agarre durante el levantamiento del producto.}
+    \label{fig:fem_mangos}
+\end{figure}
+
+\paragraph{Interpretación de los resultados.} Los resultados demuestran que los mangos y la estructura en general soportan adecuadamente las cargas de tracción generadas al levantar el dispositivo. El esfuerzo máximo de von Mises alcanza \SI{7,645}{\mega\pascal} y se concentra en la parte superior del mango y en sus vértices. Esta distribución es esperable bajo una solicitación de flexión, y su valor máximo se encuentra por debajo del límite de fluencia del material asignado (``plástico, negro'', en representación del PLA+), lo que confirma que el mango no sufrirá deformaciones plásticas al levantar el producto.
+
+El factor de seguridad mínimo es de 2,7 y se ubica en la zona superior del mango, lo que constituye un margen robusto. No se observan otras concentraciones de esfuerzos ni disminuciones del factor de seguridad en el resto de la estructura. Por lo tanto, el mango actúa como una pieza fusible que resguarda la integridad del recipiente ante una sobrecarga durante el levantamiento, ya que en tal caso es muy probable que falle el mango sin afectar al resto de la estructura.
+
+Con esta segunda simulación se validan las decisiones geométricas del diseño mecánico y estructural, confirmando que los espesores del mango y de la estructura en general son adecuados para resistir el peso dinámico del sistema. Un factor de seguridad mínimo de 2,7 mitiga el riesgo de falla por delaminación entre capas de impresión, lo que permite conservar el diseño propuesto.
+
+\paragraph{Análisis de sensibilidad.} Se omite el análisis de sensibilidad, ya que las cargas de impacto simuladas cubren holgadamente los peores escenarios de operación.
+
 \section{Caracterización, calibración y validación inicial}
 
 \section{Desarrollo del producto final y plan de fabricación}
