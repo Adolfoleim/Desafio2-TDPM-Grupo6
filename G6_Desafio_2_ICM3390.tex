@@ -218,6 +218,18 @@
 
 \section{Introducción y contexto de uso}
 
+En el contexto de acondicionar térmicamente raciones o bebestibles individuales en lugares de trabajo, estudio u hogar, se fijó el objetivo de desarrollar un acondicionador térmico de sobremesa basado en módulos de celdas Peltier. Estas celdas pueden operar en dos modos distintos según la polaridad de la conexión: absorben calor en una de sus caras ---fenómeno útil a la hora de enfriar---, mientras que por la otra entregan calor, que puede usarse para elevar la temperatura.
+
+Entre las metas particulares definidas al inicio del proyecto se encuentran que el dispositivo final sea capaz de reducir la temperatura de un bebestible en lata lo suficiente como para considerarlo fresco y que, adicionalmente, posea un modo de calentamiento que permita elevar la temperatura del agua lo suficiente para preparar sopas y fideos instantáneos u otros alimentos de cocción rápida.
+
+Algunos límites de diseño están definidos por las condiciones que impone el contexto. Uno de ellos es la seguridad e inocuidad alimentaria, dado que se trabaja con líquidos destinados al consumo humano. Esto representa una limitante a la hora del prototipado, pues acota la selección de materiales de algunos de los componentes del producto. De igual forma, se debe integrar protección al usuario frente a riesgos térmicos y eléctricos. Sumado a lo anterior, y como parte del desafío, se busca que gran parte de la arquitectura se fabrique mediante impresión 3D y que el producto sea ligero y de fácil transporte, con el fin de optimizar costos y constituir una opción atractiva para el mercado.
+
+Con este precedente, uno de los primeros pasos es recopilar evidencia y datos reales mediante herramientas como encuestas, que permitan identificar las prioridades y necesidades de posibles clientes, lo que posteriormente facilita la definición de las especificaciones técnicas.
+
+Tal como se mencionó al inicio, el objetivo es crear un producto destinado al mercado real y, como tal, no puede limitarse a planteamientos teóricos. Por ello, durante su desarrollo es de gran importancia respaldar las metas propuestas y las afirmaciones mediante modelos térmicos, termoeléctricos y estructurales que representen la realidad con la mayor fidelidad posible. Para esto, es necesario realizar tanto simulaciones de los conceptos como validaciones iniciales mediante ensayos experimentales con los componentes que se utilizarán en el producto final.
+
+Finalmente, se realiza una evaluación de fabricación y costos, de modo que el análisis de factibilidad no sea solo técnico, sino también logístico y económico, para concluir con claridad sobre la viabilidad del diseño propuesto.
+
 \section{Necesidades, especificaciones y selección del concepto}
 \subsection{Usuario}
 Para dar inicio a la elaboración del desafío, se define como usuario a aquellas personas que requieran enfriar bebestibles individuales o calentar alimentos de pequeñas porciones en su hogar, oficina o lugar de estudio. Con el objetivo de conocer las prioridades de este grupo, se aplica una encuesta mediante un formulario en línea a 9 personas representativas del usuario definido.
@@ -334,9 +346,9 @@ Las necesidades mencionadas se traducen en especificaciones técnicas. Estas bus
 \begin{itemize}
     \item Desempeño térmico
     \begin{enumerate}
-        \item Enfriamiento efectivo: llevar una lata estándar de 350 ml, cerrada desde la temperatura ambiente hasta \SI{8}{\celsius} o menos. Para fijar este valor se analizó el mercado actual, ya que se asume que es un estándar a nivel industrial.
-        \item Calentamiento efectivo: elevar el volumen de agua de una porción de sopa instantánea a \SI{85}{\celsius} o más. Al igual que en el caso anterior, se analizaron las especificaciones de la competencia, asumiendo que representan un estándar a nivel industrial.
-        \item Tiempo de respuesta: completar cada ciclo en un tiempo competitivo frente a alternativas comunes, como el refrigerador o el hervidor eléctrico. El límite se establece según la cinética de transferencia térmica mediante celdas termoeléctricas de contacto directo. Estudios indican que es factible bajar la temperatura de volúmenes similares de líquido en tiempos cercanos a los 20 minutos con tecnologías de baja potencia, por lo que se fija una meta de 30 minutos para una lata, considerando que no se contará con contacto directo, sino que la transferencia se realizará mediante el sistema de disipación \parencite{peltierpower}.
+        \item Enfriamiento efectivo: llevar una lata estándar de 350 ml, cerrada desde la temperatura ambiente hasta \SI{15}{\celsius} o menos, temperatura a la que la bebida se percibe fresca. Se fija un valor superior a los 4--\SI{8}{\celsius} de los equipos de la competencia, ya que estos operan con hielo o con tiempos de horas, mientras que este producto cuenta solo con dos celdas Peltier.
+        \item Calentamiento efectivo: elevar los \SI{330}{\ml} de agua de una porción de sopa instantánea a \SI{70}{\celsius} o más. El objetivo es cocinar los fideos instantáneos y no hervir el agua, por lo que se fija una temperatura inferior a la de ebullición, acorde a la potencia disponible en las celdas Peltier.
+        \item Tiempo de respuesta: completar cada ciclo en un tiempo razonable frente a alternativas comunes, como el refrigerador o el hervidor eléctrico. El límite se establece según la cinética de transferencia térmica mediante celdas termoeléctricas. Estudios indican que es factible bajar la temperatura de volúmenes similares de líquido en tiempos cercanos a los 20 minutos con tecnologías de baja potencia y contacto directo \parencite{peltierpower}. Como en este producto la transferencia ocurre a través de la pared del recipiente y del baño de agua, se fija una meta de 45 minutos para ambos modos.
     \end{enumerate}
     \item Uso e interacción
     \begin{enumerate}
@@ -574,7 +586,7 @@ Eficiencia energética   & 5,8  & 3 & 3 \\
 \subsubsection{Concepto seleccionado}
 De acuerdo con la Tabla \ref{tab:matriz_decision}, el concepto seleccionado es el baño líquido intermedio (C2), con un puntaje ponderado de 3,73, frente a 3,65 de la manga conductiva (C1). Como ambas alternativas superan el filtro de factibilidad, la diferencia se explica por su desempeño en las necesidades de mayor peso. C2 obtiene una mejor evaluación en enfriamiento efectivo ($P_j = 16{,}7$) y en tiempo de respuesta ($P_j = 12{,}2$). Esto se debe a que el líquido envuelve por completo la superficie lateral de la lata y elimina la resistencia térmica de contacto entre la lata y la manga, la cual depende fuertemente de las tolerancias del diámetro de la lata y del ajuste de la pieza. También, el baño distribuye el calor de forma uniforme sobre la carga, mientras que en la manga conductiva resulta difícil lograr un calentamiento homogéneo.
 
-Sin embargo, C2 obtiene una menor evaluación en limpieza e higiene y en protección integral, ya que el depósito de fluido introduce riesgos de derrame, condensación y mantenimiento del fluido de trabajo que no existen en la manga. En modo frío, el fluido debe preenfriarse antes de lograr una transferencia eficaz, lo que no ocurre con la manga; en modo calor, el fluido debe elevarse por sobre \SI{85}{\celsius}, lo que aumenta la energía requerida y afecta al tiempo objetivo de calentamiento. Estos problemas se abordarán en las etapas siguientes considerando:
+Sin embargo, C2 obtiene una menor evaluación en limpieza e higiene y en protección integral, ya que el depósito de fluido introduce riesgos de derrame, condensación y mantenimiento del fluido de trabajo que no existen en la manga. En modo frío, el fluido debe preenfriarse antes de lograr una transferencia eficaz, lo que no ocurre con la manga; en modo calor, el fluido debe elevarse por sobre \SI{70}{\celsius}, lo que aumenta la energía requerida y afecta al tiempo objetivo de calentamiento. Estos problemas se abordarán en las etapas siguientes considerando:
 
 \begin{itemize}
     \item El volumen de fluido de trabajo se dimensionará mediante el modelo térmico transitorio, buscando el mínimo volumen que asegure el contacto completo con la lata y con el recipiente, de modo de reducir la masa térmica del sistema.
@@ -1469,7 +1481,7 @@ Esta sección presenta la evidencia experimental empleada para caracterizar el c
 \toprule
 \textbf{Ensayo} & \textbf{Modo} & \textbf{Carga} & \textbf{Medición} & \textbf{Duración} & \textbf{Propósito} \\
 \midrule
-Exploratorios & Frío y calor & \SI{350}{\ml} & Comprobación táctil & \SI{30}{\minute} & Factibilidad del concepto \\
+Exploratorios & Frío y calor & \SI{350}{\ml} & Comprobación táctil & \SI{40}{\minute} & Factibilidad del concepto \\
 Preliminar (29/10) & Calor & \SI{330}{\ml} & Corriente & \SI{40}{\minute} & Caracterización del kit Peltier \\
 Calibración (31/10) & Calor & \SI{330}{\ml} & Corriente y $T_w$ en el centro & \SI{45}{\minute} & Calibración del modelo térmico \\
 Medición en pared (31/10) & Calor & \SI{330}{\ml} & Corriente y $T_w$ junto a la pared & \SI{35}{\minute} & Comparación con la simulación térmica \\
@@ -2223,8 +2235,98 @@ Finalmente, la Figura \ref{fig:plano_general} presenta el plano general del prod
 \end{sidewaysfigure}
 
 \section{Resultados y discusión}
+\label{sec:resultados}
+
+En esta sección se contrastan los resultados de los modelos, las simulaciones y los ensayos con las especificaciones técnicas de la Tabla \ref{tab:especificaciones}, y se discuten sus causas y limitaciones.
+
+\subsection{Cumplimiento de las especificaciones}
+
+La Tabla \ref{tab:cumplimiento} resume el estado de cada especificación según la evidencia disponible. Se distingue entre las especificaciones verificadas experimentalmente, las verificadas mediante el diseño o la selección de materiales, y las que deberán verificarse con el prototipo del Desafío 3.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}>{\RaggedRight\arraybackslash}p{3.4cm} >{\Centering\arraybackslash}p{2.2cm} >{\RaggedRight\arraybackslash}X >{\Centering\arraybackslash}p{2.0cm}@{}}
+\toprule
+\textbf{Especificación} & \textbf{Objetivo} & \textbf{Resultado y evidencia} & \textbf{Estado} \\
+\midrule
+Temperatura de la lata & $\le$ \SI{15}{\celsius} & \SIrange{12,6}{13,3}{\celsius} en la zona sumergida y \SIrange{14,0}{16,3}{\celsius} en la zona expuesta al aire (Tabla \ref{tab:temperatura_bebida}) & Parcial \\
+Tiempo de enfriamiento & $\le$ \SI{45}{\minute} & Resultado anterior obtenido a los \SI{40}{\minute} & Cumple \\
+Temperatura del agua & $\ge$ \SI{70}{\celsius} & \SI{69,1}{\celsius} junto a la pared a los \SI{35}{\minute}; \SI{57,8}{\celsius} en el centro a los \SI{45}{\minute} & Parcial \\
+Tiempo de calentamiento & $\le$ \SI{45}{\minute} & Fideos cocidos en los tres ensayos; \SI{35}{\minute} como tiempo mínimo & Cumple \\
+Volúmenes de carga & \SI{354}{\ml} / \SI{330}{\ml} & La lata cabe en el recipiente; ensayos de calor con \SI{330}{\ml} & Cumple \\
+Acciones para iniciar & $\le$ 5 & Con el equipo conectado: verter agua, introducir la lata, tapar, seleccionar el modo y encender la fuente & Cumple \\
+Desmontaje y lavado & $\le$ \SI{3}{\minute} & Limpieza con paño húmedo; el recipiente queda fijo al soporte & Por verificar \\
+Masa total & $\le$ \SI{4,0}{\kilogram} & No medida & Por verificar \\
+Envolvente & $30 \times 30 \times 35$~cm & Alto de \SI{30,1}{\cm}; largo de \SI{30,3}{\cm} incluida la válvula (Figura \ref{fig:plano_general}) & Parcial \\
+Grado alimentario & Cualitativo & Acero inoxidable, cobre tipo M, masilla certificada para agua potable y aluminio apto para alimentos & Cumple \\
+Temperatura de la carcasa & $\le$ \SI{40}{\celsius} & No medida & Por verificar \\
+Protección IPX2 & Aislamiento & Electrónica dentro del soporte y aislación contra la condensación; sin ensayo & Por verificar \\
+Costo total & $\le$ \num{50000}~CLP & \num{48375}~CLP (Tabla \ref{tab:costo_total}) & Cumple \\
+Potencia eléctrica & $\le$ \SI{120}{\watt} & Entre 49 y \SI{72}{\watt} en las celdas ($P = V \cdot I$, con $V = \SI{24}{\volt}$) & Cumple \\
+\bottomrule
+\end{tabularx}
+\caption{Estado de cumplimiento de las especificaciones técnicas.}
+\label{tab:cumplimiento}
+\end{table}
+
+En resumen, el producto cumple las especificaciones de tiempo, costo, potencia, inocuidad y facilidad de uso, y se acerca a las temperaturas objetivo de ambos modos. Las especificaciones de masa, temperatura de la carcasa, protección contra la humedad y tiempo de limpieza no se han medido, por lo que se verificarán con el prototipo del Desafío 3.
+
+\subsection{Desempeño en modo calentamiento}
+
+En los ensayos de calentamiento con \SI{330}{\ml} de agua, la temperatura alcanzó \SI{57,8}{\celsius} en el centro del recipiente tras \SI{45}{\minute} (Figura \ref{fig:resultados_ensayo_calibracion}) y \SI{69,1}{\celsius} junto a la pared tras \SI{35}{\minute} (Figura \ref{fig:resultados_ensayo_pared}). La diferencia entre ambas mediciones es coherente con la simulación en Nastran, que muestra un gradiente cercano a \SI{15}{\celsius} dentro del volumen de agua (Figura \ref{fig:Nastran_calentar}): el agua junto a la pared en contacto con la celda se calienta primero, mientras que el centro responde con retraso. Por lo tanto, la temperatura del agua al servirla, una vez mezclada, se encuentra entre ambos valores, y la ubicación del termómetro es una fuente relevante de incertidumbre.
+
+Aunque el agua no alcanza la temperatura de ebullición, los fideos instantáneos quedaron cocidos en los tres ensayos, y \SI{35}{\minute} resultó ser el tiempo mínimo para obtenerlos \textit{al dente}. Esto confirma que el objetivo funcional del modo calentamiento se cumple sin necesidad de resistencias eléctricas adicionales. Además, ambas curvas mantienen una pendiente positiva al final del ensayo, de aproximadamente \SI{0,7}{\celsius} por minuto, por lo que el sistema aún no alcanza su temperatura de equilibrio y prolongar el ciclo permitiría superar los \SI{70}{\celsius} en todo el volumen.
+
+La potencia eléctrica de las celdas disminuyó de \SI{65}{\watt} a cerca de \SI{49}{\watt} durante el ensayo de calibración. Este comportamiento es coherente con el modelo termoeléctrico (Ecuación \eqref{eq:v_tec}): a medida que aumenta la diferencia de temperatura entre las caras de la celda, crece la fuerza electromotriz Seebeck que se opone a la tensión de la fuente, y la corriente disminuye. Las oscilaciones del multímetro introducen una incertidumbre de $\pm$\SI{7}{\percent} en estas mediciones, pero no alteran la tendencia observada.
+
+\subsection{Desempeño en modo enfriamiento}
+
+En el ensayo de enfriamiento, el agua junto a la lata descendió de \SI{22,8}{\celsius} a \SI{8,7}{\celsius} en \SI{40}{\minute} (Figura \ref{fig:resultados_ensayo_validacion}), sin alcanzar aún un régimen estacionario. La zona sumergida de la lata alcanzó entre \SI{12,6}{\celsius} y \SI{13,3}{\celsius}, por debajo del objetivo de \SI{15}{\celsius}, y el evaluador describió la bebida como agradable, fresca y refrescante (Tabla \ref{tab:opinion_catador}).
+
+La zona de la lata expuesta al aire quedó cerca de \SI{3}{\celsius} más caliente que la zona sumergida, lo que confirma la ventaja del baño líquido frente a la convección en aire, en línea con la justificación del concepto seleccionado. Por lo tanto, la principal mejora para este modo es asegurar que la lata quede completamente sumergida, ya sea aumentando el volumen de agua o ajustando la posición de la lata, de modo que toda la bebida alcance la temperatura objetivo.
+
+\subsection{Capacidad predictiva del modelo térmico}
+
+El modelo térmico calibrado con el ensayo de calentamiento reproduce la temperatura medida con un error cuadrático medio de \SI{1,83}{\celsius} (Figura \ref{fig:resultados_calibracion}), y el valor obtenido para las pérdidas ($UA = \SI{0,001}{\watt\per\kelvin}$) indica que la aislación cumple su función. El análisis de sensibilidad muestra que la masa de agua y la corriente son las variables que más influyen en la temperatura final, lo que es coherente con el balance de energía del recipiente.
+
+Sin embargo, al aplicar este modelo al ensayo de enfriamiento, no se reproduce la tendencia medida (Figura \ref{fig:validacion_primer_modelo_en_cooling}). Al recalibrarlo con los datos del modo enfriamiento, el error disminuye a \SI{1,22}{\celsius} (Figura \ref{fig:calibracion_cooling}), pero los parámetros óptimos se ubican en los extremos de los rangos de búsqueda: $R_{\text{contacto}}$ y $R_{\text{qR}}$ en sus límites inferiores y $UA$ cerca de su límite superior. Esto indica que, en modo enfriamiento, los parámetros actúan como coeficientes de ajuste más que como propiedades físicas del sistema. Entre las causas probables se encuentran que el modelo de capacidad concentrada no representa la masa térmica de la lata parcialmente sumergida ni el aire del recipiente, y que el termómetro se ubicó junto a la pared fría. En consecuencia, el modelo requiere una calibración independiente para cada modo y nuevos ensayos para obtener una caracterización única del sistema.
+
+\subsection{Integridad estructural}
+
+Las simulaciones por elementos finitos entregan un factor de seguridad mínimo de 4,7 ante cargas severas de compresión y desvío (Figura \ref{fig:fem_cargas_severas}), y de 2,7 al levantar el producto por los mangos (Figura \ref{fig:fem_mangos}). Ambos valores se obtienen con cargas muy superiores a las de operación, por lo que compensan la anisotropía de las piezas impresas y la disminución de rigidez del PLA+ con la temperatura, que el modelo isótropo no considera. El diseño estructural se considera adecuado, con el mango como elemento que fallaría antes que el recipiente ante una sobrecarga.
+
+\subsection{Factibilidad técnico-económica}
+
+El costo total estimado, de \num{48375}~CLP, cumple el límite de \num{50000}~CLP, aunque con un margen reducido de \num{1625}~CLP. Dado que \num{10000}~CLP corresponden a estimaciones de fittings y consumibles sin precio publicado, el costo real deberá confirmarse al adquirir los componentes. El tiempo de fabricación, de 11 horas, es compatible con la fabricación de un prototipo, ya que el corazón se ensambla en paralelo a la impresión de las piezas.
+
+Frente a la competencia (Tabla \ref{tab:competencia_specs}), el producto es el único de los analizados que enfría una lata y calienta agua para una sopa instantánea en un mismo equipo, sin depender de hielo. En modo calentamiento supera los \SI{54}{\celsius} del portavasos termoeléctrico de doble modo, mientras que en modo enfriamiento es más lento que los enfriadores basados en hielo, a cambio de no requerir reposición de insumos.
 
 \section{Conclusiones}
+\label{sec:conclusiones}
+
+Se diseñó un acondicionador térmico de líquidos de sobremesa capaz de enfriar una lata de bebida y calentar agua para una sopa instantánea mediante dos celdas Peltier TEC1-12706 conectadas en serie a \SI{24}{\volt}. El concepto de baño líquido intermedio, seleccionado mediante una matriz de decisión ponderada por las necesidades de los usuarios, demostró su factibilidad en ambos modos de operación sin necesidad de resistencias eléctricas adicionales ni de control electrónico.
+
+Las principales conclusiones del trabajo son las siguientes:
+
+\begin{itemize}
+    \item El desempeño térmico, que concentra el 44,2\% de la importancia asignada por los usuarios, se aproxima a sus objetivos: el agua alcanza hasta \SI{69,1}{\celsius} y permite cocinar fideos instantáneos en \SI{35}{\minute}, y la zona sumergida de la lata alcanza \SIrange{12,6}{13,3}{\celsius} en \SI{40}{\minute}.
+    \item La arquitectura modular, con el corazón de acero inoxidable apoyado en una interfaz de ABS sobre un soporte de PLA+, resuelve la limitación térmica de los materiales impresos y permite extraer el corazón completo para su mantenimiento.
+    \item El control por un interruptor DPDT, sin microcontrolador, es suficiente para operar el producto, ya que el equilibrio entre la potencia de las celdas y las pérdidas limita naturalmente las temperaturas del agua.
+    \item El modelo térmico reproduce los ensayos con errores de \SI{1,83}{\celsius} en calentamiento y \SI{1,22}{\celsius} en enfriamiento, aunque requiere una calibración independiente para cada modo. La simulación en Nastran evidencia un gradiente de temperatura relevante dentro del agua, que explica la diferencia entre las mediciones en el centro y junto a la pared.
+    \item La estructura impresa presenta factores de seguridad mínimos de 4,7 y 2,7 ante cargas severas, por lo que su integridad está asegurada.
+    \item El producto es factible económicamente, con un costo estimado de \num{48375}~CLP y un tiempo de fabricación de 11 horas, y consume entre 49 y \SI{72}{\watt}, dentro del límite de \SI{120}{\watt}.
+\end{itemize}
+
+Para el Desafío 3, en el que se fabricará y validará el producto completo, se proponen las siguientes acciones:
+
+\begin{itemize}
+    \item Asegurar la inmersión completa de la lata en modo enfriamiento, para que toda la bebida alcance la temperatura objetivo.
+    \item Medir la temperatura del agua mezclada al momento de servirla, con el fin de verificar el objetivo de \SI{70}{\celsius} de forma representativa.
+    \item Realizar nuevos ensayos en ambos modos, con varios puntos de medición de temperatura, para calibrar el modelo térmico con parámetros físicamente consistentes.
+    \item Verificar con el prototipo las especificaciones pendientes: masa total, temperatura de la carcasa, protección contra la humedad y tiempo de limpieza.
+    \item Confirmar el costo de los componentes estimados y evaluar mejoras en la aislación y la tapa para reducir los tiempos de ciclo.
+\end{itemize}
 
 % ------------------------------------------
 % BIBLIOGRAFÍA
