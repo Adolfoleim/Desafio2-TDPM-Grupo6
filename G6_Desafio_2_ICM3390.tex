@@ -1302,8 +1302,8 @@ Las variables óptimas encontradas con un RMSE de 1,8269°C son:
 
 \begin{itemize}
     \item $R_{contacto} = 8,0375$ K/W
-    \item $R_{qR} = 1.9562$ K/W
-    \item $UA = 0.001$ W/K
+    \item $R_{qR} = 1,9562$ K/W
+    \item $UA = 0,001$ W/K
 \end{itemize}
 
 Los resultados son:
@@ -1727,7 +1727,51 @@ Sensación al beberla & Agradable y fresca. \\
 
 Con los datos registrados durante este ensayo, se procede a comparar los resultados experimentales con las predicciones del modelo térmico.
 
-% Comparación del modelo térmico con el ensayo de validación: pendiente (Adolfo)
+\subsubsection*{Comparación modelo térmico - Python}
+
+Con los datos registrados durante el ensayo de calentamiento al medir la temperatura en la pared, al compararlo con el resultado del sistema térmico medido al centro del volumen del agua, se observa un clara diferencia en la curva de temperatura, y principalmente es debido a los gradientes de temperatura observados en las paredes del recipiente en la Figura \ref{fig:Nastran_calentar} en la que se asemeja a la temperatura del módulo térmico, por lo tanto, hay que considerar que la resistencia de contacto sea mucho menor a la determinada en la calibración.
+
+En la Figura \ref{fig:validacion_primer_modelo_en_cooling} se observa una clara discrepancia en la validación del modelo térmico calibrado en el modo calentar. Debido a esto se procede a calibrar nuevamente el modelo en el modo enfriar para observar las diferencias en las variables.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{validacion_con_cooling.pdf}
+    \caption{Validación del modelo térmico de Python calibrado en el modo calentar.}
+    \label{fig:validacion_primer_modelo_en_cooling}
+\end{figure}
+
+Los resultados de los parámetros en la calibración en el modo enfriar con un RMSE mínimo de 1,2178°C son los siguientes:
+
+\begin{itemize}
+    \item $R_{contacto} = 0,001$ K/W
+    \item $R_{qR} = 0,01$ K/W
+    \item $UA = 4.8233$ W/K
+\end{itemize}
+
+Se observa una clara disminución en la resistencia térmica de contacto, en su valor mínimo, al igual que la resistencia térmica en la zona del disipador. Por otro lado aumenta el valor de las pérdidas térmicas en $UA$. Esto se puede deber al posicionamiento del medidor de temperatura como también la influencia de que la tapa queda expuesta junto a la lata, y se ignora toda la resistencia térmica que puede existir entre los módulos Peltier y el interior de la lata de bebida. Los análisis de sensibilidad se observan a continuación:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{resultados_calibracion_cooling.pdf}
+    \caption{Resultados de calibración en el modo enfriar.}
+    \label{fig:calibracion_cooling}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Sensibilidad_parametros_cooling.pdf}
+    \caption{Análisis de sensibilidad de parámetros en la calibración del modo enfriar.}
+    \label{fig:sensibilidad_parametros_cooling}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Sensibilidad_variables_cooling.pdf}
+    \caption{Análisis de sensibilidad de variables en la calibración del modo enfriar.}
+    \label{fig:sensibilidad_variables_cooling}
+\end{figure}
+
+
 
 \section{Desarrollo del producto final y plan de fabricación}
 \label{sec:plan_fabricacion}
