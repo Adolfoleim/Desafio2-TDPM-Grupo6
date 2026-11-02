@@ -340,7 +340,7 @@ Las necesidades mencionadas se traducen en especificaciones técnicas. Estas bus
     \end{enumerate}
     \item Uso e interacción
     \begin{enumerate}
-        \item Facilidad de uso: iniciar un ciclo con un máximo de tres acciones, sin necesidad de consultar un manual.
+        \item Facilidad de uso: iniciar un ciclo con un máximo de cinco acciones, sin necesidad de consultar un manual.
         \item Limpieza e higiene: las piezas en contacto con el agua deben poder retirarse y lavarse en pocos minutos y sin herramientas. Se asocia esto con el tiempo necesario para desmontar y limpiar las piezas.
         \item Portabilidad: masa y dimensiones que permitan trasladar el equipo con una mano y ubicarlo sobre un escritorio o mesón de cocina.
     \end{enumerate}
@@ -373,7 +373,7 @@ En base a las justificaciones anteriores se definen las especificaciones técnic
 \multicolumn{4}{l}{\textbf{Necesidad:} 1. Enfriamiento efectivo} \\
 \multicolumn{4}{l}{\textit{Criterio:} Desempeño Térmico (Modo Frío)} \\
 \nopagebreak
-Temperatura objetivo de la lata ($T_{f,c}$) & $0,5\le T \le 8$ & \si{\celsius} & $\downarrow$ \\
+Temperatura objetivo de la lata ($T_{f,c}$) & $0,5\le T \le 15$ & \si{\celsius} & $\downarrow$ \\
 Volumen nominal de la bebida ($V_c$) & $354$ & \si{\ml} & $\uparrow$ \\
 \midrule
 
@@ -381,23 +381,23 @@ Volumen nominal de la bebida ($V_c$) & $354$ & \si{\ml} & $\uparrow$ \\
 \multicolumn{4}{l}{\textbf{Necesidad:} 2. Calentamiento efectivo} \\
 \multicolumn{4}{l}{\textit{Criterio:} Desempeño Térmico (Modo Calor)} \\
 \nopagebreak
-Temperatura objetivo del agua ($T_{f,h}$) & $\ge 85$ & \si{\celsius} & $\uparrow$ \\
-Volumen de agua para sopa ($V_h$) & $300$ & \si{\ml} & $\uparrow$ \\
+Temperatura objetivo del agua ($T_{f,h}$) & $\ge 70$ & \si{\celsius} & $\uparrow$ \\
+Volumen de agua para sopa ($V_h$) & $330$ & \si{\ml} & $\uparrow$ \\
 \midrule
 
 % --- 3. TIEMPO DE RESPUESTA ---
 \multicolumn{4}{l}{\textbf{Necesidad:} 3. Tiempo de respuesta} \\
 \multicolumn{4}{l}{\textit{Criterio:} Cinética de Transferencia Térmica} \\
 \nopagebreak
-Tiempo de enfriamiento ($t_c$) & $\le 30$ & \si{\minute} & $\downarrow$ \\
-Tiempo de calentamiento ($t_h$) & $\le 10$ & \si{\minute} & $\downarrow$ \\
+Tiempo de enfriamiento ($t_c$) & $\le 45$ & \si{\minute} & $\downarrow$ \\
+Tiempo de calentamiento ($t_h$) & $\le 45$ & \si{\minute} & $\downarrow$ \\
 \midrule
 
 % --- 4. FACILIDAD DE USO ---
 \multicolumn{4}{l}{\textbf{Necesidad:} 4. Facilidad de uso} \\
 \multicolumn{4}{l}{\textit{Criterio:} Usabilidad e Interfaz} \\
 \nopagebreak
-Pasos requeridos para iniciar el proceso & $\le 3$ & Acciones & $\downarrow$ \\
+Pasos requeridos para iniciar el proceso & $\le 5$ & Acciones & $\downarrow$ \\
 \midrule
 
 % --- 5. LIMPIEZA E HIGIENE ---
@@ -1469,7 +1469,7 @@ Esta sección presenta la evidencia experimental empleada para caracterizar el c
 \toprule
 \textbf{Ensayo} & \textbf{Modo} & \textbf{Carga} & \textbf{Medición} & \textbf{Duración} & \textbf{Propósito} \\
 \midrule
-Exploratorios & Frío y calor & \SI{350}{\ml} & Comprobación táctil & 30 y \SI{45}{\minute} & Factibilidad del concepto \\
+Exploratorios & Frío y calor & \SI{350}{\ml} & Comprobación táctil & \SI{30}{\minute} & Factibilidad del concepto \\
 Preliminar (29/10) & Calor & \SI{330}{\ml} & Corriente & \SI{40}{\minute} & Caracterización del kit Peltier \\
 Calibración (31/10) & Calor & \SI{330}{\ml} & Corriente y $T_w$ en el centro & \SI{45}{\minute} & Calibración del modelo térmico \\
 Medición en pared (31/10) & Calor & \SI{330}{\ml} & Corriente y $T_w$ junto a la pared & \SI{35}{\minute} & Comparación con la simulación térmica \\
